@@ -17,7 +17,8 @@ public class DbHelper extends SQLiteOpenHelper {
   public static final String TABLE_RULE = "t_rule";
   public static final String TABLE_RULE_COLUMN_ID = "_id";
   public static final String TABLE_RULE_COLUMN_APPLICATION_ID = "application_id";
-  public static final String TABLE_APPLICATION_COLUMN_ALLOWED_PHONE_NUMBER = "allowed_phone_number";
+  public static final String TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER = "allowed_phone_number";
+  public static final String VIEW_APPLICATION_RULE = "v_application_rule";
 
   private static final String TAG = "DbHelper";
   private static final String DB_NAME = "SecureSmsProxy.db";
@@ -38,8 +39,11 @@ public class DbHelper extends SQLiteOpenHelper {
     db.execSQL("CREATE TABLE " + TABLE_RULE + " (" +
         "  " + TABLE_RULE_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
         "  " + TABLE_RULE_COLUMN_APPLICATION_ID + " INTEGER REFERENCES " + TABLE_APPLICATION + " (" + TABLE_APPLICATION_COLUMN_ID + ") ON DELETE CASCADE," +
-        "  " + TABLE_APPLICATION_COLUMN_ALLOWED_PHONE_NUMBER + " TEXT NOT NULL" +
+        "  " + TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER + " TEXT NOT NULL" +
         ");");
+    db.execSQL("CREATE VIEW " + VIEW_APPLICATION_RULE + " AS" +
+        "  SELECT A.*, B." + TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER +
+        "  FROM " + TABLE_APPLICATION + " A JOIN " + TABLE_RULE + " R ON R." + TABLE_RULE_COLUMN_APPLICATION_ID + "=A." + TABLE_APPLICATION_COLUMN_ID);
   }
 
   @Override
