@@ -13,6 +13,7 @@ public class DbHelper extends SQLiteOpenHelper {
   public static final String TABLE_APPLICATION = "t_application";
   public static final String TABLE_APPLICATION_COLUMN_ID = "_id";
   public static final String TABLE_APPLICATION_COLUMN_NAME = "name";
+  public static final String TABLE_APPLICATION_COLUMN_LISTENER = "listener";
   public static final String TABLE_APPLICATION_COLUMN_SECRET = "secret";
   public static final String TABLE_RULE = "t_rule";
   public static final String TABLE_RULE_COLUMN_ID = "_id";
@@ -34,6 +35,7 @@ public class DbHelper extends SQLiteOpenHelper {
     db.execSQL("CREATE TABLE " + TABLE_APPLICATION + " (" +
         "  " + TABLE_APPLICATION_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
         "  " + TABLE_APPLICATION_COLUMN_NAME + " TEXT NOT NULL," +
+        "  " + TABLE_APPLICATION_COLUMN_LISTENER + " TEXT NOT NULL," +
         "  " + TABLE_APPLICATION_COLUMN_SECRET + " TEXT NOT NULL" +
         ");");
     db.execSQL("CREATE TABLE " + TABLE_RULE + " (" +

@@ -5,12 +5,14 @@ import java.util.Objects;
 public final class Application {
 
   private final long id;
-  private final String applicationName;
+  private final String name;
+  private final String listener;
   private final String secret;
 
-  public Application(long id, String applicationName, String secret) {
+  public Application(long id, String name, String listener, String secret) {
     this.id = id;
-    this.applicationName = applicationName;
+    this.name = name;
+    this.listener = listener;
     this.secret = secret;
   }
 
@@ -18,8 +20,8 @@ public final class Application {
     return id;
   }
 
-  public String getApplicationName() {
-    return applicationName;
+  public String getName() {
+    return name;
   }
 
   public String getSecret() {
@@ -43,7 +45,8 @@ public final class Application {
   public String toString() {
     return "ApplicationRule{" +
         "id=" + id +
-        ", applicationName='" + applicationName + '\'' +
+        ", name='" + name + '\'' +
+        ", listener='" + listener + '\'' +
         ", secret='" + secret + '\'' +
         '}';
   }

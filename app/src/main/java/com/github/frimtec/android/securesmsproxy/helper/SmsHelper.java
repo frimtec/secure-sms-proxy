@@ -31,10 +31,8 @@ public final class SmsHelper {
     return Collections.emptyList();
   }
 
-
-  public static void confirmSms(String confirmText, String number) {
+  public static void send(Sms sms) {
     SmsManager smsManager = SmsManager.getDefault();
-    smsManager.sendTextMessage(number, null, confirmText, null, null);
+    smsManager.sendTextMessage(sms.getNumber(), null, sms.getText(), null, null);
   }
-
 }

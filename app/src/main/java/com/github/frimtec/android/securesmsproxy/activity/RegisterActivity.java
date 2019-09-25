@@ -16,12 +16,14 @@ import java.util.List;
 public class RegisterActivity extends AppCompatActivity {
 
   public static final String ACTION_REGISTER = "com.github.frimtec.android.securesmsproxy.intent.action.REGISTER";
+  public static final String EXTRA_LISTEER_CLASS = "com.github.frimtec.android.securesmsproxy.intent.extra.LISTENER_CLASS";
   public static final String EXTRA_PHONE_NUMBERS = "com.github.frimtec.android.securesmsproxy.intent.extra.PHONE_NUMBERS";
   public static final String EXTRA_SECRET = "com.github.frimtec.android.securesmsproxy.intent.extra.SECRET";
 
   private static final String TAG = "MainActivity";
 
   private List<String> phoneNumbers;
+  private String listenerClass;
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,7 +51,8 @@ public class RegisterActivity extends AppCompatActivity {
     }
     Bundle extras = getIntent().getExtras();
     this.phoneNumbers = extras.getStringArrayList(EXTRA_PHONE_NUMBERS);
+    this.listenerClass = extras.getString(EXTRA_LISTEER_CLASS);
     Uri caller = getReferrer();
-    Log.v(TAG, String.format("Action register [application: %s; phoneNumbers: %s", caller, phoneNumbers));
+    Log.v(TAG, String.format("Action register [application: %s; listener; %s; phoneNumbers: %s", caller, listenerClass, phoneNumbers));
   }
 }
