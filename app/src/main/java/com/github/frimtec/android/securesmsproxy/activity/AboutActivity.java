@@ -49,7 +49,7 @@ public class AboutActivity extends AppCompatActivity {
     }
 
     textView.setText(Html.fromHtml(
-        "<h2><a href='https://github.com/frimtec/pikett-assist'>SecureSmsProxy</a></h2>" +
+        "<h2><a href='https://github.com/frimtec/secure-sms-proxy'>S2MSP</a></h2>" +
             "<p>Version: " + version + " (Build  " + build + ")</p>" +
             "<p>&copy; 2019 <a href='https://github.com/frimtec'>frimTEC</a></p>" +
             ""

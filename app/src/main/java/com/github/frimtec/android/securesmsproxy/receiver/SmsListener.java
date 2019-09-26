@@ -4,31 +4,48 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
+import com.github.frimtec.android.securesmsproxy.domain.Application;
 import com.github.frimtec.android.securesmsproxy.domain.Sms;
 import com.github.frimtec.android.securesmsproxy.helper.Aes;
 import com.github.frimtec.android.securesmsproxy.helper.SmsHelper;
+import com.github.frimtec.android.securesmsproxy.service.ApplicationRuleDao;
 
-import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class SmsListener extends BroadcastReceiver {
 
-  private static final String TAG = "SmsListener";
+  public static final String ACTION_BROADCAST = "com.github.frimtec.android.securesmsproxy.SMS_RECEIVED";
 
   @Override
   public void onReceive(Context context, Intent intent) {
     if ("android.provider.Telephony.SMS_RECEIVED".equals(intent.getAction())) {
-      for (Sms sms : SmsHelper.getSmsFromIntent(intent)) {
-        Intent sendSmsIntent = new Intent("com.github.frimtec.android.securesmsproxy.SMS_RECEIVED");
-        Aes aes = new Aes("123456789012345678901234");
-        sendSmsIntent.putExtra(Intent.EXTRA_TEXT, aes.encrypt(Sms.toJsonArray(Collections.singletonList(sms))));
-        sendSmsIntent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-        sendSmsIntent.setComponent(new ComponentName("com.github.frimtec.android.pikettassist","com.github.frimtec.android.pikettassist.receiver.SmsListener"));
-        context.sendOrderedBroadcast(sendSmsIntent, null);
-        Log.d(TAG, "SMS received and send broadcast to application: " + sms);
-      }
+      Map<String, List<Sms>> smsByNumber = SmsHelper.getSmsFromIntent(intent).stream()
+          .collect(Collectors.groupingBy(Sms::getNumber));
+      ApplicationRuleDao dao = new ApplicationRuleDao();
+      Map<String, Set<Application>> applicationsByNumber = dao.byPhoneNumbers(smsByNumber.keySet());
+      smsByNumber.entrySet()
+          .forEach(entry -> {
+            Set<Application> applications = applicationsByNumber.get(entry.getKey());
+            if (applications == null || applications.isEmpty()) {
+              // no registrations for this number
+              return;
+            }
+            applications.forEach(application -> broadcastReceivedSms(context, application, entry.getValue()));
+          });
     }
+  }
+
+  public static void broadcastReceivedSms(Context context, Application application, List<Sms> smsList) {
+    Intent sendSmsIntent = new Intent(ACTION_BROADCAST);
+    Aes aes = new Aes(application.getSecret());
+    sendSmsIntent.putExtra(Intent.EXTRA_TEXT, aes.encrypt(Sms.toJsonArray(smsList)));
+    sendSmsIntent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+    sendSmsIntent.setComponent(new ComponentName(application.getName(), application.getListener()));
+    context.sendOrderedBroadcast(sendSmsIntent, null);
   }
 
 }

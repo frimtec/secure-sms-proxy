@@ -1,10 +1,13 @@
 package com.github.frimtec.android.securesmsproxy.service;
 
+import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
 import com.github.frimtec.android.securesmsproxy.domain.Application;
 import com.github.frimtec.android.securesmsproxy.domain.ApplicationRule;
+import com.github.frimtec.android.securesmsproxy.helper.RandomString;
 import com.github.frimtec.android.securesmsproxy.state.DbHelper;
 import com.github.frimtec.android.securesmsproxy.state.SecureSmsProxy;
 
@@ -16,14 +19,19 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_APPLICATION;
 import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_APPLICATION_COLUMN_ID;
 import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_APPLICATION_COLUMN_LISTENER;
 import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_APPLICATION_COLUMN_NAME;
 import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_APPLICATION_COLUMN_SECRET;
+import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_RULE;
 import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER;
+import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_RULE_COLUMN_APPLICATION_ID;
 import static com.github.frimtec.android.securesmsproxy.state.DbHelper.VIEW_APPLICATION_RULE;
 
 public class ApplicationRuleDao {
+
+  private static final int SECRET_LENGTH = 24;
 
   private static final String[] ALL_COLUMNS = {
       TABLE_APPLICATION_COLUMN_ID,
@@ -32,6 +40,38 @@ public class ApplicationRuleDao {
       TABLE_APPLICATION_COLUMN_SECRET,
       TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER
   };
+
+  public String insertOrUpdate(String applicationName, String listener, Set<String> allowedPhoneNumbers) {
+    ApplicationRule applicationRule = byApplicationName(applicationName);
+    ContentValues values = new ContentValues();
+    values.put(TABLE_APPLICATION_COLUMN_NAME, applicationName);
+    values.put(TABLE_APPLICATION_COLUMN_LISTENER, listener);
+    String secret;
+    try (SQLiteDatabase db = SecureSmsProxy.getWritableDatabase()) {
+      if (applicationRule != null) {
+        secret = applicationRule.getApplication().getSecret();
+        ContentValues ruleValues = new ContentValues();
+        ruleValues.put(TABLE_RULE_COLUMN_APPLICATION_ID, applicationRule.getApplication().getId());
+        allowedPhoneNumbers.stream()
+            .filter(phoneNumber -> !applicationRule.getAllowedPhoneNumbers().contains(phoneNumber))
+            .forEach(phoneNumber -> {
+              ruleValues.put(TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER, phoneNumber);
+              db.insert(TABLE_RULE, null, ruleValues);
+            });
+      } else {
+        secret = RandomString.nextString(SECRET_LENGTH);
+        values.put(TABLE_APPLICATION_COLUMN_SECRET, secret);
+        long id = db.insert(TABLE_APPLICATION, null, values);
+        ContentValues ruleValues = new ContentValues();
+        ruleValues.put(TABLE_RULE_COLUMN_APPLICATION_ID, id);
+        allowedPhoneNumbers.forEach(phoneNumber -> {
+          ruleValues.put(TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER, phoneNumber);
+          db.insert(TABLE_RULE, null, ruleValues);
+        });
+      }
+    }
+    return secret;
+  }
 
   public ApplicationRule byApplicationName(String applicationName) {
     try (Cursor cursor = SecureSmsProxy.getReadableDatabase().query(
@@ -43,24 +83,28 @@ public class ApplicationRuleDao {
   }
 
   public List<ApplicationRule> all() {
-    try (Cursor cursor = SecureSmsProxy.getReadableDatabase().query(
-        DbHelper.VIEW_APPLICATION_RULE, ALL_COLUMNS,
-        null, null, null, null, null)) {
-      return toApplicationRules(cursor);
+    try (SQLiteDatabase db = SecureSmsProxy.getReadableDatabase()) {
+      try (Cursor cursor = db.query(
+          DbHelper.VIEW_APPLICATION_RULE, ALL_COLUMNS,
+          null, null, null, null, null)) {
+        return toApplicationRules(cursor);
+      }
     }
   }
 
   public Map<String, Set<Application>> byPhoneNumbers(Set<String> phoneNumbers) {
     Map<Long, Application> applications = new HashMap<>();
     Map<String, Set<Application>> applicationsByPhoneNumber = new HashMap<>();
-    try (Cursor cursor = SecureSmsProxy.getReadableDatabase().rawQuery("SELECT " + TextUtils.join(", ", ALL_COLUMNS) + " FROM " + VIEW_APPLICATION_RULE + " WHERE " + TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER +
-        " IN (" + TextUtils.join(",", phoneNumbers.stream().map(s -> "'" + s + "'").collect(Collectors.toList())) + ")", null)) {
-      Application application = applications.getOrDefault(cursor.getLong(0), new Application(cursor.getLong(0), cursor.getString(1), cursor.getString(2), cursor.getString(3)));
-      applications.put(application.getId(), application);
-      String phoneNumber = cursor.getString(4);
-      Set<Application> set = applicationsByPhoneNumber.getOrDefault(phoneNumber, new HashSet<>());
-      set.add(application);
-      applicationsByPhoneNumber.put(phoneNumber, set);
+    try (SQLiteDatabase db = SecureSmsProxy.getReadableDatabase()) {
+      try (Cursor cursor = db.rawQuery("SELECT " + TextUtils.join(", ", ALL_COLUMNS) + " FROM " + VIEW_APPLICATION_RULE + " WHERE " + TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER +
+          " IN (" + TextUtils.join(",", phoneNumbers.stream().map(s -> "'" + s + "'").collect(Collectors.toList())) + ")", null)) {
+        Application application = applications.getOrDefault(cursor.getLong(0), new Application(cursor.getLong(0), cursor.getString(1), cursor.getString(2), cursor.getString(3)));
+        applications.put(application.getId(), application);
+        String phoneNumber = cursor.getString(4);
+        Set<Application> set = applicationsByPhoneNumber.getOrDefault(phoneNumber, new HashSet<>());
+        set.add(application);
+        applicationsByPhoneNumber.put(phoneNumber, set);
+      }
     }
     return applicationsByPhoneNumber;
   }
@@ -82,5 +126,11 @@ public class ApplicationRuleDao {
           .collect(Collectors.toList());
     }
     return Collections.emptyList();
+  }
+
+  public void delete(Application application) {
+    try (SQLiteDatabase db = SecureSmsProxy.getWritableDatabase()) {
+      db.delete(TABLE_APPLICATION, TABLE_APPLICATION_COLUMN_ID + "=?", new String[]{String.valueOf(application.getId())});
+    }
   }
 }

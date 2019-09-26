@@ -10,8 +10,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.frimtec.android.securesmsproxy.R;
+import com.github.frimtec.android.securesmsproxy.service.ApplicationRuleDao;
 
+import java.util.HashSet;
 import java.util.List;
+
+import static com.github.frimtec.android.securesmsproxy.helper.Feature.PERMISSION_SMS;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -19,6 +23,9 @@ public class RegisterActivity extends AppCompatActivity {
   public static final String EXTRA_LISTEER_CLASS = "com.github.frimtec.android.securesmsproxy.intent.extra.LISTENER_CLASS";
   public static final String EXTRA_PHONE_NUMBERS = "com.github.frimtec.android.securesmsproxy.intent.extra.PHONE_NUMBERS";
   public static final String EXTRA_SECRET = "com.github.frimtec.android.securesmsproxy.intent.extra.SECRET";
+
+  private static final int MISSING_SMS_PERMISSION = 1;
+  private static final int NO_REFEERRER = 2;
 
   private static final String TAG = "MainActivity";
 
@@ -28,11 +35,27 @@ public class RegisterActivity extends AppCompatActivity {
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    Intent resultIntent = new Intent();
+    if (!PERMISSION_SMS.isAllowed(this)) {
+      setResult(MISSING_SMS_PERMISSION, resultIntent);
+      finish();
+      return;
+    }
+
+    Uri referrer = getReferrer();
+    if (referrer == null) {
+      setResult(NO_REFEERRER, resultIntent);
+      finish();
+      return;
+    }
+
     setContentView(R.layout.activity_register);
     Button allow = findViewById(R.id.button_allow);
     allow.setOnClickListener(v -> {
-      Intent resultIntent = new Intent();
-      resultIntent.putExtra(EXTRA_SECRET, "hossa");
+      String applicationName = referrer.getHost();
+      String randomSecret = new ApplicationRuleDao().insertOrUpdate(applicationName, listenerClass, new HashSet<>(phoneNumbers));
+      resultIntent.putExtra(EXTRA_SECRET, randomSecret);
       setResult(RESULT_OK, resultIntent);
       finish();
     });

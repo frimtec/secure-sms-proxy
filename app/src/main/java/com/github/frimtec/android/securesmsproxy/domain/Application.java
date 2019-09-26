@@ -24,6 +24,10 @@ public final class Application {
     return name;
   }
 
+  public String getListener() {
+    return listener;
+  }
+
   public String getSecret() {
     return secret;
   }

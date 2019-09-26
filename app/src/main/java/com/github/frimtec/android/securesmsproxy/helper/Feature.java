@@ -1,7 +1,7 @@
 package com.github.frimtec.android.securesmsproxy.helper;
 
 import android.Manifest;
-import android.app.Fragment;
+import android.app.Activity;
 import android.content.Context;
 
 import androidx.core.app.ActivityCompat;
@@ -11,7 +11,7 @@ import com.github.frimtec.android.securesmsproxy.R;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -19,17 +19,17 @@ import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static com.github.frimtec.android.securesmsproxy.helper.Feature.RequestCodes.PERMISSION_CHANGED_REQUEST_CODE;
 
 public enum Feature {
-  PERMISSION_SMS(true, true, R.string.permission_sms_title, context -> allPermissionsGranted(context, PermissionSets.SMS.getPermissions()), (context, fragment) -> {
-    requestPermissionsWithExplanation(context, fragment, PermissionSets.SMS.getPermissions(), R.string.permission_sms_title, R.string.permission_sms_text);
+  PERMISSION_SMS(true, true, R.string.permission_sms_title, activity -> allPermissionsGranted(activity, PermissionSets.SMS.getPermissions()), (activity) -> {
+    requestPermissionsWithExplanation(activity, PermissionSets.SMS.getPermissions(), R.string.permission_sms_title, R.string.permission_sms_text);
   });
 
   private final boolean sensitive;
   private final boolean permissionType;
   private final int nameResourceId;
   private final Function<Context, Boolean> allowed;
-  private final BiConsumer<Context, Fragment> request;
+  private final Consumer<Activity> request;
 
-  Feature(boolean sensitive, boolean permissionType, int nameResourceId, Function<Context, Boolean> allowed, BiConsumer<Context, Fragment> request) {
+  Feature(boolean sensitive, boolean permissionType, int nameResourceId, Function<Context, Boolean> allowed, Consumer<Activity> request) {
     this.sensitive = sensitive;
     this.permissionType = permissionType;
     this.nameResourceId = nameResourceId;
@@ -41,8 +41,8 @@ public enum Feature {
     return this.allowed.apply(context);
   }
 
-  public final void request(Context context, Fragment fragment) {
-    request.accept(context, fragment);
+  public final void request(Activity activity) {
+    request.accept(activity);
   }
 
   public boolean isSensitive() {
@@ -62,15 +62,16 @@ public enum Feature {
         .noneMatch(permission -> ActivityCompat.checkSelfPermission(context, permission) != PERMISSION_GRANTED);
   }
 
-  private static void requestPermissionsWithExplanation(Context context, Fragment fragment, String[] permissions, int titleResourceId, int textResourceId) {
-    NotificationHelper.requirePermissions(context, titleResourceId, textResourceId, (dialogInterface, integer) -> requestPermissions(fragment, permissions));
+  private static void requestPermissionsWithExplanation(Activity activity, String[] permissions, int titleResourceId, int textResourceId) {
+    NotificationHelper.requirePermissions(activity, titleResourceId, textResourceId, (dialogInterface, integer) -> requestPermissions(activity, permissions));
   }
 
-  private static void requestPermissions(Fragment fragment, String[] permissions) {
-    ActivityCompat.requestPermissions(fragment.getActivity(), permissions, PERMISSION_CHANGED_REQUEST_CODE);
+  private static void requestPermissions(Activity activity, String[] permissions) {
+    ActivityCompat.requestPermissions(activity, permissions, PERMISSION_CHANGED_REQUEST_CODE);
   }
 
   public final static class RequestCodes {
+
     public final static int PERMISSION_CHANGED_REQUEST_CODE = 1;
   }
 
