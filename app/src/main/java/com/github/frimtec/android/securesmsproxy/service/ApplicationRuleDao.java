@@ -96,14 +96,19 @@ public class ApplicationRuleDao {
     Map<Long, Application> applications = new HashMap<>();
     Map<String, Set<Application>> applicationsByPhoneNumber = new HashMap<>();
     try (SQLiteDatabase db = SecureSmsProxy.getReadableDatabase()) {
-      try (Cursor cursor = db.rawQuery("SELECT " + TextUtils.join(", ", ALL_COLUMNS) + " FROM " + VIEW_APPLICATION_RULE + " WHERE " + TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER +
-          " IN (" + TextUtils.join(",", phoneNumbers.stream().map(s -> "'" + s + "'").collect(Collectors.toList())) + ")", null)) {
-        Application application = applications.getOrDefault(cursor.getLong(0), new Application(cursor.getLong(0), cursor.getString(1), cursor.getString(2), cursor.getString(3)));
-        applications.put(application.getId(), application);
-        String phoneNumber = cursor.getString(4);
-        Set<Application> set = applicationsByPhoneNumber.getOrDefault(phoneNumber, new HashSet<>());
-        set.add(application);
-        applicationsByPhoneNumber.put(phoneNumber, set);
+      String rawQuery = "SELECT " + TextUtils.join(", ", ALL_COLUMNS) + " FROM " + VIEW_APPLICATION_RULE + " WHERE " + TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER +
+          " IN (" + TextUtils.join(",", phoneNumbers.stream().map(s -> "'" + s + "'").collect(Collectors.toList())) + ")";
+      try (Cursor cursor = db.rawQuery(rawQuery, null)) {
+        if (cursor != null && cursor.moveToFirst()) {
+          do {
+            Application application = applications.getOrDefault(cursor.getLong(0), new Application(cursor.getLong(0), cursor.getString(1), cursor.getString(2), cursor.getString(3)));
+            applications.put(application.getId(), application);
+            String phoneNumber = cursor.getString(4);
+            Set<Application> set = applicationsByPhoneNumber.getOrDefault(phoneNumber, new HashSet<>());
+            set.add(application);
+            applicationsByPhoneNumber.put(phoneNumber, set);
+          } while (cursor.moveToNext());
+        }
       }
     }
     return applicationsByPhoneNumber;
