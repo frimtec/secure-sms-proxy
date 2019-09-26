@@ -33,24 +33,27 @@ public class SmsSender extends IntentService {
       if (intentExtras != null) {
         String text = intentExtras.getString(EXTRA_TEXT);
         if (text != null) {
-          // TODO: 26.09.2019 Check if  intent.getPackage() is correct?
-          String intentPackage = intent.getPackage();
+          String applicationName = intentExtras.getString(Intent.EXTRA_PACKAGE_NAME);
           ApplicationRuleDao dao = new ApplicationRuleDao();
-          ApplicationRule applicationRule = dao.byApplicationName(intentPackage);
+          ApplicationRule applicationRule = dao.byApplicationName(applicationName);
           if (applicationRule == null) {
-            Log.w(TAG, "Sms send blocked for unregistered application: " + intentPackage);
+            Log.w(TAG, "Sms send blocked for unregistered application: " + applicationName);
             return;
           }
           Aes aes = new Aes(applicationRule.getApplication().getSecret());
-          Sms sms = Sms.fromJson(aes.decrypt(text));
-          if (PHONE_NUMBER_LOOPBACK.equals(sms.getNumber())) {
-            SmsListener.broadcastReceivedSms(this, applicationRule.getApplication(), Collections.singletonList(sms));
-          } else {
-            if (applicationRule.getAllowedPhoneNumbers().contains(sms.getNumber())) {
-              SmsHelper.send(sms);
+          try {
+            Sms sms = Sms.fromJson(aes.decrypt(text));
+            if (PHONE_NUMBER_LOOPBACK.equals(sms.getNumber())) {
+              SmsListener.broadcastReceivedSms(this, applicationRule.getApplication(), Collections.singletonList(sms));
             } else {
-              Log.w(TAG, String.format("Sms send blocked for not allowed phone number %s of application %s", sms.getNumber(), applicationRule.getApplication().getName()));
+              if (applicationRule.getAllowedPhoneNumbers().contains(sms.getNumber())) {
+                SmsHelper.send(sms);
+              } else {
+                Log.w(TAG, String.format("Sms send blocked for not allowed phone number %s of application %s", sms.getNumber(), applicationRule.getApplication().getName()));
+              }
             }
+          } catch (Exception e) {
+            Log.w(TAG, "SMS can not be decrypted, secret must be false");
           }
         }
       }
