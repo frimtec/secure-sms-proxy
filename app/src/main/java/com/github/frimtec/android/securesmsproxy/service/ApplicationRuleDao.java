@@ -43,13 +43,14 @@ public class ApplicationRuleDao {
 
   public String insertOrUpdate(String applicationName, String listener, Set<String> allowedPhoneNumbers) {
     ApplicationRule applicationRule = byApplicationName(applicationName);
-    ContentValues values = new ContentValues();
-    values.put(TABLE_APPLICATION_COLUMN_NAME, applicationName);
-    values.put(TABLE_APPLICATION_COLUMN_LISTENER, listener);
     String secret;
     try (SQLiteDatabase db = SecureSmsProxy.getWritableDatabase()) {
       if (applicationRule != null) {
         secret = applicationRule.getApplication().getSecret();
+        ContentValues applicationValues = new ContentValues();
+        applicationValues.put(TABLE_APPLICATION_COLUMN_LISTENER, listener);
+        db.update(TABLE_APPLICATION, applicationValues, TABLE_APPLICATION_COLUMN_ID + "=?",
+            new String[]{String.valueOf(applicationRule.getApplication().getId())});
         ContentValues ruleValues = new ContentValues();
         ruleValues.put(TABLE_RULE_COLUMN_APPLICATION_ID, applicationRule.getApplication().getId());
         allowedPhoneNumbers.stream()
@@ -60,6 +61,9 @@ public class ApplicationRuleDao {
             });
       } else {
         secret = RandomString.nextString(SECRET_LENGTH);
+        ContentValues values = new ContentValues();
+        values.put(TABLE_APPLICATION_COLUMN_NAME, applicationName);
+        values.put(TABLE_APPLICATION_COLUMN_LISTENER, listener);
         values.put(TABLE_APPLICATION_COLUMN_SECRET, secret);
         long id = db.insert(TABLE_APPLICATION, null, values);
         ContentValues ruleValues = new ContentValues();

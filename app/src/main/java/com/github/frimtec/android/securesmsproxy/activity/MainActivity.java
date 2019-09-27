@@ -49,6 +49,9 @@ public class MainActivity extends AppCompatActivity {
 
     this.listView = findViewById(R.id.list);
     listView.setClickable(true);
+
+    View headerView = getLayoutInflater().inflate(R.layout.application_rule_header, null);
+    listView.addHeaderView(headerView);
     registerForContextMenu(listView);
     refresh();
   }
@@ -82,7 +85,14 @@ public class MainActivity extends AppCompatActivity {
 
   private void refresh() {
     List<ApplicationRule> all = dao.all();
-    listView.setAdapter(new ApplicationRuleArrayAdapter(this, all));
+    listView.setAdapter(new ApplicationRuleArrayAdapter(this, all,
+        (adapter, applicationRule) -> view -> NotificationHelper.areYouSure(adapter.getContext(), (dialog, which) -> {
+          dao.delete(applicationRule.getApplication());
+          adapter.remove(applicationRule);
+          adapter.notifyDataSetChanged();
+          Toast.makeText(adapter.getContext(), R.string.general_entry_deleted, Toast.LENGTH_SHORT).show();
+        }, (dialog, which) -> {
+        })));
     if (all.isEmpty()) {
       Toast.makeText(this, getString(R.string.general_no_data), Toast.LENGTH_LONG).show();
     }

@@ -1,13 +1,12 @@
 package com.github.frimtec.android.securesmsproxy.activity;
 
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.graphics.drawable.Drawable;
-import android.text.TextUtils;
+import android.telephony.PhoneNumberUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,14 +16,25 @@ import androidx.annotation.Nullable;
 import com.github.frimtec.android.securesmsproxy.R;
 import com.github.frimtec.android.securesmsproxy.domain.Application;
 import com.github.frimtec.android.securesmsproxy.domain.ApplicationRule;
+import com.github.frimtec.android.securesmsproxy.helper.PackageInfoAccessor;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Locale;
+import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 
-public class ApplicationRuleArrayAdapter extends ArrayAdapter<ApplicationRule> {
+class ApplicationRuleArrayAdapter extends ArrayAdapter<ApplicationRule> {
 
-  ApplicationRuleArrayAdapter(Context context, List<ApplicationRule> applicationRules) {
+  private final PackageInfoAccessor packageInfoAccessor;
+  private final BiFunction<ApplicationRuleArrayAdapter, ApplicationRule, View.OnClickListener> deleteAction;
+
+  ApplicationRuleArrayAdapter(
+      Context context,
+      List<ApplicationRule> applicationRules,
+      BiFunction<ApplicationRuleArrayAdapter, ApplicationRule, View.OnClickListener> deleteAction) {
     super(context, 0, applicationRules);
+    this.packageInfoAccessor = new PackageInfoAccessor(getContext());
+    this.deleteAction = deleteAction;
   }
 
   @NonNull
@@ -37,31 +47,25 @@ public class ApplicationRuleArrayAdapter extends ArrayAdapter<ApplicationRule> {
     if (applicationRule != null) {
       Application application = applicationRule.getApplication();
       ImageView logo = convertView.findViewById(R.id.application_logo);
-      lookupIcon(application.getName()).ifPresent(logo::setImageDrawable);
+      packageInfoAccessor.getIcon(application.getName()).ifPresent(logo::setImageDrawable);
       TextView label = convertView.findViewById(R.id.application_label);
-      label.setText(lookupLabel(application.getName()));
+
+      CharSequence labelText = this.packageInfoAccessor.getLabel(application.getName());
+      if (!packageInfoAccessor.isInstalled(application.getName())) {
+        labelText = labelText + " (not installed)";
+      }
+      label.setText(labelText);
       TextView phoneNumbers = convertView.findViewById(R.id.application_allowed_phone_numbers);
-      phoneNumbers.setText(TextUtils.join("\n", applicationRule.getAllowedPhoneNumbers()));
+      phoneNumbers.setText(applicationRule.getAllowedPhoneNumbers()
+          .stream()
+          .map(phoneNumber -> PhoneNumberUtils.formatNumber(phoneNumber, Locale.getDefault().getCountry()))
+          .collect(Collectors.joining("\n"))
+      );
+
+      ImageButton deleteButton = convertView.findViewById(R.id.application_button_delete);
+      deleteButton.setOnClickListener(deleteAction.apply(this, applicationRule));
     }
     return convertView;
   }
-
-  private Optional<Drawable> lookupIcon(String name) {
-    try {
-      return Optional.of(getContext().getPackageManager().getApplicationIcon(name));
-    } catch (PackageManager.NameNotFoundException e) {
-      return Optional.empty();
-    }
-  }
-
-  private CharSequence lookupLabel(String name) {
-    PackageManager packageManager = getContext().getPackageManager();
-    try {
-      return packageManager.getApplicationLabel(packageManager.getApplicationInfo(name, PackageManager.GET_META_DATA));
-    } catch (PackageManager.NameNotFoundException e) {
-      return name;
-    }
-  }
-
 
 }

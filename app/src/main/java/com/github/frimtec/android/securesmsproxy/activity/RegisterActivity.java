@@ -3,58 +3,83 @@ package com.github.frimtec.android.securesmsproxy.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
+import android.telephony.PhoneNumberUtils;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.frimtec.android.securesmsproxy.R;
+import com.github.frimtec.android.securesmsproxy.helper.PackageInfoAccessor;
 import com.github.frimtec.android.securesmsproxy.service.ApplicationRuleDao;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
 
 import static com.github.frimtec.android.securesmsproxy.helper.Feature.PERMISSION_SMS;
+import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.ACTION_REGISTER;
+import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.EXTRA_LISTENER_CLASS;
+import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.EXTRA_PHONE_NUMBERS;
+import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.EXTRA_SECRET;
+import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.REGISTRATION_RESULT_CODE_MISSING_SMS_PERMISSION;
+import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.REGISTRATION_RESULT_CODE_NO_EXTRAS;
+import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.REGISTRATION_RESULT_CODE_NO_REFERRER;
 
 public class RegisterActivity extends AppCompatActivity {
-
-  public static final String ACTION_REGISTER = "com.github.frimtec.android.securesmsproxy.intent.action.REGISTER";
-  public static final String EXTRA_LISTEER_CLASS = "com.github.frimtec.android.securesmsproxy.intent.extra.LISTENER_CLASS";
-  public static final String EXTRA_PHONE_NUMBERS = "com.github.frimtec.android.securesmsproxy.intent.extra.PHONE_NUMBERS";
-  public static final String EXTRA_SECRET = "com.github.frimtec.android.securesmsproxy.intent.extra.SECRET";
-
-  private static final int MISSING_SMS_PERMISSION = 1;
-  private static final int NO_REFEERRER = 2;
-
-  private static final String TAG = "MainActivity";
-
-  private List<String> phoneNumbers;
-  private String listenerClass;
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    PackageInfoAccessor packageInfoAccessor = new PackageInfoAccessor(this);
+
+    if (!ACTION_REGISTER.equals(getIntent().getAction())) {
+      finish();
+      return;
+    }
 
     Intent resultIntent = new Intent();
     if (!PERMISSION_SMS.isAllowed(this)) {
-      setResult(MISSING_SMS_PERMISSION, resultIntent);
+      setResult(REGISTRATION_RESULT_CODE_MISSING_SMS_PERMISSION, resultIntent);
       finish();
       return;
     }
 
     Uri referrer = getReferrer();
     if (referrer == null) {
-      setResult(NO_REFEERRER, resultIntent);
+      setResult(REGISTRATION_RESULT_CODE_NO_REFERRER, resultIntent);
+      finish();
+      return;
+    }
+    Bundle extras = getIntent().getExtras();
+    if (extras == null) {
+      setResult(REGISTRATION_RESULT_CODE_NO_EXTRAS, resultIntent);
       finish();
       return;
     }
 
+    String listener = extras.getString(EXTRA_LISTENER_CLASS);
+    List<String> phoneNumbers = extras.getStringArrayList(EXTRA_PHONE_NUMBERS);
+    String packageName = referrer.getHost();
+
     setContentView(R.layout.activity_register);
+    ImageView applicationIcon = findViewById(R.id.register_application_icon);
+    packageInfoAccessor.getIcon(packageName).ifPresent(applicationIcon::setImageDrawable);
+
+    TextView applicationLabel = findViewById(R.id.register_application_label);
+    applicationLabel.setText(packageInfoAccessor.getLabel(packageName));
+
+    TextView phoneNumbersToAllow = findViewById(R.id.register_phone_numbers);
+    phoneNumbersToAllow.setText(phoneNumbers != null ? phoneNumbers.stream()
+        .map(phoneNumber -> PhoneNumberUtils.formatNumber(phoneNumber, Locale.getDefault().getCountry()))
+        .collect(Collectors.joining("\n")) : "");
     Button allow = findViewById(R.id.button_allow);
     allow.setOnClickListener(v -> {
-      String applicationName = referrer.getHost();
-      String randomSecret = new ApplicationRuleDao().insertOrUpdate(applicationName, listenerClass, new HashSet<>(phoneNumbers));
+      String randomSecret = new ApplicationRuleDao().insertOrUpdate(packageName, listener, phoneNumbers != null ? new HashSet<>(phoneNumbers) : Collections.emptySet());
       resultIntent.putExtra(EXTRA_SECRET, randomSecret);
       setResult(RESULT_OK, resultIntent);
       finish();
@@ -64,18 +89,5 @@ public class RegisterActivity extends AppCompatActivity {
       setResult(RESULT_CANCELED);
       finish();
     });
-  }
-
-  @Override
-  protected void onStart() {
-    super.onStart();
-    if (!ACTION_REGISTER.equals(getIntent().getAction())) {
-      finish();
-    }
-    Bundle extras = getIntent().getExtras();
-    this.phoneNumbers = extras.getStringArrayList(EXTRA_PHONE_NUMBERS);
-    this.listenerClass = extras.getString(EXTRA_LISTEER_CLASS);
-    Uri caller = getReferrer();
-    Log.v(TAG, String.format("Action register [application: %s; listener; %s; phoneNumbers: %s", caller, listenerClass, phoneNumbers));
   }
 }

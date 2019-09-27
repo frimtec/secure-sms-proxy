@@ -6,10 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.github.frimtec.android.securesmsproxy.domain.Application;
-import com.github.frimtec.android.securesmsproxy.domain.Sms;
-import com.github.frimtec.android.securesmsproxy.helper.Aes;
+import com.github.frimtec.android.securesmsproxyapi.Aes;
 import com.github.frimtec.android.securesmsproxy.helper.SmsHelper;
 import com.github.frimtec.android.securesmsproxy.service.ApplicationRuleDao;
+import com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade;
+import com.github.frimtec.android.securesmsproxyapi.Sms;
 
 import java.util.List;
 import java.util.Map;
@@ -17,8 +18,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class SmsListener extends BroadcastReceiver {
-
-  public static final String ACTION_BROADCAST = "com.github.frimtec.android.securesmsproxy.SMS_RECEIVED";
 
   @Override
   public void onReceive(Context context, Intent intent) {
@@ -40,7 +39,7 @@ public class SmsListener extends BroadcastReceiver {
   }
 
   public static void broadcastReceivedSms(Context context, Application application, List<Sms> smsList) {
-    Intent sendSmsIntent = new Intent(ACTION_BROADCAST);
+    Intent sendSmsIntent = new Intent(SecureSmsProxyFacade.ACTION_BROADCAST_SMS_RECEIVED);
     Aes aes = new Aes(application.getSecret());
     sendSmsIntent.putExtra(Intent.EXTRA_TEXT, aes.encrypt(Sms.toJsonArray(smsList)));
     sendSmsIntent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);

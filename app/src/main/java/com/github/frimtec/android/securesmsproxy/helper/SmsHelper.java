@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 
-import com.github.frimtec.android.securesmsproxy.domain.Sms;
+import com.github.frimtec.android.securesmsproxyapi.Sms;
 
 import java.util.Arrays;
 import java.util.Collections;

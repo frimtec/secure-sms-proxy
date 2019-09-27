@@ -1,6 +1,8 @@
 package com.github.frimtec.android.securesmsproxy.helper;
 
 
+import com.github.frimtec.android.securesmsproxyapi.Aes;
+
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;

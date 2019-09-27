@@ -1,4 +1,4 @@
-package com.github.frimtec.android.securesmsproxy.domain;
+package com.github.frimtec.android.securesmsproxyapi;
 
 import androidx.annotation.NonNull;
 
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Sms {
+public final class Sms {
 
   private final String number;
   private final String text;

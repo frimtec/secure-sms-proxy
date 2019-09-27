@@ -8,18 +8,19 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 import com.github.frimtec.android.securesmsproxy.domain.ApplicationRule;
-import com.github.frimtec.android.securesmsproxy.domain.Sms;
-import com.github.frimtec.android.securesmsproxy.helper.Aes;
 import com.github.frimtec.android.securesmsproxy.helper.SmsHelper;
 import com.github.frimtec.android.securesmsproxy.service.ApplicationRuleDao;
+import com.github.frimtec.android.securesmsproxyapi.Aes;
+import com.github.frimtec.android.securesmsproxyapi.Sms;
 
 import java.util.Collections;
 
 import static android.content.Intent.EXTRA_TEXT;
+import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.ACTION_SEND_SMS;
+import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.PHONE_NUMBER_LOOPBACK;
 
 public class SmsSender extends IntentService {
 
-  private static final String PHONE_NUMBER_LOOPBACK = "loopback";
   private static final String TAG = "SmsSender";
 
   public SmsSender() {
@@ -28,7 +29,7 @@ public class SmsSender extends IntentService {
 
   @Override
   protected void onHandleIntent(@Nullable Intent intent) {
-    if (intent != null && "com.github.frimtec.android.securesmsproxy.SEND_SMS".equals(intent.getAction())) {
+    if (intent != null && ACTION_SEND_SMS.equals(intent.getAction())) {
       Bundle intentExtras = intent.getExtras();
       if (intentExtras != null) {
         String text = intentExtras.getString(EXTRA_TEXT);

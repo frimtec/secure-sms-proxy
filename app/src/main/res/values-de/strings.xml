@@ -32,5 +32,6 @@
     <string name="send_log_title">Secure SMS Proxy Crash-Report</string>
     <string name="send_log_message">Secure SMS Proxy wurde unerwarteterweise beendet. Bitte sende den Crash-Report via E-Mail an den Autor, um die Stabilität von Secure SMS Proxy zu erhöhen.</string>
     <string name="send_log_button_send">Senden</string>
-s
+    <string name="button_delete">Löschen</string>
+    s
 </resources>

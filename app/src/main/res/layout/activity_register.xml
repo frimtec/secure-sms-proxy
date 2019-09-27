@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingLeft="10dp"
     android:paddingTop="10dp"
     android:paddingRight="10dp"
@@ -13,7 +14,8 @@
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_alignParentStart="true"
-        android:layout_marginEnd="10dp" />
+        android:layout_marginEnd="10dp"
+        app:srcCompat="@drawable/ic_android_black_24dp"/>
 
     <TextView
         android:id="@+id/register_application_label"
@@ -28,7 +30,8 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/register_text"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:text="The application requests permissions to receive and send SMS to the following phone numbers:"/>
 
     <TextView
         android:id="@+id/register_phone_numbers"
