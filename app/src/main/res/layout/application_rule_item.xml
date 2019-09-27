@@ -46,6 +46,6 @@
         android:layout_centerVertical="true"
         android:layout_marginStart="20dp"
         android:padding="15dp"
-        android:contentDescription="@string/button_delete"
+        android:contentDescription="@string/action_delete"
         android:src="@drawable/ic_delete_black_24dp" />
 </RelativeLayout>

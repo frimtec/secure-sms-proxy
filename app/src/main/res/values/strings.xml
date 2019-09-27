@@ -32,5 +32,10 @@
     <string name="send_log_title">Secure SMS Proxy crash report</string>
     <string name="send_log_message">Secure SMS Proxy was crashed unexpectedly. To improve the stability of Secure SMS Proxy, please send the crash report to the author via e-mail.</string>
     <string name="send_log_button_send">Send</string>
-    <string name="button_delete">Delete</string>
+    <string name="action_delete">Delete</string>
+    <string name="header_application">Application</string>
+    <string name="header_phone_numbers">Allowed phone numbers</string>
+    <string name="register_comment">The stated application requests permissions to send and receive SMS via S2MSP restricted to the following phone numbers:</string>
+    <string name="register_reject">Reject</string>
+    <string name="register_allow">Allow</string>
 </resources>

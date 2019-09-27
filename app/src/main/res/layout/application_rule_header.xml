@@ -14,7 +14,7 @@
         android:layout_marginBottom="5dp"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:text="Application"/>
+        android:text="@string/header_application"/>
 
     <TextView
         android:id="@+id/header_phone_numbers"
@@ -26,5 +26,5 @@
         android:layout_alignParentEnd="true"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:text="Allowed phone numbers"/>
+        android:text="@string/header_phone_numbers"/>
 </RelativeLayout>

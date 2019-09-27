@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingLeft="10dp"
     android:paddingTop="10dp"
     android:paddingRight="10dp"
@@ -15,47 +15,60 @@
         android:layout_height="70dp"
         android:layout_alignParentStart="true"
         android:layout_marginEnd="10dp"
-        app:srcCompat="@drawable/ic_android_black_24dp"/>
+        app:srcCompat="@drawable/ic_android_black_24dp" />
 
     <TextView
         android:id="@+id/register_application_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:textSize="16sp" />
+        android:layout_marginTop="15dp"
+        android:layout_toEndOf="@id/register_application_icon"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/register_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/register_text"
-        android:textSize="16sp"
-        android:text="The application requests permissions to receive and send SMS to the following phone numbers:"/>
+        android:layout_below="@id/register_application_icon"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/register_comment"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/register_phone_numbers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/register_application_label"
-        android:layout_marginStart="10dp" />
+        android:layout_below="@id/register_text"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:textSize="20sp"/>
 
     <Button
         android:id="@+id/button_reject"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Reject"
-        android:layout_below="@id/register_phone_numbers"
-        />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:text="@string/register_reject"
+        android:layout_marginStart="40dp"
+        android:layout_marginBottom="40dp"
+        android:textSize="18sp" />
 
     <Button
         android:id="@+id/button_allow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Allow"
-        android:layout_toEndOf="@id/button_reject"
-        android:layout_below="@id/register_phone_numbers"
-        />
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:text="@string/register_allow"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="40dp"
+        android:textSize="18sp" />
 
 
 </RelativeLayout>
