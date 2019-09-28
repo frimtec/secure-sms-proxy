@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
-import static com.github.frimtec.android.securesmsproxy.helper.Feature.PERMISSION_SMS;
+import static com.github.frimtec.android.securesmsproxy.helper.Permission.SMS;
 import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.ACTION_REGISTER;
 import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.EXTRA_LISTENER_CLASS;
 import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.EXTRA_PHONE_NUMBERS;
@@ -43,7 +43,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     Intent resultIntent = new Intent();
-    if (!PERMISSION_SMS.isAllowed(this)) {
+    if (!SMS.isAllowed(this)) {
       setResult(REGISTRATION_RESULT_CODE_MISSING_SMS_PERMISSION, resultIntent);
       finish();
       return;

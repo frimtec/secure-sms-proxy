@@ -18,11 +18,13 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.github.frimtec.android.securesmsproxy.R;
 import com.github.frimtec.android.securesmsproxy.domain.ApplicationRule;
 import com.github.frimtec.android.securesmsproxy.helper.NotificationHelper;
+import com.github.frimtec.android.securesmsproxy.helper.Permission;
 import com.github.frimtec.android.securesmsproxy.service.ApplicationRuleDao;
 
 import java.util.List;
 
-import static com.github.frimtec.android.securesmsproxy.helper.Feature.PERMISSION_SMS;
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import static com.github.frimtec.android.securesmsproxy.helper.Permission.SMS;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,8 +38,8 @@ public class MainActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
-    if (!PERMISSION_SMS.isAllowed(this)) {
-      PERMISSION_SMS.request(this);
+    if (!SMS.isAllowed(this)) {
+      SMS.request(this);
     }
 
     this.dao = new ApplicationRuleDao();
@@ -100,6 +102,10 @@ public class MainActivity extends AppCompatActivity {
 
   public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    if (Permission.RequestCodes.PERMISSION_CHANGED_REQUEST_CODE == requestCode) {
+      String text = grantResults[0] == PERMISSION_GRANTED ? getString(R.string.permission_accepted) : getString(R.string.permission_rejected);
+      Toast.makeText(this, text, Toast.LENGTH_LONG).show();
+    }
   }
 
   @Override

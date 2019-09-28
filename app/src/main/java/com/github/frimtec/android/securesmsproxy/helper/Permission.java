@@ -16,23 +16,17 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
-import static com.github.frimtec.android.securesmsproxy.helper.Feature.RequestCodes.PERMISSION_CHANGED_REQUEST_CODE;
+import static com.github.frimtec.android.securesmsproxy.helper.Permission.RequestCodes.PERMISSION_CHANGED_REQUEST_CODE;
 
-public enum Feature {
-  PERMISSION_SMS(true, true, R.string.permission_sms_title, activity -> allPermissionsGranted(activity, PermissionSets.SMS.getPermissions()), (activity) -> {
+public enum Permission {
+  SMS(activity -> allPermissionsGranted(activity, PermissionSets.SMS.getPermissions()), (activity) -> {
     requestPermissionsWithExplanation(activity, PermissionSets.SMS.getPermissions(), R.string.permission_sms_title, R.string.permission_sms_text);
   });
 
-  private final boolean sensitive;
-  private final boolean permissionType;
-  private final int nameResourceId;
   private final Function<Context, Boolean> allowed;
   private final Consumer<Activity> request;
 
-  Feature(boolean sensitive, boolean permissionType, int nameResourceId, Function<Context, Boolean> allowed, Consumer<Activity> request) {
-    this.sensitive = sensitive;
-    this.permissionType = permissionType;
-    this.nameResourceId = nameResourceId;
+  Permission(Function<Context, Boolean> allowed, Consumer<Activity> request) {
     this.allowed = allowed;
     this.request = request;
   }
@@ -43,18 +37,6 @@ public enum Feature {
 
   public final void request(Activity activity) {
     request.accept(activity);
-  }
-
-  public boolean isSensitive() {
-    return sensitive;
-  }
-
-  public boolean isPermissionType() {
-    return permissionType;
-  }
-
-  public int getNameResourceId() {
-    return nameResourceId;
   }
 
   private static boolean allPermissionsGranted(Context context, String[] permissions) {
@@ -71,7 +53,6 @@ public enum Feature {
   }
 
   public final static class RequestCodes {
-
     public final static int PERMISSION_CHANGED_REQUEST_CODE = 1;
   }
 

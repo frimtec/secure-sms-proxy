@@ -27,8 +27,13 @@
     <string name="general_no_data">Noch keine Daten vorhanden.</string>
 
     <string name="permission_required">Benötigte Berechtigung:</string>
-    <string name="permission_sms_title">SMS</string>
-    <string name="permission_sms_text">TODO</string>
+    <string name="permission_sms_title">SMS Senden/Empfangen</string>
+    <string name="permission_sms_text">
+        Damit S2SMP funktioniert, ist die Berechtigung zum Senden und Empfangen von SMS notwendigig.
+        S2SMP ermöglicht es anderen Applikationen mit SMS zu kommunizieren. Dies nur für vorher berechtigte Telefonnummern.
+        Der SMS Austausch zwischen S2SMP und berechtigten Applikationen, erfolgt ausschliesslich verschlüsselt.
+        S2SMP verwendet keine weiteren Rechte, um die Sicherheit und Integrität zu gewährleisten.
+    </string>
     <string name="send_log_title">Secure SMS Proxy Crash-Report</string>
     <string name="send_log_message">Secure SMS Proxy wurde unerwarteterweise beendet. Bitte sende den Crash-Report via E-Mail an den Autor, um die Stabilität von Secure SMS Proxy zu erhöhen.</string>
     <string name="send_log_button_send">Senden</string>
@@ -38,4 +43,6 @@
     <string name="register_comment">Die genannte Applikation verlangt die Berechtigung SMS via S2MSP zu Empfangen und zu Senden, eingeschränkt auf folgende Telefonnummern:</string>
     <string name="register_reject">Ablehnen</string>
     <string name="register_allow">Erlauben</string>
+    <string name="permission_accepted">Berechtigung erhalten.</string>
+    <string name="permission_rejected">Berechtigung NICHT erhalten!</string>
 </resources>
