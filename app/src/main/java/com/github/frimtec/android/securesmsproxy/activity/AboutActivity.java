@@ -45,7 +45,7 @@ public class AboutActivity extends AppCompatActivity {
       version = packageInfo.versionName;
       build = packageInfo.versionCode;
     } catch (PackageManager.NameNotFoundException e) {
-      Log.e(TAG, "Can not read version info", e);
+      Log.e(TAG, "Can not read version info.", e);
     }
 
     textView.setText(Html.fromHtml(

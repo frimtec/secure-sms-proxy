@@ -39,7 +39,11 @@ final class SecureSmsProxyFacadeImpl implements SecureSmsProxyFacade {
   }
 
   @Override
-  public void register(Activity callerActivity, int requestCode, List<String> phoneNumbersToAllow, Class<? extends BroadcastReceiver> smsBroadCastReceiverClass) {
+  public void register(
+      Activity callerActivity,
+      int requestCode,
+      List<String> phoneNumbersToAllow,
+      Class<? extends BroadcastReceiver> smsBroadCastReceiverClass) {
     Intent intent = new Intent(ACTION_REGISTER);
     intent.putStringArrayListExtra(EXTRA_PHONE_NUMBERS, new ArrayList<>(phoneNumbersToAllow));
     intent.putExtra(EXTRA_LISTENER_CLASS, smsBroadCastReceiverClass.getCanonicalName());
@@ -74,8 +78,7 @@ final class SecureSmsProxyFacadeImpl implements SecureSmsProxyFacade {
     sendSmsIntent.putExtra(EXTRA_TEXT, aes.encrypt(sms.toJson()));
     sendSmsIntent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
     sendSmsIntent.setComponent(SECURE_SMS_PROXY_COMPONENT);
-    ComponentName componentName = context.startService(sendSmsIntent);
-    Log.d(TAG, "SMS send: " + componentName);
+    context.startService(sendSmsIntent);
   }
 
   @Override
