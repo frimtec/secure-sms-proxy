@@ -1,29 +1,14 @@
 <resources>
     <string name="app_name" translatable="false">Secure SMS Proxy</string>
     <string name="title_activity_about">About</string>
-
-    <!-- Strings related to Settings -->
-
     <string name="menu_about">About</string>
-    <string name="alert_action_close">Close</string>
-    <string name="state_on">On</string>
-    <string name="state_off">Off</string>
-    <string name="alarm_state_on">Unconfirmed</string>
-    <string name="alarm_state_on_confirmed">Confirmed</string>
-    <string name="alarm_state_off">Off</string>
-    <string name="state_fragment_test_alarm_never_received">Never received</string>
-    <string name="contact_helper_unknown_contact">Unknown</string>
-    <string name="contact_preference_empty_selection">Empty</string>
     <string name="about_documentation">&lt;h3&gt;Documentation&lt;/h3&gt;&lt;p&gt;A manual for the use of Secure SMS Proxy can be found here: &lt;a href=https://github.com/frimtec/secure-sms-proxy/blob/master/README.md#secure-sms-proxy&gt;Manual&lt;/a&gt;.&lt;/p&gt;</string>
     <string name="about_disclaimer">&lt;h3&gt;Disclaimer&lt;/h3&gt;&lt;p&gt;The author assumes no responsibility, gives no guarantee when using the application.&lt;/p&gt;&lt;p&gt;The application is free.
     The source code is available as open source under the &lt;a href=https://opensource.org/licenses/Apache-2.0&gt;Apache 2.0 license&lt;/a&gt;.&lt;/p&gt;</string>
-    <string name="general_ok">Ok</string>
-    <string name="general_cancel">Cancel</string>
     <string name="general_no">No</string>
     <string name="general_yes">Yes</string>
     <string name="general_are_you_sure">Are you sure?</string>
     <string name="general_entry_deleted">Entry has been deleted.</string>
-    <string name="state_fragment_permissions">Permissions</string>
     <string name="general_no_data">No data available yet.</string>
 
     <string name="permission_required">Required permission:</string>
