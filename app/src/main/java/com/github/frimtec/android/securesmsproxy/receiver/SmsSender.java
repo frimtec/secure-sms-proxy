@@ -8,6 +8,7 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 import com.github.frimtec.android.securesmsproxy.domain.ApplicationRule;
+import com.github.frimtec.android.securesmsproxy.helper.Permission;
 import com.github.frimtec.android.securesmsproxy.helper.SmsHelper;
 import com.github.frimtec.android.securesmsproxy.service.ApplicationRuleDao;
 import com.github.frimtec.android.securesmsproxyapi.Aes;
@@ -29,33 +30,41 @@ public class SmsSender extends IntentService {
 
   @Override
   protected void onHandleIntent(@Nullable Intent intent) {
-    if (intent != null && ACTION_SEND_SMS.equals(intent.getAction())) {
-      Bundle intentExtras = intent.getExtras();
-      if (intentExtras != null) {
-        String text = intentExtras.getString(EXTRA_TEXT);
-        if (text != null) {
-          String applicationName = intentExtras.getString(Intent.EXTRA_PACKAGE_NAME);
-          ApplicationRuleDao dao = new ApplicationRuleDao();
-          ApplicationRule applicationRule = dao.byApplicationName(applicationName);
-          if (applicationRule == null) {
-            Log.w(TAG, "Sms send blocked for unregistered application: " + applicationName);
-            return;
-          }
-          Aes aes = new Aes(applicationRule.getApplication().getSecret());
-          try {
-            Sms sms = Sms.fromJson(aes.decrypt(text));
-            if (PHONE_NUMBER_LOOPBACK.equals(sms.getNumber())) {
-              SmsListener.broadcastReceivedSms(this, applicationRule.getApplication(), Collections.singletonList(sms));
+    if (intent == null || !ACTION_SEND_SMS.equals(intent.getAction())) {
+      Log.w(TAG, "SMS sending blocked because of unrecognized intent.");
+      return;
+    }
+    if (Permission.SMS.isAllowed(this)) {
+      Log.w(TAG, "SMS sending blocked because of missing SMS permissions.");
+      return;
+    }
+
+    Bundle intentExtras = intent.getExtras();
+    if (intentExtras != null) {
+      String text = intentExtras.getString(EXTRA_TEXT);
+      if (text != null) {
+        String applicationName = intentExtras.getString(Intent.EXTRA_PACKAGE_NAME);
+        ApplicationRuleDao dao = new ApplicationRuleDao();
+        ApplicationRule applicationRule = dao.byApplicationName(applicationName);
+        if (applicationRule == null) {
+          Log.w(TAG, String.format("SMS sending blocked because of unregistered sender application: %s.", applicationName));
+          return;
+        }
+        Aes aes = new Aes(applicationRule.getApplication().getSecret());
+        try {
+          Sms sms = Sms.fromJson(aes.decrypt(text));
+          if (PHONE_NUMBER_LOOPBACK.equals(sms.getNumber())) {
+            SmsListener.broadcastReceivedSms(this, applicationRule.getApplication(), Collections.singletonList(sms));
+          } else {
+            if (applicationRule.getAllowedPhoneNumbers().contains(sms.getNumber())) {
+              SmsHelper.send(sms);
             } else {
-              if (applicationRule.getAllowedPhoneNumbers().contains(sms.getNumber())) {
-                SmsHelper.send(sms);
-              } else {
-                Log.w(TAG, String.format("Sms send blocked for not allowed phone number %s of application %s", sms.getNumber(), applicationRule.getApplication().getName()));
-              }
+              Log.w(TAG, String.format("SMS sending blocked because of not allowed phone number %s of application %s.",
+                  sms.getNumber(), applicationRule.getApplication().getName()));
             }
-          } catch (Exception e) {
-            Log.w(TAG, "SMS can not be decrypted, secret must be false");
           }
+        } catch (Exception e) {
+          Log.w(TAG, "SMS cannot be decrypted, secret must be wrong.");
         }
       }
     }
