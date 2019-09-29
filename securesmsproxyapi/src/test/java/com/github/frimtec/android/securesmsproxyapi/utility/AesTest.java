@@ -1,7 +1,5 @@
-package com.github.frimtec.android.securesmsproxy.helper;
+package com.github.frimtec.android.securesmsproxyapi.utility;
 
-
-import com.github.frimtec.android.securesmsproxyapi.Aes;
 
 import org.junit.Test;
 

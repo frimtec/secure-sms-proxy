@@ -1,4 +1,4 @@
-package com.github.frimtec.android.securesmsproxy.helper;
+package com.github.frimtec.android.securesmsproxy.utility;
 
 import android.app.AlertDialog;
 import android.content.Context;

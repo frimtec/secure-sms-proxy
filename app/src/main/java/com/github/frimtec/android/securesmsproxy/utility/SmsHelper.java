@@ -1,4 +1,4 @@
-package com.github.frimtec.android.securesmsproxy.helper;
+package com.github.frimtec.android.securesmsproxy.utility;
 
 import android.content.Intent;
 import android.os.Bundle;

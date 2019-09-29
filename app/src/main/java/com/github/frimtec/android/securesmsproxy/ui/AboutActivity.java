@@ -1,4 +1,4 @@
-package com.github.frimtec.android.securesmsproxy.activity;
+package com.github.frimtec.android.securesmsproxy.ui;
 
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;

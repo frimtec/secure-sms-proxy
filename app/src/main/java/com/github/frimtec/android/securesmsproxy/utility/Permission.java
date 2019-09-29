@@ -1,4 +1,4 @@
-package com.github.frimtec.android.securesmsproxy.helper;
+package com.github.frimtec.android.securesmsproxy.utility;
 
 import android.Manifest;
 import android.app.Activity;
@@ -16,7 +16,7 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
-import static com.github.frimtec.android.securesmsproxy.helper.Permission.RequestCodes.PERMISSION_CHANGED_REQUEST_CODE;
+import static com.github.frimtec.android.securesmsproxy.utility.Permission.RequestCodes.PERMISSION_CHANGED_REQUEST_CODE;
 
 public enum Permission {
   SMS(activity -> allPermissionsGranted(activity, PermissionSets.SMS.getPermissions()), (activity) -> {

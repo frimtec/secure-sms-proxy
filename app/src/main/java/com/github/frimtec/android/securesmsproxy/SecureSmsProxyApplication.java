@@ -1,4 +1,4 @@
-package com.github.frimtec.android.securesmsproxy.state;
+package com.github.frimtec.android.securesmsproxy;
 
 import android.app.Application;
 import android.content.Intent;
@@ -9,32 +9,36 @@ import android.os.Build;
 import android.os.Process;
 import android.util.Log;
 
+import com.github.frimtec.android.securesmsproxy.state.DbHelper;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import static android.content.Intent.EXTRA_BUG_REPORT;
-import static com.github.frimtec.android.securesmsproxy.activity.SendLogActivity.ACTION_SEND_LOG;
+import static com.github.frimtec.android.securesmsproxy.ui.SendLogActivity.ACTION_SEND_LOG;
 
-public class SecureSmsProxy extends Application {
+public class SecureSmsProxyApplication extends Application {
 
-  private static final String TAG = "SecureSmsProxy";
+  private static final String TAG = "SecureSmsProxyApplication";
 
-  private static DbHelper openHelper;
+  private static DbHelper dbHelper;
 
   public static SQLiteDatabase getWritableDatabase() {
-    return openHelper.getWritableDatabase();
+    return dbHelper.getWritableDatabase();
   }
 
   public static SQLiteDatabase getReadableDatabase() {
-    return openHelper.getReadableDatabase();
+    return dbHelper.getReadableDatabase();
   }
 
   @Override
   public void onCreate() {
     super.onCreate();
     Thread.setDefaultUncaughtExceptionHandler(this::handleUncaughtException);
-    openHelper = new DbHelper(this);
-    getWritableDatabase().execSQL("PRAGMA foreign_keys=ON;");
+    dbHelper = new DbHelper(this);
+    try (SQLiteDatabase writableDatabase = getWritableDatabase()) {
+      writableDatabase.execSQL("PRAGMA foreign_keys=ON;");
+    }
   }
 
 
@@ -53,8 +57,9 @@ public class SecureSmsProxy extends Application {
     PrintWriter writer = new PrintWriter(stringWriter);
 
     String model = Build.MODEL;
-    if (!model.startsWith(Build.MANUFACTURER))
+    if (!model.startsWith(Build.MANUFACTURER)) {
       model = Build.MANUFACTURER + " " + model;
+    }
 
     PackageManager manager = this.getPackageManager();
     PackageInfo info = null;
@@ -64,9 +69,10 @@ public class SecureSmsProxy extends Application {
       // ignore
     }
 
+    writer.println("App name: S2SMP" + (info == null ? "" : " (" + info.packageName + ")"));
+    writer.println("App version: " + (info == null ? "NOT AVAILABLE" : info.versionCode));
     writer.println("Android version: " + Build.VERSION.SDK_INT);
     writer.println("Device: " + model);
-    writer.println("App version: " + (info == null ? "NOT AVAILABLE" : info.versionCode));
     writer.println("Thread name: " + thread.getName());
     writer.println();
     writer.println("Exception stack trace:");

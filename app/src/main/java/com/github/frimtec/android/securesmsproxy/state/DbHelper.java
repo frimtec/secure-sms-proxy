@@ -22,7 +22,7 @@ public class DbHelper extends SQLiteOpenHelper {
   public static final String VIEW_APPLICATION_RULE = "v_application_rule";
 
   private static final String TAG = "DbHelper";
-  private static final String DB_NAME = "SecureSmsProxy.db";
+  private static final String DB_NAME = "S2MSP.db";
   private static final int DB_VERSION = 1;
 
   public DbHelper(@Nullable Context context) {

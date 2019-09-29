@@ -1,4 +1,4 @@
-package com.github.frimtec.android.securesmsproxy.helper;
+package com.github.frimtec.android.securesmsproxy.utility;
 
 import java.security.SecureRandom;
 import java.util.Random;

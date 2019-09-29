@@ -1,4 +1,4 @@
-package com.github.frimtec.android.securesmsproxy.activity;
+package com.github.frimtec.android.securesmsproxy.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,14 +17,14 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.github.frimtec.android.securesmsproxy.R;
 import com.github.frimtec.android.securesmsproxy.domain.ApplicationRule;
-import com.github.frimtec.android.securesmsproxy.helper.NotificationHelper;
-import com.github.frimtec.android.securesmsproxy.helper.Permission;
 import com.github.frimtec.android.securesmsproxy.service.ApplicationRuleDao;
+import com.github.frimtec.android.securesmsproxy.utility.NotificationHelper;
+import com.github.frimtec.android.securesmsproxy.utility.Permission;
 
 import java.util.List;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
-import static com.github.frimtec.android.securesmsproxy.helper.Permission.SMS;
+import static com.github.frimtec.android.securesmsproxy.utility.Permission.SMS;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     this.listView = findViewById(R.id.list);
     listView.setClickable(true);
 
-    View headerView = getLayoutInflater().inflate(R.layout.application_rule_header, null);
+    View headerView = getLayoutInflater().inflate(R.layout.application_rule_header, listView, false);
     listView.addHeaderView(headerView);
     registerForContextMenu(listView);
     refresh();
@@ -67,18 +67,16 @@ public class MainActivity extends AppCompatActivity {
   public boolean onContextItemSelected(MenuItem item) {
     AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
     ApplicationRule selectedAlert = (ApplicationRule) listView.getItemAtPosition(info.position);
-    switch (item.getItemId()) {
-      case MENU_CONTEXT_DELETE_ID:
-        NotificationHelper.areYouSure(this, (dialog, which) -> {
-          deleteApplicationRule(selectedAlert);
-          refresh();
-          Toast.makeText(this, R.string.general_entry_deleted, Toast.LENGTH_SHORT).show();
-        }, (dialog, which) -> {
-        });
-        return true;
-      default:
-        return super.onContextItemSelected(item);
+    if (item.getItemId() == MENU_CONTEXT_DELETE_ID) {
+      NotificationHelper.areYouSure(this, (dialog, which) -> {
+        deleteApplicationRule(selectedAlert);
+        refresh();
+        Toast.makeText(this, R.string.general_entry_deleted, Toast.LENGTH_SHORT).show();
+      }, (dialog, which) -> {
+      });
+      return true;
     }
+    return super.onContextItemSelected(item);
   }
 
   private void deleteApplicationRule(ApplicationRule applicationRule) {
@@ -117,10 +115,9 @@ public class MainActivity extends AppCompatActivity {
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    switch (item.getItemId()) {
-      case R.id.about:
-        startActivity(new Intent(this, AboutActivity.class));
-        return true;
+    if (item.getItemId() == R.id.about) {
+      startActivity(new Intent(this, AboutActivity.class));
+      return true;
     }
     return super.onOptionsItemSelected(item);
   }

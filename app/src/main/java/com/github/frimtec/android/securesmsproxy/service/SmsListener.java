@@ -1,4 +1,4 @@
-package com.github.frimtec.android.securesmsproxy.receiver;
+package com.github.frimtec.android.securesmsproxy.service;
 
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -6,9 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.github.frimtec.android.securesmsproxy.domain.Application;
-import com.github.frimtec.android.securesmsproxyapi.Aes;
-import com.github.frimtec.android.securesmsproxy.helper.SmsHelper;
-import com.github.frimtec.android.securesmsproxy.service.ApplicationRuleDao;
+import com.github.frimtec.android.securesmsproxy.utility.SmsHelper;
+import com.github.frimtec.android.securesmsproxyapi.utility.Aes;
 import com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade;
 import com.github.frimtec.android.securesmsproxyapi.Sms;
 

@@ -1,4 +1,4 @@
-package com.github.frimtec.android.securesmsproxy.activity;
+package com.github.frimtec.android.securesmsproxy.ui;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -12,7 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.frimtec.android.securesmsproxy.R;
-import com.github.frimtec.android.securesmsproxy.helper.PackageInfoAccessor;
+import com.github.frimtec.android.securesmsproxy.utility.PackageInfoAccessor;
 import com.github.frimtec.android.securesmsproxy.service.ApplicationRuleDao;
 
 import java.util.Collections;
@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
-import static com.github.frimtec.android.securesmsproxy.helper.Permission.SMS;
+import static com.github.frimtec.android.securesmsproxy.utility.Permission.SMS;
 import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.ACTION_REGISTER;
 import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.EXTRA_LISTENER_CLASS;
 import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.EXTRA_PHONE_NUMBERS;

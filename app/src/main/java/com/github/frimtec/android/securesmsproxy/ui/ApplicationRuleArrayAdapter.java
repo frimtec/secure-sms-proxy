@@ -1,4 +1,4 @@
-package com.github.frimtec.android.securesmsproxy.activity;
+package com.github.frimtec.android.securesmsproxy.ui;
 
 import android.content.Context;
 import android.telephony.PhoneNumberUtils;
@@ -16,7 +16,7 @@ import androidx.annotation.Nullable;
 import com.github.frimtec.android.securesmsproxy.R;
 import com.github.frimtec.android.securesmsproxy.domain.Application;
 import com.github.frimtec.android.securesmsproxy.domain.ApplicationRule;
-import com.github.frimtec.android.securesmsproxy.helper.PackageInfoAccessor;
+import com.github.frimtec.android.securesmsproxy.utility.PackageInfoAccessor;
 
 import java.util.List;
 import java.util.Locale;

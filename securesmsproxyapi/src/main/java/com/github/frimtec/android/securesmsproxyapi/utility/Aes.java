@@ -1,4 +1,4 @@
-package com.github.frimtec.android.securesmsproxyapi;
+package com.github.frimtec.android.securesmsproxyapi.utility;
 
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
@@ -12,10 +12,10 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-final public class Aes {
+public final class Aes {
 
   private static final String ALGORITHM_AES = "AES/CBC/PKCS5Padding";
-  private final static String HEX = "0123456789ABCDEF";
+  private static final String HEX = "0123456789ABCDEF";
 
   private final SecretKeySpec secretKey;
   private final IvParameterSpec parameterSpec;
@@ -61,9 +61,9 @@ final public class Aes {
   private static byte[] toByte(String hexString) {
     int len = hexString.length() / 2;
     byte[] result = new byte[len];
-    for (int i = 0; i < len; i++)
-      result[i] = Integer.valueOf(hexString.substring(2 * i, 2 * i + 2),
-          16).byteValue();
+    for (int i = 0; i < len; i++) {
+      result[i] = Integer.valueOf(hexString.substring(2 * i, 2 * i + 2), 16).byteValue();
+    }
     return result;
   }
 

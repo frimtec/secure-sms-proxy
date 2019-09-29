@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
-        android:name=".state.SecureSmsProxy"
+        android:name=".SecureSmsProxyApplication"
         android:allowBackup="true"
         android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
@@ -16,13 +16,13 @@
         android:theme="@style/AppTheme">
 
 
-        <activity android:name=".activity.RegisterActivity" >
+        <activity android:name=".ui.RegisterActivity" >
             <intent-filter>
                 <action android:name="com.github.frimtec.android.securesmsproxy.intent.action.REGISTER" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.SendLogActivity">
+        <activity android:name=".ui.SendLogActivity">
             <intent-filter>
                 <action android:name="android.permission.SEND_LOG" />
 
@@ -30,7 +30,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".ui.MainActivity"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="singleTask">
             <intent-filter>
@@ -39,24 +39,24 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.AboutActivity"
+            android:name=".ui.AboutActivity"
             android:label="@string/title_activity_about"
-            android:parentActivityName=".activity.MainActivity">
+            android:parentActivityName=".ui.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.github.frimtec.android.securesmsproxy.activity.MainActivity" />
+                android:value="com.github.frimtec.android.securesmsproxy.ui.MainActivity" />
         </activity>
 
         <receiver
-            android:name=".receiver.SmsListener"
+            android:name=".service.SmsListener"
             android:permission="android.permission.BROADCAST_SMS">
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
 
-        <service android:name=".receiver.SmsSender" android:exported="true"/>
-        <service android:name=".service.SecureSmsProxyService" android:exported="true"/>
+        <service android:name=".service.SmsSender" android:exported="true"/>
+        <service android:name=".service.SecureSmsProxyRemoteService" android:exported="true"/>
     </application>
 
 </manifest>

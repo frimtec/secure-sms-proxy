@@ -1,4 +1,4 @@
-package com.github.frimtec.android.securesmsproxy.activity;
+package com.github.frimtec.android.securesmsproxy.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,7 +13,7 @@ import static android.content.Intent.EXTRA_BUG_REPORT;
 
 public class SendLogActivity extends AppCompatActivity {
 
-  public final static String ACTION_SEND_LOG = "android.permission.SEND_LOG";
+  public static final String ACTION_SEND_LOG = "android.permission.SEND_LOG";
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +37,7 @@ public class SendLogActivity extends AppCompatActivity {
     Intent intent = new Intent(Intent.ACTION_SEND);
     intent.setType("plain/text");
     intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"frimtec@gmx.ch"});
-    intent.putExtra(Intent.EXTRA_SUBJECT, "SecureSmsProxy crash report");
+    intent.putExtra(Intent.EXTRA_SUBJECT, "S2SMP crash report");
     intent.putExtra(Intent.EXTRA_TEXT, report);
     startActivityForResult(intent, 1);
   }

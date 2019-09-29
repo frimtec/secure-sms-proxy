@@ -1,4 +1,4 @@
-package com.github.frimtec.android.securesmsproxy.receiver;
+package com.github.frimtec.android.securesmsproxy.service;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -8,10 +8,9 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 import com.github.frimtec.android.securesmsproxy.domain.ApplicationRule;
-import com.github.frimtec.android.securesmsproxy.helper.Permission;
-import com.github.frimtec.android.securesmsproxy.helper.SmsHelper;
-import com.github.frimtec.android.securesmsproxy.service.ApplicationRuleDao;
-import com.github.frimtec.android.securesmsproxyapi.Aes;
+import com.github.frimtec.android.securesmsproxy.utility.Permission;
+import com.github.frimtec.android.securesmsproxy.utility.SmsHelper;
+import com.github.frimtec.android.securesmsproxyapi.utility.Aes;
 import com.github.frimtec.android.securesmsproxyapi.Sms;
 
 import java.util.Collections;

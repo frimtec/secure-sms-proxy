@@ -13,7 +13,7 @@ import com.github.frimtec.android.securesmsproxyapi.ISecureSmsProxyService;
 
 import java.util.List;
 
-public class SecureSmsProxyService extends Service {
+public class SecureSmsProxyRemoteService extends Service {
 
   private ApplicationRuleDao dao;
 

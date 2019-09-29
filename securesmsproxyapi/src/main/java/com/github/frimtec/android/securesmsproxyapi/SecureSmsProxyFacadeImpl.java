@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.github.frimtec.android.securesmsproxyapi.utility.Aes;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
