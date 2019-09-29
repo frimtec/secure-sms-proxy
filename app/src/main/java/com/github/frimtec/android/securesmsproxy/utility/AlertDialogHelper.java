@@ -3,29 +3,13 @@ package com.github.frimtec.android.securesmsproxy.utility;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.text.Html;
-import android.text.SpannableString;
-import android.text.method.LinkMovementMethod;
-import android.widget.TextView;
 
 import com.github.frimtec.android.securesmsproxy.R;
 
 import java.util.function.BiConsumer;
 
 
-public class NotificationHelper {
-
-  public static void infoDialog(Context context, int titleResourceId, int textResourceId, BiConsumer<DialogInterface, Integer> action) {
-    SpannableString message = new SpannableString(Html.fromHtml(context.getString(textResourceId), Html.FROM_HTML_MODE_COMPACT));
-    AlertDialog alertDialog = new AlertDialog.Builder(context)
-        // set dialog message
-        .setTitle(titleResourceId)
-        .setMessage(message)
-        .setCancelable(true)
-        .setPositiveButton("OK", action::accept).create();
-    alertDialog.show();
-    ((TextView) alertDialog.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
-  }
+public class AlertDialogHelper {
 
   public static void requirePermissions(Context context, int titleResourceId, int textResourceId, BiConsumer<DialogInterface, Integer> action) {
     AlertDialog alertDialog = new AlertDialog.Builder(context)

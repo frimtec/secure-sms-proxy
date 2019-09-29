@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.github.frimtec.android.securesmsproxy">
 
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
@@ -16,7 +17,7 @@
         android:theme="@style/AppTheme">
 
 
-        <activity android:name=".ui.RegisterActivity" >
+        <activity android:name=".ui.RegisterActivity">
             <intent-filter>
                 <action android:name="com.github.frimtec.android.securesmsproxy.intent.action.REGISTER" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -55,8 +56,14 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".service.SmsSender" android:exported="true"/>
-        <service android:name=".service.SecureSmsProxyRemoteService" android:exported="true"/>
+        <service
+            android:name=".service.SmsSender"
+            android:exported="true"
+            tools:ignore="ExportedService" />
+        <service
+            android:name=".service.SecureSmsProxyRemoteService"
+            android:exported="true"
+            tools:ignore="ExportedService" />
     </application>
 
 </manifest>

@@ -18,7 +18,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.github.frimtec.android.securesmsproxy.R;
 import com.github.frimtec.android.securesmsproxy.domain.ApplicationRule;
 import com.github.frimtec.android.securesmsproxy.service.ApplicationRuleDao;
-import com.github.frimtec.android.securesmsproxy.utility.NotificationHelper;
+import com.github.frimtec.android.securesmsproxy.utility.AlertDialogHelper;
 import com.github.frimtec.android.securesmsproxy.utility.Permission;
 
 import java.util.List;
@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
     AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
     ApplicationRule selectedAlert = (ApplicationRule) listView.getItemAtPosition(info.position);
     if (item.getItemId() == MENU_CONTEXT_DELETE_ID) {
-      NotificationHelper.areYouSure(this, (dialog, which) -> {
+      AlertDialogHelper.areYouSure(this, (dialog, which) -> {
         deleteApplicationRule(selectedAlert);
         refresh();
         Toast.makeText(this, R.string.general_entry_deleted, Toast.LENGTH_SHORT).show();
@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
   private void refresh() {
     List<ApplicationRule> all = dao.all();
     listView.setAdapter(new ApplicationRuleArrayAdapter(this, all,
-        (adapter, applicationRule) -> view -> NotificationHelper.areYouSure(adapter.getContext(), (dialog, which) -> {
+        (adapter, applicationRule) -> view -> AlertDialogHelper.areYouSure(adapter.getContext(), (dialog, which) -> {
           dao.delete(applicationRule.getApplication());
           adapter.remove(applicationRule);
           adapter.notifyDataSetChanged();

@@ -45,7 +45,7 @@ public enum Permission {
   }
 
   private static void requestPermissionsWithExplanation(Activity activity, String[] permissions, int titleResourceId, int textResourceId) {
-    NotificationHelper.requirePermissions(activity, titleResourceId, textResourceId, (dialogInterface, integer) -> requestPermissions(activity, permissions));
+    AlertDialogHelper.requirePermissions(activity, titleResourceId, textResourceId, (dialogInterface, integer) -> requestPermissions(activity, permissions));
   }
 
   private static void requestPermissions(Activity activity, String[] permissions) {
