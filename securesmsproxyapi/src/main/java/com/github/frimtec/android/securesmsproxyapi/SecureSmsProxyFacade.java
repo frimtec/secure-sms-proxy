@@ -133,4 +133,10 @@ public interface SecureSmsProxyFacade {
    * @return list of received SMS
    */
   List<Sms> extractReceivedSms(Intent smsReceivedIntent, String secret);
+
+  /**
+   * Checks whether the S2SMP application is installed or not.
+   * @return true: S2SMP is installed; false: S2SMP is not installed;
+   */
+  boolean isInstalled();
 }

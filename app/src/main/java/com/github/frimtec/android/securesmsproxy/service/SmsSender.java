@@ -33,7 +33,7 @@ public class SmsSender extends IntentService {
       Log.w(TAG, "SMS sending blocked because of unrecognized intent.");
       return;
     }
-    if (Permission.SMS.isAllowed(this)) {
+    if (!Permission.SMS.isAllowed(this)) {
       Log.w(TAG, "SMS sending blocked because of missing SMS permissions.");
       return;
     }

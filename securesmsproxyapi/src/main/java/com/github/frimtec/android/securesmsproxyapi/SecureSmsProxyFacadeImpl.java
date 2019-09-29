@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -31,13 +32,15 @@ final class SecureSmsProxyFacadeImpl implements SecureSmsProxyFacade {
 
   private static final ComponentName SECURE_SMS_PROXY_COMPONENT = new ComponentName(
       S2SMP_PACKAGE_NAME,
-      S2SMP_PACKAGE_NAME + ".receiver.SmsSender"
+      S2SMP_PACKAGE_NAME + ".service.SmsSender"
   );
 
   private final Context context;
+  private final PackageManager packageManager;
 
   SecureSmsProxyFacadeImpl(Context context) {
     this.context = context;
+    this.packageManager = context.getPackageManager();
   }
 
   @Override
@@ -98,4 +101,13 @@ final class SecureSmsProxyFacadeImpl implements SecureSmsProxyFacade {
     }
   }
 
+  @Override
+  public boolean isInstalled() {
+    try {
+      this.packageManager.getPackageInfo(S2SMP_PACKAGE_NAME, 0);
+      return true;
+    } catch (PackageManager.NameNotFoundException e) {
+      return false;
+    }
+  }
 }
