@@ -25,7 +25,7 @@ Build S2SMP on your own and then install the APK via ADB to your android phone.
 
 ## Integrating applications with S2SMP
 S2SMP provides an easy API to integrate applications. The API supports the registration process, sending and receiving SMS, 
-as well querying if specific phone numbers are already granted for the application.  
+as well as querying if specific phone numbers are already granted for the application.  
 
 ## Supported languages
 Currently the following languages are supported in S2SMP:
