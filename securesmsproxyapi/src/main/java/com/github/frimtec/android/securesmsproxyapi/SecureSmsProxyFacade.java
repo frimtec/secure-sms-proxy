@@ -44,7 +44,7 @@ public interface SecureSmsProxyFacade {
     /**
      * Registration return code.
      */
-    enum ReturnCode {
+    public enum ReturnCode {
       ALLOWED(true),
       NO_SECRET(false),
       REJECTED(false),
