@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 
 import java.util.List;
 import java.util.Optional;
@@ -134,9 +135,51 @@ public interface SecureSmsProxyFacade {
    */
   List<Sms> extractReceivedSms(Intent smsReceivedIntent, String secret);
 
+
   /**
-   * Checks whether the S2SMP application is installed or not.
-   * @return true: S2SMP is installed; false: S2SMP is not installed;
+   * Installation information.
+   * @see #getInstallation()
    */
-  boolean isInstalled();
+  class Installation {
+
+    private final String apiVersion;
+    private final String appVersion;
+    private final Uri downloadLink;
+
+    public Installation(String apiVersion, String appVersion, Uri downloadLink) {
+      this.apiVersion = apiVersion;
+      this.appVersion = appVersion;
+      this.downloadLink = downloadLink;
+    }
+
+    /**
+     * Returns the version of the S2SMP API library.
+     * @return S2SMP API library version
+     */
+    public String getApiVersion() {
+      return apiVersion;
+    }
+
+    /**
+     * Returns the version of the installed S2SMP app.
+     * @return S2SMP app version or empty if S2SMP app is not installed
+     */
+    public Optional<String> getAppVersion() {
+      return Optional.ofNullable(appVersion);
+    }
+
+    /**
+     * Returns download link of the S2SMP application that fits best your to the current API version.
+     * @return download link for the S2SMP app
+     */
+    public Uri getDownloadLink() {
+      return downloadLink;
+    }
+  }
+
+  /**
+   * Returns the installation of the S2SMP application.
+   * @return installation
+   */
+  Installation getInstallation();
 }

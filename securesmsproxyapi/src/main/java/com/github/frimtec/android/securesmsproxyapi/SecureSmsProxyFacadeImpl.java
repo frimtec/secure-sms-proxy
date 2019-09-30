@@ -5,7 +5,9 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -102,12 +104,15 @@ final class SecureSmsProxyFacadeImpl implements SecureSmsProxyFacade {
   }
 
   @Override
-  public boolean isInstalled() {
+  public Installation getInstallation() {
+    String appVersion;
     try {
-      this.packageManager.getPackageInfo(S2SMP_PACKAGE_NAME, 0);
-      return true;
+      PackageInfo packageInfo = this.packageManager.getPackageInfo(S2SMP_PACKAGE_NAME, 0);
+      appVersion = packageInfo.versionName;
     } catch (PackageManager.NameNotFoundException e) {
-      return false;
+      appVersion = null;
     }
+    String apiVersion = BuildConfig.VERSION_NAME;
+    return new Installation(apiVersion, appVersion, Uri.parse("https://api.github.com/repos/frimtec/secure-sms-proxy/releases/tag/" + apiVersion + "/app-release.apk"));
   }
 }
