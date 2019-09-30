@@ -112,7 +112,7 @@ public interface SecureSmsProxyFacade {
    * @param smsBroadCastReceiverClass broad cast receiver class of the current application where received SMS will be broadcast to
    * @see #getRegistrationResult(int, Intent)
    */
-  void register(Activity callerActivity, int requestCode, List<String> phoneNumbersToAllow, Class<? extends BroadcastReceiver> smsBroadCastReceiverClass);
+  void register(Activity callerActivity, int requestCode, Set<String> phoneNumbersToAllow, Class<? extends BroadcastReceiver> smsBroadCastReceiverClass);
 
   /**
    * Returns registration result from result code and data intent that your activity will receive

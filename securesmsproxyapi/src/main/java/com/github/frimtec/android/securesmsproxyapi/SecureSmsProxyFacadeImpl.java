@@ -54,7 +54,7 @@ final class SecureSmsProxyFacadeImpl implements SecureSmsProxyFacade {
   public void register(
       Activity callerActivity,
       int requestCode,
-      List<String> phoneNumbersToAllow,
+      Set<String> phoneNumbersToAllow,
       Class<? extends BroadcastReceiver> smsBroadCastReceiverClass) {
     Intent intent = new Intent(ACTION_REGISTER);
     intent.putStringArrayListExtra(EXTRA_PHONE_NUMBERS, new ArrayList<>(phoneNumbersToAllow));
@@ -127,7 +127,9 @@ final class SecureSmsProxyFacadeImpl implements SecureSmsProxyFacade {
     try (Cursor cursor = cr.query(Uri.withAppendedPath(CONTENT_URI, this.context.getApplicationContext().getPackageName()), new String[0], null, null, null)) {
       Set<String> allowedNumbers = new HashSet<>();
       if (cursor != null && cursor.moveToFirst()) {
-        allowedNumbers.add(cursor.getString(0));
+        do {
+          allowedNumbers.add(cursor.getString(0));
+        } while (cursor.moveToNext());
       }
       return allowedNumbers.containsAll(phoneNumbers);
     }
