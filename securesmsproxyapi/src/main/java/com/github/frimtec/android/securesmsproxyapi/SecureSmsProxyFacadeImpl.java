@@ -118,7 +118,7 @@ final class SecureSmsProxyFacadeImpl implements SecureSmsProxyFacade {
       appVersion = null;
     }
     String apiVersion = BuildConfig.VERSION_NAME;
-    return new Installation(apiVersion, appVersion, Uri.parse("https://api.github.com/repos/frimtec/secure-sms-proxy/releases/tag/" + apiVersion + "/app-release.apk"));
+    return new Installation(apiVersion, appVersion, Uri.parse("https://github.com/frimtec/secure-sms-proxy/releases/download/" + apiVersion + "/app-release.apk"));
   }
 
   @Override
