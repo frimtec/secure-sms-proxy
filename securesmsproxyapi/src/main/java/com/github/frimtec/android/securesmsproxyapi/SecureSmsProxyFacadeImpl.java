@@ -3,10 +3,12 @@ package com.github.frimtec.android.securesmsproxyapi;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,11 +17,14 @@ import com.github.frimtec.android.securesmsproxyapi.utility.Aes;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 import static android.content.Intent.EXTRA_TEXT;
+import static com.github.frimtec.android.securesmsproxyapi.IsAllowedPhoneNumberContract.CONTENT_URI;
 import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.RegistrationResult.ReturnCode.ALLOWED;
 import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.RegistrationResult.ReturnCode.MISSING_SMS_PERMISSION;
 import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.RegistrationResult.ReturnCode.NO_EXTRAS;
@@ -114,5 +119,17 @@ final class SecureSmsProxyFacadeImpl implements SecureSmsProxyFacade {
     }
     String apiVersion = BuildConfig.VERSION_NAME;
     return new Installation(apiVersion, appVersion, Uri.parse("https://api.github.com/repos/frimtec/secure-sms-proxy/releases/tag/" + apiVersion + "/app-release.apk"));
+  }
+
+  @Override
+  public boolean isAllowed(Set<String> phoneNumbers) {
+    ContentResolver cr = context.getContentResolver();
+    try (Cursor cursor = cr.query(Uri.withAppendedPath(CONTENT_URI, this.context.getApplicationContext().getPackageName()), new String[0], null, null, null)) {
+      Set<String> allowedNumbers = new HashSet<>();
+      if (cursor != null && cursor.moveToFirst()) {
+        allowedNumbers.add(cursor.getString(0));
+      }
+      return allowedNumbers.containsAll(phoneNumbers);
+    }
   }
 }

@@ -8,6 +8,7 @@ import android.net.Uri;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface SecureSmsProxyFacade {
 
@@ -38,6 +39,7 @@ public interface SecureSmsProxyFacade {
 
   /**
    * Registration result.
+   *
    * @see #getRegistrationResult(int, Intent)
    */
   class RegistrationResult {
@@ -61,6 +63,7 @@ public interface SecureSmsProxyFacade {
 
       /**
        * Returns whether the return code is a success or an error.
+       *
        * @return true: success; false: error
        */
       public boolean isSuccess() {
@@ -83,6 +86,7 @@ public interface SecureSmsProxyFacade {
 
     /**
      * Returns the return code.
+     *
      * @return return code
      */
     public ReturnCode getReturnCode() {
@@ -91,6 +95,7 @@ public interface SecureSmsProxyFacade {
 
     /**
      * Returns the secret to be used to encrypt/decrypt SMS in the exchange with the secure SMS proxy.
+     *
      * @return secret or empty if registration was not successful
      */
     public Optional<String> getSecret() {
@@ -100,9 +105,10 @@ public interface SecureSmsProxyFacade {
 
   /**
    * Registers the current application to be allowed to send and receive SMS to a given list of phone numbers.
-   * @param callerActivity caller activity; this activity will receive the result in the {@link Activity#onActivityResult(int, int, Intent)} hook
-   * @param requestCode request code that will be used to identify the result in the {@link Activity#onActivityResult(int, int, Intent)} hook
-   * @param phoneNumbersToAllow list of phone numbers to get approved
+   *
+   * @param callerActivity            caller activity; this activity will receive the result in the {@link Activity#onActivityResult(int, int, Intent)} hook
+   * @param requestCode               request code that will be used to identify the result in the {@link Activity#onActivityResult(int, int, Intent)} hook
+   * @param phoneNumbersToAllow       list of phone numbers to get approved
    * @param smsBroadCastReceiverClass broad cast receiver class of the current application where received SMS will be broadcast to
    * @see #getRegistrationResult(int, Intent)
    */
@@ -111,8 +117,9 @@ public interface SecureSmsProxyFacade {
   /**
    * Returns registration result from result code and data intent that your activity will receive
    * with the {@link Activity#onActivityResult(int, int, Intent)} hook upon result.
+   *
    * @param resultCode result code from {@code onActivityResult}
-   * @param data data from {@code onActivityResult}
+   * @param data       data from {@code onActivityResult}
    * @return registration result
    * @see #register(Activity, int, List, Class)
    */
@@ -138,6 +145,7 @@ public interface SecureSmsProxyFacade {
 
   /**
    * Installation information.
+   *
    * @see #getInstallation()
    */
   class Installation {
@@ -154,6 +162,7 @@ public interface SecureSmsProxyFacade {
 
     /**
      * Returns the version of the S2SMP API library.
+     *
      * @return S2SMP API library version
      */
     public String getApiVersion() {
@@ -162,6 +171,7 @@ public interface SecureSmsProxyFacade {
 
     /**
      * Returns the version of the installed S2SMP app.
+     *
      * @return S2SMP app version or empty if S2SMP app is not installed
      */
     public Optional<String> getAppVersion() {
@@ -170,6 +180,7 @@ public interface SecureSmsProxyFacade {
 
     /**
      * Returns download link of the S2SMP application that fits best your to the current API version.
+     *
      * @return download link for the S2SMP app
      */
     public Uri getDownloadLink() {
@@ -179,7 +190,16 @@ public interface SecureSmsProxyFacade {
 
   /**
    * Returns the installation of the S2SMP application.
+   *
    * @return installation
    */
   Installation getInstallation();
+
+  /**
+   * Checks whether the current application is allowed to send/receive SMS to all of the given phone numbers or not.
+   *
+   * @param phoneNumbers phone numbers to check
+   * @return true: all phone numbers are allowed; false: at least one of the phone numbers is not allowed
+   */
+  boolean isAllowed(Set<String> phoneNumbers);
 }
