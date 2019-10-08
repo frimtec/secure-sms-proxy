@@ -5,19 +5,20 @@
 
 ![Deactivated PAssist](app/src/main/res/mipmap-hdpi/ic_launcher.png) 
 
-As Google strongly restricts the use of SMS permissions for applications on the Play-Store, S2SMP provides a API for third party applications
+As Google strongly restricts the use of SMS permissions for applications in the Play-Store, S2SMP provides a API for third party applications
 to send and receive SMS to specific phone numbers via a secure SMS proxy.
 Each application that wants to send/receive SMS to a phone number can register itself on S2SMP. 
-S2SMP asks the user for permission if the requesting application is allowed to send/receive SMS from and to the requested phone number.
+S2SMP asks the user for permission, whether the requesting application is allowed to send/receive SMS from and to the requested phone number or not.
 All SMS exchanged with third party applications are strongly encrypted.
+
 Beside SMS permissions, S2SMP does not request any other permissions to ensure the integrity and security of S2SMP.
 
 ## Installation
-S2SMP cannot be offered on Google-Play as Google does only allow applications using SMS permissions for very rare cases. 
+S2SMP cannot be offered on Google-Play as Google does only allow applications using SMS permissions in very special cases. 
 
 ### Install pre build APK
 You can download the APK file from the [GitHub release page](https://github.com/frimtec/secure-sms-proxy/releases).
-To install the APK you need to disable "Play Protect" in "Google Play" for the time of the installation (don't forget to re-enable "Play Protect" after the installation). 
+To install the APK you eventually need to disable "Play Protect" in "Google Play" for the time of the installation (don't forget to re-enable "Play Protect" after the installation). 
 This is only required for the first installation. Updates can be installed with "Play Protect" enabled.
 
 ### Self build
@@ -25,8 +26,107 @@ Build S2SMP on your own and then install the APK via ADB to your android phone.
 
 ## Integrating applications with S2SMP
 S2SMP provides an easy API to integrate applications. The API supports the registration process, sending and receiving SMS, 
-as well as querying if specific phone numbers are already granted for the application.  
+as well as querying if specific phone numbers are already granted for the application.
 
+### Adding the library to your project
+The API is provided as an AAR (Android Archive) file ```securesmsproxyapi-release.aar``` and can be downloaded from the [GitHub release page](https://github.com/frimtec/secure-sms-proxy/releases).
+You can put the AAR fie into the lib folder of your project and add the following dependency:
+```
+dependencies {
+    implementation fileTree(include: ['*.jar', '*.aar'], dir: 'lib')
+    ...
+}
+```
+
+### Register your application with S2SMP to communicate via SMS for some defined phone numbers
+In you activity do the following:
+
+```
+package your.application.package;
+  ...
+public class YourActivity extends AppCompatActivity {
+  ...
+
+  private static final int YOUR_REQUEST_CODE = ...;
+  private SecureSmsProxyFacade s2smp;
+ 
+  @Override
+  public void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    s2smp = SecureSmsProxyFacade.instance(this.getContext());
+    ...
+  }
+
+  anyMethod() {
+    Set<String> phoneNumbers = ...;
+    s2smp.register(this, YOUR_REQUEST_CODE, phoneNumbers, YourSmsListener.class);
+  }
+  
+  @Override
+  public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    if (requestCode == YOUR_REQUEST_CODE) {
+      RegistrationResult result = s2smp.getRegistrationResult(resultCode, data);
+      result.getSecret().ifPresent(secret -> {/* store the secret peremanently for later SMS communication */});
+      if (result.getReturnCode().isSuccess()) {
+        Toast.makeText(this, "Registration OK.", Toast.LENGTH_LONG).show();
+        ...
+      } else {
+        Toast.makeText(this, "Registration FAILED: " + result.getReturnCode().name(), Toast.LENGTH_LONG).show();
+        ...
+      }
+    }
+    ...
+  }
+  
+  ...
+```
+
+### Receiving SMS in your registered SMS listener
+The SMS listener registered in the previous step should look like this:
+```
+package your.application.package;
+
+public class YourSmsListener extends BroadcastReceiver {
+
+  @Override
+  public void onReceive(Context context, Intent intent) {
+    if ("your.application.package.SMS_RECEIVED".equals(intent.getAction())) {
+      List<Sms> receivedSms = getSmsFromIntent(context, intent);
+      for (Sms sms : receivedSms) {
+         ...
+      }
+    }
+  }
+
+  private static List<Sms> getSmsFromIntent(Context context, Intent intent) {
+    SecureSmsProxyFacade s2smp = SecureSmsProxyFacade.instance(context);
+    String secret = ...; // secret from your registration
+    return s2smp.extractReceivedSms(intent, secret);
+  }
+  
+  ...
+```
+
+### Sending an SMS 
+A SMS can be send with the following code:
+```
+  void sendSms(Context context, String phoneNumber, String smsText) {
+    SecureSmsProxyFacade s2smp = SecureSmsProxyFacade.instance(context);
+    String secret = ...; // secret from your registration
+    s2smp.sendSms(new Sms(phoneNumber, smsText), secret);
+  }
+
+```
+
+### Check if you application is allowed to send/receive SMS with specific phone numbers 
+You can check if you application is allowed to communicate to a given set of phone numbers:
+```
+    SecureSmsProxyFacade s2smp = SecureSmsProxyFacade.instance(context);
+    Set<String> phoneNumbers = ...; // phone numbers to check
+    boolean allowed = s2smp.isAllowed(phoneNumbers);
+```
+ 
 ## Supported languages
 Currently the following languages are supported in S2SMP:
 * English
