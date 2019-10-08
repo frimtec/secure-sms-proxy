@@ -67,7 +67,7 @@ public class YourActivity extends AppCompatActivity {
     super.onActivityResult(requestCode, resultCode, data);
     if (requestCode == YOUR_REQUEST_CODE) {
       RegistrationResult result = s2smp.getRegistrationResult(resultCode, data);
-      result.getSecret().ifPresent(secret -> {/* store the secret peremanently for later SMS communication */});
+      result.getSecret().ifPresent(secret -> {/* store the secret permanently for later SMS communication */});
       if (result.getReturnCode().isSuccess()) {
         Toast.makeText(this, "Registration OK.", Toast.LENGTH_LONG).show();
         ...
