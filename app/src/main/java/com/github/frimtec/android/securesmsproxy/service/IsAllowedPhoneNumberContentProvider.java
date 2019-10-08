@@ -10,7 +10,6 @@ import android.net.Uri;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.github.frimtec.android.securesmsproxy.SecureSmsProxyApplication;
 import com.github.frimtec.android.securesmsproxy.state.DbHelper;
 import com.github.frimtec.android.securesmsproxyapi.IsAllowedPhoneNumberContract;
 
@@ -26,6 +25,15 @@ public class IsAllowedPhoneNumberContentProvider extends ContentProvider {
     URI_MATCHER.addURI(IsAllowedPhoneNumberContract.AUTHORITY, ALLOWED_PHONE_NUMBERS_PATH + "/*", 1);
   }
 
+  private DbHelper dbHelper;
+  private SQLiteDatabase db;
+
+  @Override
+  public boolean onCreate() {
+    this.dbHelper = new DbHelper(getContext());
+    return true;
+  }
+
   @Nullable
   public Cursor query(
       @NonNull Uri uri,
@@ -33,17 +41,21 @@ public class IsAllowedPhoneNumberContentProvider extends ContentProvider {
       String selection,
       String[] selectionArgs,
       String sortOrder) {
-
-    SQLiteDatabase db = SecureSmsProxyApplication.getReadableDatabase();
     if (URI_MATCHER.match(uri) != 1) {
       throw new IllegalArgumentException("Provided uri not supported");
     }
-    return db.query(DbHelper.VIEW_APPLICATION_RULE, new String[]{TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER}, TABLE_APPLICATION_COLUMN_NAME + "=?", new String[]{uri.getLastPathSegment()}, null, null, null);
-  }
 
-  @Override
-  public boolean onCreate() {
-    return false;
+    if (this.db == null || !this.db.isOpen()) {
+      this.db = this.dbHelper.getReadableDatabase();
+    }
+
+    return this.db.query(
+        DbHelper.VIEW_APPLICATION_RULE,
+        new String[]{TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER},
+        TABLE_APPLICATION_COLUMN_NAME + "=?",
+        new String[]{uri.getLastPathSegment()},
+        null, null, null
+    );
   }
 
   @Nullable

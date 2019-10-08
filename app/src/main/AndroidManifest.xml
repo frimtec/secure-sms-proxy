@@ -5,7 +5,6 @@
 
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:name=".SecureSmsProxyApplication"
@@ -15,26 +14,7 @@
         android:label="S2SMP"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <provider
-            android:name=".service.IsAllowedPhoneNumberContentProvider"
-            android:authorities="com.github.frimtec.android.securesmsproxy.provider"
-            android:enabled="true"
-            android:exported="true" />
 
-        <activity android:name=".ui.RegisterActivity">
-            <intent-filter>
-                <action android:name="com.github.frimtec.android.securesmsproxy.intent.action.REGISTER" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".ui.SendLogActivity">
-            <intent-filter>
-                <action android:name="android.permission.SEND_LOG" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
         <activity
             android:name=".ui.MainActivity"
             android:configChanges="orientation|keyboardHidden"
@@ -45,6 +25,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".ui.RegisterActivity">
+
+            <intent-filter>
+                <action android:name="com.github.frimtec.android.securesmsproxy.intent.action.REGISTER" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".ui.SendLogActivity">
+            <intent-filter>
+                <action android:name="android.permission.SEND_LOG" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".ui.AboutActivity"
             android:label="@string/title_activity_about"
@@ -66,6 +64,12 @@
             android:name=".service.SmsSender"
             android:exported="true"
             tools:ignore="ExportedService" />
+
+        <provider
+            android:name=".service.IsAllowedPhoneNumberContentProvider"
+            android:authorities="com.github.frimtec.android.securesmsproxy.provider"
+            android:enabled="true"
+            android:exported="true" />
     </application>
 
 </manifest>
