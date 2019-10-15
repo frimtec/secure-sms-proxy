@@ -14,10 +14,13 @@ public final class Sms {
 
   private final String number;
   private final String text;
+  private final Integer subscriptionId;
+  ;
 
-  public Sms(String number, String text) {
+  public Sms(String number, String text, Integer subscriptionId) {
     this.number = number;
     this.text = text;
+    this.subscriptionId = subscriptionId;
   }
 
   public String getNumber() {
@@ -28,17 +31,22 @@ public final class Sms {
     return text;
   }
 
+  public Integer getSubscriptionId() {
+    return subscriptionId;
+  }
+
   @NonNull
   @Override
   public String toString() {
     return "Sms{" +
         "number='" + number + '\'' +
         ", text='" + text + '\'' +
+        ", subscriptionId='" + subscriptionId + '\'' +
         '}';
   }
 
   public String toJson() {
-      return toJsonObject(this).toString();
+    return toJsonObject(this).toString();
   }
 
   public static String toJsonArray(List<Sms> smsList) {
@@ -50,6 +58,7 @@ public final class Sms {
       JSONObject jsonObject = new JSONObject();
       jsonObject.put("number", sms.getNumber());
       jsonObject.put("text", sms.getText());
+      jsonObject.put("subscriptionId", sms.getSubscriptionId());
       return jsonObject;
     } catch (JSONException e) {
       throw new IllegalStateException("Cannot generate JSON string", e);
@@ -78,6 +87,7 @@ public final class Sms {
   }
 
   private static Sms toSms(JSONObject jsonObject) throws JSONException {
-    return new Sms(jsonObject.getString("number"), jsonObject.getString("text"));
+
+    return new Sms(jsonObject.getString("number"), jsonObject.getString("text"), jsonObject.has("subscriptionId") ? jsonObject.getInt("subscriptionId") : null);
   }
 }
