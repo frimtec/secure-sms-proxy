@@ -15,12 +15,26 @@ public final class Sms {
   private final String number;
   private final String text;
   private final Integer subscriptionId;
-  ;
 
+  /**
+   * Creates SMS for specific description.
+   * @param number phone number
+   * @param text text
+   * @param subscriptionId subscription ID
+   */
   public Sms(String number, String text, Integer subscriptionId) {
     this.number = number;
     this.text = text;
     this.subscriptionId = subscriptionId;
+  }
+
+  /**
+   * Creates SMS for default subscription.
+   * @param number phone number
+   * @param text text
+   */
+  public Sms(String number, String text) {
+    this(number, text, null);
   }
 
   public String getNumber() {
