@@ -147,3 +147,6 @@ The current Android target SDK is 29 (Android 10-Q) and the minimal SDK is 24 (A
 ## Feedback
 Feedback, bug reports or feature requests are very welcome.
 You can send an email to [frimtec@gmx.ch](mailto:frimtec@gmx.ch) or [open an issue on GitHub](https://github.com/frimtec/secure-sms-proxy/issues).
+
+## Credits
+* @bakito: For implementing dual SIM support.
