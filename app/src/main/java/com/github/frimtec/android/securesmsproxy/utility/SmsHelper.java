@@ -20,13 +20,13 @@ public final class SmsHelper {
   public static List<Sms> getSmsFromIntent(Intent intent) {
     Bundle bundle = intent.getExtras();
     if (bundle != null) {
-      int sub1 = bundle.getInt("subscription", -1);
+      int subscription = bundle.getInt("subscription", -1);
       Object[] pdus = (Object[]) bundle.get("pdus");
       return Arrays.stream(pdus)
           .map(pdu -> {
             String format = bundle.getString("format");
             SmsMessage message = SmsMessage.createFromPdu((byte[]) pdu, format);
-            return new Sms(message.getOriginatingAddress(), message.getMessageBody(), sub1 >= 0 ? sub1 : null);
+            return new Sms(message.getOriginatingAddress(), message.getMessageBody(), subscription >= 0 ? subscription : null);
           }).collect(Collectors.toList());
     }
     return Collections.emptyList();

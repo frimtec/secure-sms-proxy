@@ -29,6 +29,12 @@ public class SmsTest {
   }
 
   @Test
+  public void createSmsWithDefaultSubscription() {
+    Sms sms = new Sms("1234", "Text");
+    assertThat(sms.getSubscriptionId(), is(nullValue()));
+  }
+
+  @Test
   public void testToString() {
     Sms sms = new Sms("1234", "Text", 5678);
     assertThat(sms.toString(), CoreMatchers.allOf(
