@@ -28,4 +28,5 @@
     <string name="register_allow">Erlauben</string>
     <string name="permission_accepted">Berechtigung erhalten.</string>
     <string name="permission_rejected">Berechtigung NICHT erhalten!</string>
+    <string name="content_description_logo">Applikationslogo</string>
 </resources>

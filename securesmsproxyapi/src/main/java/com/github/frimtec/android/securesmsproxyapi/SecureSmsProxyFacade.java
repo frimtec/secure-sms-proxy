@@ -121,7 +121,7 @@ public interface SecureSmsProxyFacade {
    * @param resultCode result code from {@code onActivityResult}
    * @param data       data from {@code onActivityResult}
    * @return registration result
-   * @see #register(Activity, int, List, Class)
+   * @see #register(Activity, int, Set, Class)
    */
   RegistrationResult getRegistrationResult(int resultCode, Intent data);
 

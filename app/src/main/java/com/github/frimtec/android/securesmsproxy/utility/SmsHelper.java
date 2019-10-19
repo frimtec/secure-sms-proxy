@@ -22,12 +22,14 @@ public final class SmsHelper {
     if (bundle != null) {
       int subscription = bundle.getInt("subscription", -1);
       Object[] pdus = (Object[]) bundle.get("pdus");
-      return Arrays.stream(pdus)
-          .map(pdu -> {
-            String format = bundle.getString("format");
-            SmsMessage message = SmsMessage.createFromPdu((byte[]) pdu, format);
-            return new Sms(message.getOriginatingAddress(), message.getMessageBody(), subscription >= 0 ? subscription : null);
-          }).collect(Collectors.toList());
+      if (pdus != null) {
+        return Arrays.stream(pdus)
+            .map(pdu -> {
+              String format = bundle.getString("format");
+              SmsMessage message = SmsMessage.createFromPdu((byte[]) pdu, format);
+              return new Sms(message.getOriginatingAddress(), message.getMessageBody(), subscription >= 0 ? subscription : null);
+            }).collect(Collectors.toList());
+      }
     }
     return Collections.emptyList();
   }

@@ -30,4 +30,5 @@
     <string name="register_allow">Allow</string>
     <string name="permission_accepted">Permission was accepted.</string>
     <string name="permission_rejected">Permission was rejected!</string>
+    <string name="content_description_logo">Application logo</string>
 </resources>

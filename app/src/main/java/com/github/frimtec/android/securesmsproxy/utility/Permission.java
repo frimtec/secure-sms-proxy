@@ -52,8 +52,8 @@ public enum Permission {
     ActivityCompat.requestPermissions(activity, permissions, PERMISSION_CHANGED_REQUEST_CODE);
   }
 
-  public final static class RequestCodes {
-    public final static int PERMISSION_CHANGED_REQUEST_CODE = 1;
+  public static final class RequestCodes {
+    public static final int PERMISSION_CHANGED_REQUEST_CODE = 1;
   }
 
   private enum PermissionSets {
