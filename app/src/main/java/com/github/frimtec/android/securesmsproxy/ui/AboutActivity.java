@@ -1,21 +1,17 @@
 package com.github.frimtec.android.securesmsproxy.ui;
 
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.github.frimtec.android.securesmsproxy.BuildConfig;
 import com.github.frimtec.android.securesmsproxy.R;
 
 public class AboutActivity extends AppCompatActivity {
-
-  private static final String TAG = "AboutActivity";
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -37,17 +33,8 @@ public class AboutActivity extends AppCompatActivity {
 
   private void setupAppInfo() {
     TextView textView = findViewById(R.id.app_info);
-
-    String version = "N/A";
-    int build = 0;
-    try {
-      PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-      version = packageInfo.versionName;
-      build = packageInfo.versionCode;
-    } catch (PackageManager.NameNotFoundException e) {
-      Log.e(TAG, "Can not read version info.", e);
-    }
-
+    String version = BuildConfig.VERSION_NAME;
+    int build = BuildConfig.VERSION_CODE;
     textView.setText(Html.fromHtml(
         "<h2><a href='https://github.com/frimtec/secure-sms-proxy'>Secure SMS Proxy</a></h2>" +
             "<p>Version: " + version + " (Build  " + build + ")</p>" +
