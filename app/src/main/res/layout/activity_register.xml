@@ -47,25 +47,32 @@
         android:layout_marginBottom="20dp"
         android:textSize="17sp"/>
 
-    <Button
+    <Button style="@style/Widget.AppCompat.ButtonBar.AlertDialog"
         android:id="@+id/button_reject"
-        android:layout_width="wrap_content"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
         android:text="@string/register_reject"
-        android:layout_marginStart="60dp"
+        android:textStyle="bold"
+        android:background="@color/red"
+        android:textColor="@color/white"
+        android:layout_marginStart="25dp"
         android:layout_marginBottom="25dp"
         android:textSize="18sp" />
 
     <Button
+        style="@style/Widget.AppCompat.ButtonBar.AlertDialog"
         android:id="@+id/button_allow"
-        android:layout_width="wrap_content"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:text="@string/register_allow"
-        android:layout_marginEnd="60dp"
+        android:textStyle="bold"
+        android:background="@color/green"
+        android:textColor="@color/white"
+        android:layout_marginEnd="25dp"
         android:layout_marginBottom="25dp"
         android:textSize="18sp" />
 
