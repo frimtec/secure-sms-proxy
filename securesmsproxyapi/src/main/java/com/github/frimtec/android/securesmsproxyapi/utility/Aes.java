@@ -14,44 +14,49 @@ import javax.crypto.spec.SecretKeySpec;
 
 public final class Aes {
 
+  public static final String SEPARATOR = ";";
   private static final String ALGORITHM_AES = "AES/CBC/PKCS5Padding";
   private static final String HEX = "0123456789ABCDEF";
 
   private final SecretKeySpec secretKey;
-  private final IvParameterSpec parameterSpec;
 
   public Aes(String secret24Bytes) {
     try {
       byte[] bytes = secret24Bytes.getBytes(StandardCharsets.UTF_8);
       this.secretKey = new SecretKeySpec(bytes, "AES");
-      this.parameterSpec = new IvParameterSpec("3855219456285914".getBytes(StandardCharsets.UTF_8));
     } catch (Exception e) {
       throw new RuntimeException("Cannot create AES key", e);
     }
   }
 
   public String encrypt(String cleartext) {
-    return toHex(encrypt(cleartext.getBytes()));
+    byte[] initVector = RandomString.nextString(16).getBytes(StandardCharsets.UTF_8);
+    IvParameterSpec spec = new IvParameterSpec(initVector);
+    return toHex(encrypt(spec, cleartext.getBytes())) + SEPARATOR + toHex(initVector);
   }
 
   public String decrypt(String encrypted) {
-    return new String(decrypt(toByte(encrypted)));
+    String[] split = encrypted.split(SEPARATOR);
+    if (split.length != 2) {
+      throw new RuntimeException("Encrypted value in wrong format");
+    }
+    return new String(decrypt(new IvParameterSpec(toByte(split[1])), toByte(split[0])));
   }
 
-  private byte[] encrypt(byte[] clear) {
+  private byte[] encrypt(IvParameterSpec spec, byte[] clear) {
     try {
       Cipher cipher = Cipher.getInstance(ALGORITHM_AES);
-      cipher.init(Cipher.ENCRYPT_MODE, secretKey, parameterSpec);
+      cipher.init(Cipher.ENCRYPT_MODE, secretKey, spec);
       return cipher.doFinal(clear);
     } catch (BadPaddingException | IllegalBlockSizeException | NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException e) {
       throw new RuntimeException("Cannot create encrypt", e);
     }
   }
 
-  private byte[] decrypt(byte[] encrypted) {
+  private byte[] decrypt(IvParameterSpec spec, byte[] encrypted) {
     try {
       Cipher cipher = Cipher.getInstance(ALGORITHM_AES);
-      cipher.init(Cipher.DECRYPT_MODE, secretKey, parameterSpec);
+      cipher.init(Cipher.DECRYPT_MODE, secretKey, spec);
       return cipher.doFinal(encrypted);
     } catch (BadPaddingException | IllegalBlockSizeException | NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException e) {
       throw new RuntimeException("Cannot decrypt", e);

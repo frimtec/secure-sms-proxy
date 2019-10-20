@@ -1,4 +1,4 @@
-package com.github.frimtec.android.securesmsproxy.utility;
+package com.github.frimtec.android.securesmsproxyapi.utility;
 
 import org.junit.Test;
 

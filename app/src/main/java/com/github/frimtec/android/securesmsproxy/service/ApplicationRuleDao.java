@@ -8,7 +8,7 @@ import android.text.TextUtils;
 import com.github.frimtec.android.securesmsproxy.SecureSmsProxyApplication;
 import com.github.frimtec.android.securesmsproxy.domain.Application;
 import com.github.frimtec.android.securesmsproxy.domain.ApplicationRule;
-import com.github.frimtec.android.securesmsproxy.utility.RandomString;
+import com.github.frimtec.android.securesmsproxyapi.utility.RandomString;
 import com.github.frimtec.android.securesmsproxy.state.DbHelper;
 
 import java.util.Collections;
