@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
 
 
 System.setProperty("line.separator", "\n")
@@ -9,6 +11,27 @@ if (versionPropsFile.exists()) {
 }
 int vcode = (versionProps['VERSION_CODE'] ?: "0").toInteger()
 String vname = (versionProps['VERSION_NAME'] ?: "0.0.1")
+
+ext["signing.gnupg.useLegacyGpg"] = ''
+ext["signing.gnupg.keyName"] = ''
+ext["ossrhUsername"] = ''
+ext["ossrhPassword"] = ''
+
+File secretPropsFile = project.rootProject.file('publish.properties')
+if (secretPropsFile.exists()) {
+    println "Found secret props file, loading props"
+    Properties p = new Properties()
+    p.load(new FileInputStream(secretPropsFile))
+    p.each { name, value ->
+        ext[name] = value
+    }
+} else {
+    println "No props file, loading env vars"
+    ext["signing.gnupg.useLegacyGpg"] = System.getenv('SIGNING_GNUPG_USELEGACYGPG')
+    ext["signing.gnupg.keyName"] = System.getenv('SIGNING_GNUPG_KEYNAME')
+    ext["ossUsername"] = System.getenv('OSS_USERNAME')
+    ext["ossPassword"] = System.getenv('OSS_PASSWORD')
+}
 
 android {
     compileSdkVersion 29
@@ -41,6 +64,70 @@ android {
     }
 }
 
+task sourceJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier "sources"
+}
+
+publishing {
+    publications {
+        release(MavenPublication) {
+            groupId 'com.github.frimtec'
+            artifactId 'secure-sms-proxy-api'
+            version vname
+            artifact(sourceJar)
+            artifact("$buildDir/outputs/aar/securesmsproxyapi-release.aar")
+            pom {
+                name = 'Secure SMS Proxy API'
+                description = 'API to integrate S2SMP (Secure SMS Proxy) into an android application.'
+                url = 'https://github.com/frimtec/secure-sms-proxy'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'frimtec'
+                        name = 'Markus Friedli'
+                        email = 'frimtec@gmx.ch'
+                        url = 'https://github.com/frimtec'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:git@github.com:frimtec/secure-sms-proxy'
+                    developerConnection = 'scm:git:git@github.com:frimtec/secure-sms-proxy'
+                    url = 'https://github.com/frimtec/secure-sms-proxy'
+                }
+                ciManagement {
+                    system = 'travis-ci'
+                    url = 'https://travis-ci.org/frimtec/secure-sms-proxy'
+                }
+                issueManagement {
+                    system = 'github'
+                    url = 'https://github.com/frimtec/secure-sms-proxy/issues'
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+            credentials {
+                username ossUsername
+                password ossPassword
+            }
+        }
+    }
+}
+
+signing {
+    useGpgCmd()
+    sign publishing.publications
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -50,3 +137,4 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }
+

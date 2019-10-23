@@ -1,5 +1,6 @@
 # Secure SMS Proxy (S2SMP)
 [![Build Status](https://travis-ci.org/frimtec/secure-sms-proxy.svg?branch=master)](https://travis-ci.org/frimtec/secure-sms-proxy) 
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.frimtec/secure-sms-proxy-api/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.frimtec/secure-sms-proxy-api) 
 [![Coverage Status](https://coveralls.io/repos/github/frimtec/secure-sms-proxy/badge.svg?branch=master)](https://coveralls.io/github/frimtec/secure-sms-proxy?branch=master)
 [![license](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
@@ -29,12 +30,11 @@ S2SMP provides an easy API to integrate applications. The API supports the regis
 as well as querying if specific phone numbers are already granted for the application.
 
 ### Adding the library to your project
-The API is provided as an AAR (Android Archive) file ```securesmsproxyapi-release.aar``` and can be downloaded from the [GitHub release page](https://github.com/frimtec/secure-sms-proxy/releases).
-You can put the AAR fie into the lib folder of your project and add the following dependency:
+The API is provided as an AAR (Android Archive) file ```securesmsproxyapi-release.aar``` and is available on [Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.frimtec/secure-sms-proxy-api).
+You can add the following dependency to your application project:
 ```
 dependencies {
-    implementation fileTree(include: ['*.jar', '*.aar'], dir: 'lib')
-    ...
+    implementation 'com.github.frimtec:secure-sms-proxy-api:1.3.0'
 }
 ```
 
