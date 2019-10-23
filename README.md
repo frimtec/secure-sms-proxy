@@ -30,7 +30,7 @@ S2SMP provides an easy API to integrate applications. The API supports the regis
 as well as querying if specific phone numbers are already granted for the application.
 
 ### Adding the library to your project
-The API is provided as an AAR (Android Archive) file ```securesmsproxyapi-release.aar``` and is available on [Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.frimtec/secure-sms-proxy-api).
+The API is provided as an AAR (Android Archive) file and is available on [Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.frimtec/secure-sms-proxy-api).
 You can add the following dependency to your application project:
 ```
 dependencies {
