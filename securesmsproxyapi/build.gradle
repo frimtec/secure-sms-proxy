@@ -2,6 +2,9 @@ apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
+jacoco {
+    toolVersion = "0.8.4"
+}
 
 System.setProperty("line.separator", "\n")
 Properties versionProps = new Properties()
@@ -31,6 +34,21 @@ if (secretPropsFile.exists()) {
     ext["signing.gnupg.keyName"] = System.getenv('SIGNING_GNUPG_KEYNAME')
     ext["ossUsername"] = System.getenv('OSS_USERNAME')
     ext["ossPassword"] = System.getenv('OSS_PASSWORD')
+}
+
+coveralls {
+    jacocoReportPath 'securesmsproxyapi/build/reports/jacoco/jacocoTestReleaseUnitTestReport/jacocoTestReleaseUnitTestReport.xml'
+    sourceDirs += ['securesmsproxyapi/src/main/java']
+}
+
+jacocoAndroidUnitTestReport {
+    csv.enabled false
+    html.enabled false
+    xml.enabled true
+}
+
+tasks.withType(Test) {
+    jacoco.includeNoLocationClasses = true
 }
 
 android {
