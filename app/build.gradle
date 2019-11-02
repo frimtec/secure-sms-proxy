@@ -17,11 +17,6 @@ versionProps['VERSION_CODE'] = vcode.toString()
 versionProps['VERSION_NAME'] = vname
 versionProps.store(versionPropsFile.newWriter(), null)
 
-coveralls {
-    jacocoReportPath 'app/build/reports/jacoco/jacocoTestReleaseUnitTestReport/jacocoTestReleaseUnitTestReport.xml'
-    sourceDirs += ['app/src/main/java']
-}
-
 jacocoAndroidUnitTestReport {
     csv.enabled false
     html.enabled false

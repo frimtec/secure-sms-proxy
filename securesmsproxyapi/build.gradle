@@ -1,7 +1,11 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
+apply plugin: 'jacoco-android'
 
+jacoco {
+    toolVersion = "0.8.4"
+}
 
 System.setProperty("line.separator", "\n")
 Properties versionProps = new Properties()
@@ -31,6 +35,16 @@ if (secretPropsFile.exists()) {
     ext["signing.gnupg.keyName"] = System.getenv('SIGNING_GNUPG_KEYNAME')
     ext["ossUsername"] = System.getenv('OSS_USERNAME')
     ext["ossPassword"] = System.getenv('OSS_PASSWORD')
+}
+
+jacocoAndroidUnitTestReport {
+    csv.enabled false
+    html.enabled false
+    xml.enabled true
+}
+
+tasks.withType(Test) {
+    jacoco.includeNoLocationClasses = true
 }
 
 android {

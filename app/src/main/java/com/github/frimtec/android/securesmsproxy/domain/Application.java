@@ -51,7 +51,7 @@ public final class Application {
 
   @Override
   public String toString() {
-    return "ApplicationRule{" +
+    return "Application{" +
         "id=" + id +
         ", name='" + name + '\'' +
         ", listener='" + listener + '\'' +
