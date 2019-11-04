@@ -83,7 +83,7 @@ public final class Sms {
     try {
       return toSms(new JSONObject(json));
     } catch (JSONException e) {
-      throw new IllegalStateException("Cannot generate JSON string", e);
+      throw new IllegalArgumentException("Cannot parse JSON string", e);
     }
   }
 
@@ -96,12 +96,11 @@ public final class Sms {
       }
       return result;
     } catch (JSONException e) {
-      throw new IllegalStateException("Cannot generate JSON string", e);
+      throw new IllegalArgumentException("Cannot parse JSON string", e);
     }
   }
 
   private static Sms toSms(JSONObject jsonObject) throws JSONException {
-
     return new Sms(jsonObject.getString("number"), jsonObject.getString("text"), jsonObject.has("subscriptionId") ? jsonObject.getInt("subscriptionId") : null);
   }
 }
