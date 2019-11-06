@@ -3,6 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/logcat"
+        android:icon="@drawable/ic_adb_white_24dp"
+        android:title="@string/menu_logcat"
+        app:showAsAction="always|withText" />
+    <item
         android:id="@+id/about"
         android:icon="@drawable/ic_info_white_24dp"
         android:title="@string/menu_about"

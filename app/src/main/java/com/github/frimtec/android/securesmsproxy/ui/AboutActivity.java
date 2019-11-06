@@ -35,9 +35,10 @@ public class AboutActivity extends AppCompatActivity {
     TextView textView = findViewById(R.id.app_info);
     String version = BuildConfig.VERSION_NAME;
     int build = BuildConfig.VERSION_CODE;
+
     textView.setText(Html.fromHtml(
         "<h2><a href='https://github.com/frimtec/secure-sms-proxy'>Secure SMS Proxy</a></h2>" +
-            "<p>Version: " + version + " (Build  " + build + ")</p>" +
+            "<p>Version: <b>" + version + "</b><br/>" + "Build  " + build + "</p>" +
             "<p>&copy; 2019 <a href='https://github.com/frimtec'>frimTEC</a></p>" +
             ""
         , Html.FROM_HTML_MODE_COMPACT));
