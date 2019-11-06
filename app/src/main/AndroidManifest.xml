@@ -14,7 +14,6 @@
         android:label="S2SMP"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
             android:name=".ui.MainActivity"
             android:configChanges="orientation|keyboardHidden"
@@ -25,24 +24,28 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".ui.RegisterActivity">
-
             <intent-filter>
                 <action android:name="com.github.frimtec.android.securesmsproxy.intent.action.REGISTER" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <activity android:name=".ui.SendLogActivity">
             <intent-filter>
-                <action android:name="android.permission.SEND_LOG" />
+                <action android:name="com.github.frimtec.android.securesmsproxy.SEND_LOG" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
+        <activity
+            android:name=".ui.LogcatActivity"
+            android:label="@string/title_activity_logcat"
+            android:parentActivityName=".ui.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.github.frimtec.android.securesmsproxy.ui.MainActivity" />
+        </activity>
         <activity
             android:name=".ui.AboutActivity"
             android:label="@string/title_activity_about"

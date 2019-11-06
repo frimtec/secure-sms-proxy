@@ -13,7 +13,7 @@ import static android.content.Intent.EXTRA_BUG_REPORT;
 
 public class SendLogActivity extends AppCompatActivity {
 
-  public static final String ACTION_SEND_LOG = "android.permission.SEND_LOG";
+  public static final String ACTION_SEND_LOG = "com.github.frimtec.android.securesmsproxy.SEND_LOG";
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {

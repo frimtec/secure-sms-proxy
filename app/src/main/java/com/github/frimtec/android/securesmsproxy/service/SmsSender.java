@@ -43,6 +43,7 @@ public class SmsSender extends IntentService {
       String text = intentExtras.getString(EXTRA_TEXT);
       if (text != null) {
         String applicationName = intentExtras.getString(Intent.EXTRA_PACKAGE_NAME);
+        Log.v(TAG, "SMS to be send from application: " + applicationName);
         ApplicationRuleDao dao = new ApplicationRuleDao();
         ApplicationRule applicationRule = dao.byApplicationName(applicationName);
         if (applicationRule == null) {

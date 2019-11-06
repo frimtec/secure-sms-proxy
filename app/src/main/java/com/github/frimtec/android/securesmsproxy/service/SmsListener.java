@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.github.frimtec.android.securesmsproxy.domain.Application;
 import com.github.frimtec.android.securesmsproxy.utility.SmsHelper;
@@ -18,9 +19,12 @@ import java.util.stream.Collectors;
 
 public class SmsListener extends BroadcastReceiver {
 
+  private static final String TAG = "SmsListener";
+
   @Override
   public void onReceive(Context context, Intent intent) {
     if ("android.provider.Telephony.SMS_RECEIVED".equals(intent.getAction())) {
+      Log.d(TAG, "SMS received");
       Map<String, List<Sms>> smsByNumber = SmsHelper.getSmsFromIntent(intent).stream()
           .collect(Collectors.groupingBy(Sms::getNumber));
       ApplicationRuleDao dao = new ApplicationRuleDao();
@@ -38,6 +42,7 @@ public class SmsListener extends BroadcastReceiver {
   }
 
   public static void broadcastReceivedSms(Context context, Application application, List<Sms> smsList) {
+    Log.d(TAG, "broadcastReceivedSms,  count: " + smsList.size() + "; to application: " + application.getName());
     Intent sendSmsIntent = new Intent(SecureSmsProxyFacade.ACTION_BROADCAST_SMS_RECEIVED);
     Aes aes = new Aes(application.getSecret());
     sendSmsIntent.putExtra(Intent.EXTRA_TEXT, aes.encrypt(Sms.toJsonArray(smsList)));
