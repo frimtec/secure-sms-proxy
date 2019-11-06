@@ -1,5 +1,6 @@
 <resources>
     <string name="title_activity_about">Über</string>
+    <string name="title_activity_logcat">Logcat</string>
     <string name="menu_about">Über</string>
     <string name="menu_logcat">Logcat</string>
     <string name="about_documentation">&lt;h3&gt;Dokumentation&lt;/h3&gt;&lt;p&gt;Eine Dokumentation für die Benutzung von Secure SMS Proxy findest Du hier: &lt;a href=https://github.com/frimtec/secure-sms-proxy/blob/master/README.md#secure-sms-proxy&gt;Anleitung&lt;/a&gt;.&lt;/p&gt;</string>

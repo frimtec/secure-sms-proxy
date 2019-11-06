@@ -2,6 +2,7 @@ package com.github.frimtec.android.securesmsproxy.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -110,7 +111,15 @@ public class MainActivity extends AppCompatActivity {
   public boolean onCreateOptionsMenu(Menu menu) {
     MenuInflater inflater = getMenuInflater();
     inflater.inflate(R.menu.main_menu, menu);
+    if(isDeveloperMode()) {
+      menu.findItem(R.id.logcat).setVisible(true);
+    }
     return super.onCreateOptionsMenu(menu);
+  }
+
+  private boolean isDeveloperMode() {
+    return Settings.Secure.getInt(getApplicationContext().getContentResolver(),
+        Settings.Global.DEVELOPMENT_SETTINGS_ENABLED , 0) != 0;
   }
 
   @Override

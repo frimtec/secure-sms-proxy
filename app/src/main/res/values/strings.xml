@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name" translatable="false">Secure SMS Proxy</string>
     <string name="title_activity_about">About</string>
+    <string name="title_activity_logcat">Logcat</string>
     <string name="menu_about">About</string>
     <string name="menu_logcat">Logcat</string>
     <string name="about_documentation">&lt;h3&gt;Documentation&lt;/h3&gt;&lt;p&gt;A manual for the use of Secure SMS Proxy can be found here: &lt;a href=https://github.com/frimtec/secure-sms-proxy/blob/master/README.md#secure-sms-proxy&gt;Manual&lt;/a&gt;.&lt;/p&gt;</string>

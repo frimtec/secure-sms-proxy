@@ -33,14 +33,14 @@
         </activity>
         <activity android:name=".ui.SendLogActivity">
             <intent-filter>
-                <action android:name="android.permission.SEND_LOG" />
+                <action android:name="com.github.frimtec.android.securesmsproxy.SEND_LOG" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
             android:name=".ui.LogcatActivity"
-            android:label="@string/menu_logcat"
+            android:label="@string/title_activity_logcat"
             android:parentActivityName=".ui.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
