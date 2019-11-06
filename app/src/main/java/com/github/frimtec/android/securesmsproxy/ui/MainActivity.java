@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
   }
 
   private boolean isDeveloperMode() {
-    return Settings.Secure.getInt(getApplicationContext().getContentResolver(),
+    return Settings.Global.getInt(getApplicationContext().getContentResolver(),
         Settings.Global.DEVELOPMENT_SETTINGS_ENABLED , 0) != 0;
   }
 
