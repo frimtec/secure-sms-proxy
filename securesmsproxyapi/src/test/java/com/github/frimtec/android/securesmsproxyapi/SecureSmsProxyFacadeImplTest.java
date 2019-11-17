@@ -47,14 +47,14 @@ public class SecureSmsProxyFacadeImplTest {
   @Test
   public void isAllowedNotFound() {
     SecureSmsProxyFacade facade = new SecureSmsProxyFacadeImpl(context(new HashSet<>(Arrays.asList("1", "5"))));
-    boolean allowed = facade.isAllowed(Collections.singleton("111"));
+    boolean allowed = facade.isAllowed(new HashSet<>(Arrays.asList("111", "5")));
     assertThat(allowed, is(false));
   }
 
   @Test
   public void isAllowedFound() {
-    SecureSmsProxyFacade facade = new SecureSmsProxyFacadeImpl(context(new HashSet<>(Arrays.asList("1", "111"))));
-    boolean allowed = facade.isAllowed(Collections.singleton("111"));
+    SecureSmsProxyFacade facade = new SecureSmsProxyFacadeImpl(context(new HashSet<>(Arrays.asList("1", "5", "111"))));
+    boolean allowed = facade.isAllowed(new HashSet<>(Arrays.asList("111", "5")));
     assertThat(allowed, is(true));
   }
 
