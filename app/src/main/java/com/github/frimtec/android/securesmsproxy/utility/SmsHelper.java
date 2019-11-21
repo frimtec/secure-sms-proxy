@@ -7,9 +7,10 @@ import android.telephony.SmsMessage;
 
 import com.github.frimtec.android.securesmsproxyapi.Sms;
 
-import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public final class SmsHelper {
@@ -22,13 +23,19 @@ public final class SmsHelper {
     if (bundle != null) {
       int subscription = bundle.getInt("subscription", -1);
       Object[] pdus = (Object[]) bundle.get("pdus");
+      String format = bundle.getString("format");
       if (pdus != null) {
-        return Arrays.stream(pdus)
-            .map(pdu -> {
-              String format = bundle.getString("format");
-              SmsMessage message = SmsMessage.createFromPdu((byte[]) pdu, format);
-              return new Sms(message.getOriginatingAddress(), message.getMessageBody(), subscription >= 0 ? subscription : null);
-            }).collect(Collectors.toList());
+        Map<String, String> smsTextByNumber = new LinkedHashMap<>();
+        for (Object pdu : pdus) {
+          SmsMessage message = SmsMessage.createFromPdu((byte[]) pdu, format);
+          String number = message.getOriginatingAddress();
+          String text = smsTextByNumber.getOrDefault(number, "");
+          smsTextByNumber.put(number, text + message.getMessageBody());
+        }
+        Integer subscriptionId = subscription >= 0 ? subscription : null;
+        return smsTextByNumber.entrySet().stream()
+            .map(entry -> new Sms(entry.getKey(), entry.getValue(), subscriptionId))
+            .collect(Collectors.toList());
       }
     }
     return Collections.emptyList();
