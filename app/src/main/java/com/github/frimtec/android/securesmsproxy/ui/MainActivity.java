@@ -60,6 +60,12 @@ public class MainActivity extends AppCompatActivity {
   }
 
   @Override
+  protected void onPostResume() {
+    super.onPostResume();
+    refresh();
+  }
+
+  @Override
   public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
     menu.add(Menu.NONE, MENU_CONTEXT_DELETE_ID, Menu.NONE, R.string.action_delete);
   }

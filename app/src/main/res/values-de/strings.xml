@@ -3,6 +3,8 @@
     <string name="title_activity_logcat">Logcat</string>
     <string name="menu_about">Über</string>
     <string name="menu_logcat">Logcat</string>
+    <string name="menu_logcat_refresh">Aktualisieren</string>
+    <string name="menu_logcat_clear">Leeren</string>
     <string name="about_documentation">&lt;h3&gt;Dokumentation&lt;/h3&gt;&lt;p&gt;Eine Dokumentation für die Benutzung von Secure SMS Proxy findest Du hier: &lt;a href=https://github.com/frimtec/secure-sms-proxy/blob/master/README.md#secure-sms-proxy&gt;Anleitung&lt;/a&gt;.&lt;/p&gt;</string>
     <string name="about_disclaimer">&lt;h3&gt;Haftungsausschluss&lt;/h3&gt;&lt;p&gt;Der Autor übernimmt keine Verantwortung, gibt keinerlei Garantie bei der Nutzung der Anwendung.&lt;/p&gt;&lt;p&gt;Die Anwendung ist kostenlos. Der Quellcode steht als Open-Source unter der &lt;a href=https://opensource.org/licenses/Apache-2.0&gt;Apache 2.0 Lizenz&lt;/a&gt; zur Verfügung.&lt;/p&gt;</string>
     <string name="general_no">Nein</string>
