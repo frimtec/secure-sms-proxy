@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 public final class SmsHelper {
@@ -19,6 +20,10 @@ public final class SmsHelper {
   }
 
   public static List<Sms> getSmsFromIntent(Intent intent) {
+    return getSmsFromIntent(intent, SmsMessage::createFromPdu);
+  }
+
+  static List<Sms> getSmsFromIntent(Intent intent, BiFunction<byte[], String, SmsMessage> pduDecoder) {
     Bundle bundle = intent.getExtras();
     if (bundle != null) {
       int subscription = bundle.getInt("subscription", -1);
@@ -27,7 +32,7 @@ public final class SmsHelper {
       if (pdus != null) {
         Map<String, String> smsTextByNumber = new LinkedHashMap<>();
         for (Object pdu : pdus) {
-          SmsMessage message = SmsMessage.createFromPdu((byte[]) pdu, format);
+          SmsMessage message = pduDecoder.apply((byte[]) pdu, format);
           String number = message.getOriginatingAddress();
           String text = smsTextByNumber.getOrDefault(number, "");
           smsTextByNumber.put(number, text + message.getMessageBody());
