@@ -12,6 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public final class SmsHelper {
@@ -47,12 +48,11 @@ public final class SmsHelper {
   }
 
   public static void send(Sms sms) {
-    SmsManager smsManager;
-    if (sms.getSubscriptionId() == null) {
-      smsManager = SmsManager.getDefault();
-    } else {
-      smsManager = SmsManager.getSmsManagerForSubscriptionId(sms.getSubscriptionId());
-    }
+    send(sms, SmsManager.getDefault(), SmsManager::getSmsManagerForSubscriptionId);
+  }
+
+  static void send(Sms sms, SmsManager defaultSmsManager, Function<Integer, SmsManager> subscriptionSmsManagerFactory) {
+    SmsManager smsManager = sms.getSubscriptionId() == null ? defaultSmsManager : subscriptionSmsManagerFactory.apply(sms.getSubscriptionId());
     smsManager.sendTextMessage(sms.getNumber(), null, sms.getText(), null, null);
   }
 }

@@ -2,6 +2,7 @@ package com.github.frimtec.android.securesmsproxy.utility;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 
 import com.github.frimtec.android.securesmsproxyapi.Sms;
@@ -14,6 +15,8 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 public class SmsHelperTest {
@@ -56,6 +59,27 @@ public class SmsHelperTest {
     assertThat(smsList.size(), is(2));
     assertThat(smsList.get(0).toString(), is("Sms{number='number1', text='pdu1pdu3', subscriptionId='1'}"));
     assertThat(smsList.get(1).toString(), is("Sms{number='number2', text='text', subscriptionId='1'}"));
+  }
+
+  @Test
+  public void sendWithSubscriptionId() {
+    SmsManager defaultManager = mock(SmsManager.class);
+    SmsManager subscriptionManager = mock(SmsManager.class);
+    SmsHelper.send(new Sms("number", "text", 1), defaultManager, (subscriptionId) -> {
+      assertThat(subscriptionId, is(1));
+      return subscriptionManager;
+    });
+    verifyNoInteractions(defaultManager);
+    verify(subscriptionManager).sendTextMessage("number", null, "text", null, null);
+  }
+
+  @Test
+  public void sendWithNoSubscriptionId() {
+    SmsManager defaultManager = mock(SmsManager.class);
+    SmsManager subscriptionManager = mock(SmsManager.class);
+    SmsHelper.send(new Sms("number", "text"), defaultManager, (subscriptionId) -> subscriptionManager);
+    verify(defaultManager).sendTextMessage("number", null, "text", null, null);
+    verifyNoInteractions(subscriptionManager);
   }
 
   private SmsMessage createSmsMessage(String number, String text) {
