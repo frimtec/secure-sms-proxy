@@ -47,7 +47,7 @@ public class SmsListener extends BroadcastReceiver {
   @Override
   public void onReceive(Context context, Intent intent) {
     if ("android.provider.Telephony.SMS_RECEIVED".equals(intent.getAction())) {
-      Log.d(TAG, "SMS received");
+      Log.i(TAG, "SMS received");
       Map<String, List<Sms>> smsByNumber = this.smsHelper.getSmsFromIntent(intent).stream()
           .collect(Collectors.groupingBy(Sms::getNumber));
       Map<String, Set<Application>> applicationsByNumber = this.dao.byPhoneNumbers(smsByNumber.keySet());
@@ -68,7 +68,7 @@ public class SmsListener extends BroadcastReceiver {
   }
 
   static void broadcastReceivedSms(Context context, Application application, List<Sms> smsList, BiFunction<Application, String, Intent> smsBroadcastIntentFactory) {
-    Log.d(TAG, "broadcastReceivedSms,  count: " + smsList.size() + "; to application: " + application.getName());
+    Log.i(TAG, "broadcastReceivedSms,  count: " + smsList.size() + "; to application: " + application.getName());
     Aes aes = new Aes(application.getSecret());
     String serializedEncryptedSmsList = aes.encrypt(Sms.toJsonArray(smsList));
     context.sendOrderedBroadcast(smsBroadcastIntentFactory.apply(application, serializedEncryptedSmsList), null);

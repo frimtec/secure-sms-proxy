@@ -24,10 +24,16 @@ public class SmsSender extends IntentService {
   private static final String TAG = "SmsSender";
 
   private final SmsHelper smsHelper;
+  private final ApplicationRuleDao dao;
 
   public SmsSender() {
+    this(new SmsHelper(), new ApplicationRuleDao());
+  }
+
+  SmsSender(SmsHelper smsHelper, ApplicationRuleDao dao) {
     super(TAG);
-    this.smsHelper = new SmsHelper();
+    this.smsHelper = smsHelper;
+    this.dao = dao;
   }
 
   @Override
@@ -47,8 +53,7 @@ public class SmsSender extends IntentService {
       if (text != null) {
         String applicationName = intentExtras.getString(Intent.EXTRA_PACKAGE_NAME);
         Log.v(TAG, "SMS to be send from application: " + applicationName);
-        ApplicationRuleDao dao = new ApplicationRuleDao();
-        ApplicationRule applicationRule = dao.byApplicationName(applicationName);
+        ApplicationRule applicationRule = this.dao.byApplicationName(applicationName);
         if (applicationRule == null) {
           Log.w(TAG, String.format("SMS sending blocked because of unregistered sender application: %s.", applicationName));
           return;
