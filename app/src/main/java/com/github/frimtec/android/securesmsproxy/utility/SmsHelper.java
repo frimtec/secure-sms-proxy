@@ -15,16 +15,23 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public final class SmsHelper {
+public class SmsHelper {
 
-  private SmsHelper() {
+  private final BiFunction<byte[], String, SmsMessage> pduDecoder;
+  private final SmsManager defaultSmsManager;
+  private final Function<Integer, SmsManager> subscriptionSmsManagerFactory;
+
+  public SmsHelper() {
+    this(SmsMessage::createFromPdu, SmsManager.getDefault(), SmsManager::getSmsManagerForSubscriptionId);
   }
 
-  public static List<Sms> getSmsFromIntent(Intent intent) {
-    return getSmsFromIntent(intent, SmsMessage::createFromPdu);
+  SmsHelper(BiFunction<byte[], String, SmsMessage> pduDecoder, SmsManager defaultSmsManager, Function<Integer, SmsManager> subscriptionSmsManagerFactory) {
+    this.pduDecoder = pduDecoder;
+    this.defaultSmsManager = defaultSmsManager;
+    this.subscriptionSmsManagerFactory = subscriptionSmsManagerFactory;
   }
 
-  static List<Sms> getSmsFromIntent(Intent intent, BiFunction<byte[], String, SmsMessage> pduDecoder) {
+  public List<Sms> getSmsFromIntent(Intent intent) {
     Bundle bundle = intent.getExtras();
     if (bundle != null) {
       int subscription = bundle.getInt("subscription", -1);
@@ -33,7 +40,7 @@ public final class SmsHelper {
       if (pdus != null) {
         Map<String, String> smsTextByNumber = new LinkedHashMap<>();
         for (Object pdu : pdus) {
-          SmsMessage message = pduDecoder.apply((byte[]) pdu, format);
+          SmsMessage message = this.pduDecoder.apply((byte[]) pdu, format);
           String number = message.getOriginatingAddress();
           String text = smsTextByNumber.getOrDefault(number, "");
           smsTextByNumber.put(number, text + message.getMessageBody());
@@ -47,12 +54,8 @@ public final class SmsHelper {
     return Collections.emptyList();
   }
 
-  public static void send(Sms sms) {
-    send(sms, SmsManager.getDefault(), SmsManager::getSmsManagerForSubscriptionId);
-  }
-
-  static void send(Sms sms, SmsManager defaultSmsManager, Function<Integer, SmsManager> subscriptionSmsManagerFactory) {
-    SmsManager smsManager = sms.getSubscriptionId() == null ? defaultSmsManager : subscriptionSmsManagerFactory.apply(sms.getSubscriptionId());
+  public void send(Sms sms) {
+    SmsManager smsManager = sms.getSubscriptionId() == null ? this.defaultSmsManager : this.subscriptionSmsManagerFactory.apply(sms.getSubscriptionId());
     smsManager.sendTextMessage(sms.getNumber(), null, sms.getText(), null, null);
   }
 }

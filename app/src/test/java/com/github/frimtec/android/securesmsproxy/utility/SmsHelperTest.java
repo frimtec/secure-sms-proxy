@@ -23,39 +23,44 @@ public class SmsHelperTest {
 
   @Test
   public void getSmsFromIntentNullBundleReturnsEmptyList() {
-    List<Sms> sms = SmsHelper.getSmsFromIntent(createIntent(null));
+    SmsHelper smsHelper = new SmsHelper();
+    List<Sms> sms = smsHelper.getSmsFromIntent(createIntent(null));
     assertThat(sms.size(), is(0));
   }
 
   @Test
   public void getSmsFromIntentWithNullPdusReturnsEmptyList() {
-    List<Sms> sms = SmsHelper.getSmsFromIntent(createIntent(createBundle(1, null)));
+    SmsHelper smsHelper = new SmsHelper();
+    List<Sms> sms = smsHelper.getSmsFromIntent(createIntent(createBundle(1, null)));
     assertThat(sms.size(), is(0));
   }
 
   @Test
   public void getSmsFromIntentWithSubscriptionReturnsSmsWithSubscription() {
-    List<Sms> smsList = SmsHelper.getSmsFromIntent(createIntent(createBundle(1, new Object[]{"pdu1".getBytes()})), (bytes, s) -> createSmsMessage("number", "text"));
+    SmsHelper smsHelper = new SmsHelper((bytes, s) -> createSmsMessage("number", "text"), null, null);
+    List<Sms> smsList = smsHelper.getSmsFromIntent(createIntent(createBundle(1, new Object[]{"pdu1".getBytes()})));
     assertThat(smsList.size(), is(1));
     assertThat(smsList.get(0).toString(), is("Sms{number='number', text='text', subscriptionId='1'}"));
   }
 
   @Test
   public void getSmsFromIntentWithNoSubscriptionReturnsSmsWithDefaultSubscription() {
-    List<Sms> smsList = SmsHelper.getSmsFromIntent(createIntent(createBundle(null, new Object[]{"pdu1".getBytes()})), (bytes, s) -> createSmsMessage("number", "text"));
+    SmsHelper smsHelper = new SmsHelper((bytes, s) -> createSmsMessage("number", "text"), null, null);
+    List<Sms> smsList = smsHelper.getSmsFromIntent(createIntent(createBundle(null, new Object[]{"pdu1".getBytes()})));
     assertThat(smsList.size(), is(1));
     assertThat(smsList.get(0).toString(), is("Sms{number='number', text='text', subscriptionId='null'}"));
   }
 
   @Test
   public void getSmsFromIntentWithSplitSmsReturnsMergedSms() {
-    List<Sms> smsList = SmsHelper.getSmsFromIntent(createIntent(createBundle(1, new Object[]{"pdu1".getBytes(), "pdu2".getBytes(), "pdu3".getBytes()})), (bytes, format) -> {
+    SmsHelper smsHelper = new SmsHelper((bytes, format) -> {
       if (Arrays.equals(bytes, "pdu1".getBytes()) || Arrays.equals(bytes, "pdu3".getBytes())) {
         return createSmsMessage("number1", new String(bytes));
       } else {
         return createSmsMessage("number2", "text");
       }
-    });
+    }, null, null);
+    List<Sms> smsList = smsHelper.getSmsFromIntent(createIntent(createBundle(1, new Object[]{"pdu1".getBytes(), "pdu2".getBytes(), "pdu3".getBytes()})));
     assertThat(smsList.size(), is(2));
     assertThat(smsList.get(0).toString(), is("Sms{number='number1', text='pdu1pdu3', subscriptionId='1'}"));
     assertThat(smsList.get(1).toString(), is("Sms{number='number2', text='text', subscriptionId='1'}"));
@@ -65,10 +70,11 @@ public class SmsHelperTest {
   public void sendWithSubscriptionId() {
     SmsManager defaultManager = mock(SmsManager.class);
     SmsManager subscriptionManager = mock(SmsManager.class);
-    SmsHelper.send(new Sms("number", "text", 1), defaultManager, (subscriptionId) -> {
+    SmsHelper smsHelper = new SmsHelper(null, defaultManager, (subscriptionId) -> {
       assertThat(subscriptionId, is(1));
       return subscriptionManager;
     });
+    smsHelper.send(new Sms("number", "text", 1));
     verifyNoInteractions(defaultManager);
     verify(subscriptionManager).sendTextMessage("number", null, "text", null, null);
   }
@@ -77,7 +83,8 @@ public class SmsHelperTest {
   public void sendWithNoSubscriptionId() {
     SmsManager defaultManager = mock(SmsManager.class);
     SmsManager subscriptionManager = mock(SmsManager.class);
-    SmsHelper.send(new Sms("number", "text"), defaultManager, (subscriptionId) -> subscriptionManager);
+    SmsHelper smsHelper = new SmsHelper(null, defaultManager, (subscriptionId) -> subscriptionManager);
+    smsHelper.send(new Sms("number", "text"));
     verify(defaultManager).sendTextMessage("number", null, "text", null, null);
     verifyNoInteractions(subscriptionManager);
   }

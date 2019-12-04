@@ -10,8 +10,8 @@ import androidx.annotation.Nullable;
 import com.github.frimtec.android.securesmsproxy.domain.ApplicationRule;
 import com.github.frimtec.android.securesmsproxy.utility.Permission;
 import com.github.frimtec.android.securesmsproxy.utility.SmsHelper;
-import com.github.frimtec.android.securesmsproxyapi.utility.Aes;
 import com.github.frimtec.android.securesmsproxyapi.Sms;
+import com.github.frimtec.android.securesmsproxyapi.utility.Aes;
 
 import java.util.Collections;
 
@@ -23,8 +23,11 @@ public class SmsSender extends IntentService {
 
   private static final String TAG = "SmsSender";
 
+  private final SmsHelper smsHelper;
+
   public SmsSender() {
     super(TAG);
+    this.smsHelper = new SmsHelper();
   }
 
   @Override
@@ -57,7 +60,7 @@ public class SmsSender extends IntentService {
             SmsListener.broadcastReceivedSms(this, applicationRule.getApplication(), Collections.singletonList(sms));
           } else {
             if (applicationRule.getAllowedPhoneNumbers().contains(sms.getNumber())) {
-              SmsHelper.send(sms);
+              this.smsHelper.send(sms);
             } else {
               Log.w(TAG, String.format("SMS sending blocked because of not allowed phone number %s of application %s.",
                   sms.getNumber(), applicationRule.getApplication().getName()));
