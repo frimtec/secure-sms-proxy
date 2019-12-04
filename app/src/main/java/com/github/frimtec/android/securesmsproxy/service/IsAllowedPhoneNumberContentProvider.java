@@ -2,6 +2,7 @@ package com.github.frimtec.android.securesmsproxy.service;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -12,6 +13,8 @@ import androidx.annotation.Nullable;
 
 import com.github.frimtec.android.securesmsproxy.state.DbHelper;
 import com.github.frimtec.android.securesmsproxyapi.IsAllowedPhoneNumberContract;
+
+import java.util.function.Function;
 
 import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_APPLICATION_COLUMN_NAME;
 import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER;
@@ -25,12 +28,23 @@ public class IsAllowedPhoneNumberContentProvider extends ContentProvider {
     URI_MATCHER.addURI(IsAllowedPhoneNumberContract.AUTHORITY, ALLOWED_PHONE_NUMBERS_PATH + "/*", 1);
   }
 
-  private DbHelper dbHelper;
+
+  private final Function<Context, SQLiteDatabase> databaseFactory;
+  private final Function<Uri, Boolean> uriMatcher;
   private SQLiteDatabase db;
+
+
+  public IsAllowedPhoneNumberContentProvider() {
+    this((context) -> new DbHelper(context).getReadableDatabase(), (uri) -> URI_MATCHER.match(uri) == 1);
+  }
+
+  IsAllowedPhoneNumberContentProvider(Function<Context, SQLiteDatabase> databaseFactory, Function<Uri, Boolean> uriMatcher) {
+    this.databaseFactory = databaseFactory;
+    this.uriMatcher = uriMatcher;
+  }
 
   @Override
   public boolean onCreate() {
-    this.dbHelper = new DbHelper(getContext());
     return true;
   }
 
@@ -41,12 +55,12 @@ public class IsAllowedPhoneNumberContentProvider extends ContentProvider {
       String selection,
       String[] selectionArgs,
       String sortOrder) {
-    if (URI_MATCHER.match(uri) != 1) {
+    if (!this.uriMatcher.apply(uri)) {
       throw new IllegalArgumentException("Provided uri not supported");
     }
 
     if (this.db == null || !this.db.isOpen()) {
-      this.db = this.dbHelper.getReadableDatabase();
+      this.db = this.databaseFactory.apply(getContext());
     }
 
     return this.db.query(
@@ -61,7 +75,7 @@ public class IsAllowedPhoneNumberContentProvider extends ContentProvider {
   @Nullable
   @Override
   public String getType(@NonNull Uri uri) {
-    return "vnd.android.cursor.dir/vnd.com.example.provider.allowed_phone_numbers";
+    return "vnd.android.cursor.dir/vnd.com.github.frimtec.android.securesmsproxy.provider.allowed_phone_numbers";
   }
 
   @Nullable
