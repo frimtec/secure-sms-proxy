@@ -8,7 +8,6 @@ import com.github.frimtec.android.securesmsproxy.utility.SmsHelper;
 import com.github.frimtec.android.securesmsproxyapi.Sms;
 import com.github.frimtec.android.securesmsproxyapi.utility.Aes;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
@@ -33,7 +32,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-@Ignore
 public class SmsListenerTest {
 
   public static final String SECRET = "1234567890123456";
@@ -174,6 +172,7 @@ public class SmsListenerTest {
   }
 
   private BiFunction<Application, String, Intent> broadcastIntentFactory(Intent broadcastIntentMock, ArgumentCaptor<String> encryptedSmsCaptor) {
+    //noinspection unchecked
     BiFunction<Application, String, Intent> broadcastIntentFactory = mock(BiFunction.class);
     when(broadcastIntentFactory.apply(any(), encryptedSmsCaptor.capture())).thenReturn(broadcastIntentMock);
     return broadcastIntentFactory;
