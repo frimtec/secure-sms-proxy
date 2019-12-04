@@ -26,7 +26,7 @@ public class PackageInfoAccessor {
     try {
       return this.packageManager.getApplicationLabel(this.packageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA));
     } catch (PackageManager.NameNotFoundException e) {
-      return packageName.substring(packageName.lastIndexOf("." + 1));
+      return packageName.substring(packageName.lastIndexOf(".") + 1);
     }
   }
 
