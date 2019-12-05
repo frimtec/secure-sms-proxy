@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
@@ -44,10 +45,16 @@ final class SecureSmsProxyFacadeImpl implements SecureSmsProxyFacade {
 
   private final Context context;
   private final PackageManager packageManager;
+  private final Function<String, Intent> actionIntentFactory;
 
   SecureSmsProxyFacadeImpl(Context context) {
+    this(context, Intent::new);
+  }
+
+  SecureSmsProxyFacadeImpl(Context context, Function<String, Intent> actionIntentFactory) {
     this.context = context;
     this.packageManager = context.getPackageManager();
+    this.actionIntentFactory = actionIntentFactory;
   }
 
   @Override
@@ -56,7 +63,7 @@ final class SecureSmsProxyFacadeImpl implements SecureSmsProxyFacade {
       int requestCode,
       Set<String> phoneNumbersToAllow,
       Class<? extends BroadcastReceiver> smsBroadCastReceiverClass) {
-    Intent intent = new Intent(ACTION_REGISTER);
+    Intent intent = this.actionIntentFactory.apply(ACTION_REGISTER);
     intent.putStringArrayListExtra(EXTRA_PHONE_NUMBERS, new ArrayList<>(phoneNumbersToAllow));
     intent.putExtra(EXTRA_LISTENER_CLASS, smsBroadCastReceiverClass.getCanonicalName());
     callerActivity.startActivityForResult(intent, requestCode);
@@ -84,7 +91,7 @@ final class SecureSmsProxyFacadeImpl implements SecureSmsProxyFacade {
 
   @Override
   public void sendSms(Sms sms, String secret) {
-    Intent sendSmsIntent = new Intent(ACTION_SEND_SMS);
+    Intent sendSmsIntent = this.actionIntentFactory.apply(ACTION_SEND_SMS);
     Aes aes = new Aes(secret);
     sendSmsIntent.putExtra(Intent.EXTRA_PACKAGE_NAME, this.context.getApplicationContext().getPackageName());
     sendSmsIntent.putExtra(EXTRA_TEXT, aes.encrypt(sms.toJson()));
