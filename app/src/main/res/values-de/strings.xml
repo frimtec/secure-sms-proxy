@@ -16,10 +16,10 @@
     <string name="permission_required">Benötigte Berechtigung:</string>
     <string name="permission_sms_title">SMS Senden/Empfangen</string>
     <string name="permission_sms_text">
-        Damit S2SMP funktioniert, ist die Berechtigung zum Senden und Empfangen von SMS notwendigig.
-        S2SMP ermöglicht es anderen Applikationen mit SMS zu kommunizieren. Dies nur für vorher berechtigte Telefonnummern.
-        Der SMS Austausch zwischen S2SMP und berechtigten Applikationen, erfolgt ausschliesslich verschlüsselt.
-        S2SMP verwendet keine weiteren Rechte, um die Sicherheit und Integrität zu gewährleisten.
+        Damit S2MSP funktioniert, ist die Berechtigung zum Senden und Empfangen von SMS notwendigig.
+        S2MSP ermöglicht es anderen Applikationen mit SMS zu kommunizieren. Dies nur für vorher berechtigte Telefonnummern.
+        Der SMS Austausch zwischen S2MSP und berechtigten Applikationen, erfolgt ausschliesslich verschlüsselt.
+        S2MSP verwendet keine weiteren Rechte, um die Sicherheit und Integrität zu gewährleisten.
     </string>
     <string name="send_log_title">Secure SMS Proxy Crash-Report</string>
     <string name="send_log_message">Secure SMS Proxy wurde unerwarteterweise beendet. Bitte sende den Crash-Report via E-Mail an den Autor, um die Stabilität von Secure SMS Proxy zu erhöhen.</string>

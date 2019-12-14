@@ -93,7 +93,7 @@ publishing {
             artifact("$buildDir/outputs/aar/securesmsproxyapi-release.aar")
             pom {
                 name = 'Secure SMS Proxy API'
-                description = 'API to integrate S2SMP (Secure SMS Proxy) into an android application.'
+                description = 'API to integrate S2MSP (Secure SMS Proxy) into an android application.'
                 url = 'https://github.com/frimtec/secure-sms-proxy'
                 licenses {
                     license {

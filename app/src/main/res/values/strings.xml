@@ -18,10 +18,10 @@
     <string name="permission_required">Required permission:</string>
     <string name="permission_sms_title">SMS send/receive</string>
     <string name="permission_sms_text">
-        S2SMP only works with the permissions to send and receive SMS.
-        S2SMP provides SMS communication to other applications for previously authorised phone numbers.
-        The SMS exchange between S2SMP and authorized applications is always encrypted.
-        S2SMP uses no other permissions to ensure the security and integrity.
+        S2MSP only works with the permissions to send and receive SMS.
+        S2MSP provides SMS communication to other applications for previously authorised phone numbers.
+        The SMS exchange between S2MSP and authorized applications is always encrypted.
+        S2MSP uses no other permissions to ensure the security and integrity.
     </string>
     <string name="send_log_title">Secure SMS Proxy crash report</string>
     <string name="send_log_message">S2MSP was crashed unexpectedly. To improve the stability of Secure SMS Proxy, please send the crash report to the author via e-mail.</string>

@@ -45,7 +45,7 @@ import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.
 import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.RegistrationResult.ReturnCode.NO_SECRET;
 import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.RegistrationResult.ReturnCode.REJECTED;
 import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.RegistrationResult.ReturnCode.UNKNOWN;
-import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.S2SMP_PACKAGE_NAME;
+import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.S2MSP_PACKAGE_NAME;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -60,7 +60,7 @@ public class SecureSmsProxyFacadeImplTest {
   @Test
   public void getInstallationForExistingProxyApp() throws PackageManager.NameNotFoundException {
     PackageInfo packageInfo = new PackageInfo();
-    packageInfo.packageName = S2SMP_PACKAGE_NAME;
+    packageInfo.packageName = S2MSP_PACKAGE_NAME;
     packageInfo.versionName = "1.0.1";
     SecureSmsProxyFacade facade = new SecureSmsProxyFacadeImpl(context(packageInfo));
     SecureSmsProxyFacade.Installation installation = facade.getInstallation();
@@ -305,9 +305,9 @@ public class SecureSmsProxyFacadeImplTest {
   private PackageManager packageManager(PackageInfo packageInfo) throws PackageManager.NameNotFoundException {
     PackageManager packageManager = mock(PackageManager.class);
     if (packageInfo != null) {
-      when(packageManager.getPackageInfo(S2SMP_PACKAGE_NAME, 0)).thenReturn(packageInfo);
+      when(packageManager.getPackageInfo(S2MSP_PACKAGE_NAME, 0)).thenReturn(packageInfo);
     } else {
-      when(packageManager.getPackageInfo(S2SMP_PACKAGE_NAME, 0)).thenThrow(new PackageManager.NameNotFoundException());
+      when(packageManager.getPackageInfo(S2MSP_PACKAGE_NAME, 0)).thenThrow(new PackageManager.NameNotFoundException());
     }
     return packageManager;
   }

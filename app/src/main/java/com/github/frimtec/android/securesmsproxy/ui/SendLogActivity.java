@@ -37,7 +37,7 @@ public class SendLogActivity extends AppCompatActivity {
     Intent intent = new Intent(Intent.ACTION_SEND);
     intent.setType("plain/text");
     intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"frimtec@gmx.ch"});
-    intent.putExtra(Intent.EXTRA_SUBJECT, "S2SMP crash report");
+    intent.putExtra(Intent.EXTRA_SUBJECT, "S2MSP crash report");
     intent.putExtra(Intent.EXTRA_TEXT, report);
     startActivityForResult(intent, 1);
   }

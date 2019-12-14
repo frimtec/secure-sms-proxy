@@ -17,9 +17,9 @@ public interface SecureSmsProxyFacade {
   String EXTRA_PHONE_NUMBERS = "com.github.frimtec.android.securesmsproxy.intent.extra.PHONE_NUMBERS";
   String EXTRA_SECRET = "com.github.frimtec.android.securesmsproxy.intent.extra.SECRET";
 
-  String S2SMP_PACKAGE_NAME = "com.github.frimtec.android.securesmsproxy";
-  String ACTION_SEND_SMS = S2SMP_PACKAGE_NAME + ".SEND_SMS";
-  String ACTION_BROADCAST_SMS_RECEIVED = S2SMP_PACKAGE_NAME + ".SMS_RECEIVED";
+  String S2MSP_PACKAGE_NAME = "com.github.frimtec.android.securesmsproxy";
+  String ACTION_SEND_SMS = S2MSP_PACKAGE_NAME + ".SEND_SMS";
+  String ACTION_BROADCAST_SMS_RECEIVED = S2MSP_PACKAGE_NAME + ".SMS_RECEIVED";
 
   int REGISTRATION_RESULT_CODE_MISSING_SMS_PERMISSION = 1;
   int REGISTRATION_RESULT_CODE_NO_REFERRER = 2;
@@ -161,27 +161,27 @@ public interface SecureSmsProxyFacade {
     }
 
     /**
-     * Returns the version of the S2SMP API library.
+     * Returns the version of the S2MSP API library.
      *
-     * @return S2SMP API library version
+     * @return S2MSP API library version
      */
     public String getApiVersion() {
       return apiVersion;
     }
 
     /**
-     * Returns the version of the installed S2SMP app.
+     * Returns the version of the installed S2MSP app.
      *
-     * @return S2SMP app version or empty if S2SMP app is not installed
+     * @return S2MSP app version or empty if S2MSP app is not installed
      */
     public Optional<String> getAppVersion() {
       return Optional.ofNullable(appVersion);
     }
 
     /**
-     * Returns download link of the S2SMP application that fits best your to the current API version.
+     * Returns download link of the S2MSP application that fits best your to the current API version.
      *
-     * @return download link for the S2SMP app
+     * @return download link for the S2MSP app
      */
     public Uri getDownloadLink() {
       return downloadLink;
@@ -189,7 +189,7 @@ public interface SecureSmsProxyFacade {
   }
 
   /**
-   * Returns the installation of the S2SMP application.
+   * Returns the installation of the S2MSP application.
    *
    * @return installation
    */

@@ -11,7 +11,7 @@
         android:allowBackup="true"
         android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="S2SMP"
+        android:label="S2MSP"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity

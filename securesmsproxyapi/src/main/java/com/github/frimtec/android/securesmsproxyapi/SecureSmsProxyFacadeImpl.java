@@ -39,8 +39,8 @@ final class SecureSmsProxyFacadeImpl implements SecureSmsProxyFacade {
   private static final String TAG = "SecureSmsProxyFacadeImpl";
 
   private static final ComponentName SECURE_SMS_PROXY_COMPONENT = new ComponentName(
-      S2SMP_PACKAGE_NAME,
-      S2SMP_PACKAGE_NAME + ".service.SmsSender"
+      S2MSP_PACKAGE_NAME,
+      S2MSP_PACKAGE_NAME + ".service.SmsSender"
   );
 
   private final Context context;
@@ -119,7 +119,7 @@ final class SecureSmsProxyFacadeImpl implements SecureSmsProxyFacade {
   public Installation getInstallation() {
     String appVersion;
     try {
-      PackageInfo packageInfo = this.packageManager.getPackageInfo(S2SMP_PACKAGE_NAME, 0);
+      PackageInfo packageInfo = this.packageManager.getPackageInfo(S2MSP_PACKAGE_NAME, 0);
       appVersion = packageInfo.versionName;
     } catch (PackageManager.NameNotFoundException e) {
       appVersion = null;
