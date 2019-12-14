@@ -26,9 +26,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import static android.Manifest.permission.RECEIVE_SMS;
+import static android.Manifest.permission.SEND_SMS;
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 import static android.content.Intent.EXTRA_TEXT;
+import static android.content.pm.PackageManager.PERMISSION_DENIED;
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.ACTION_BROADCAST_SMS_RECEIVED;
 import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.ACTION_REGISTER;
 import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.ACTION_SEND_SMS;
@@ -56,6 +60,54 @@ import static org.mockito.Mockito.when;
 public class SecureSmsProxyFacadeImplTest {
 
   public static final String SECRET = "1234567890123456";
+
+  @Test
+  public void areSmsPermissionsGrantedForYes() throws PackageManager.NameNotFoundException {
+    PackageInfo packageInfo = new PackageInfo();
+    Context context = context(packageInfo);
+    SecureSmsProxyFacade facade = new SecureSmsProxyFacadeImpl(context);
+    PackageManager packageManager = context.getPackageManager();
+    when(packageManager.checkPermission(RECEIVE_SMS, S2MSP_PACKAGE_NAME)).thenReturn(PERMISSION_GRANTED);
+    when(packageManager.checkPermission(SEND_SMS, S2MSP_PACKAGE_NAME)).thenReturn(PERMISSION_GRANTED);
+    boolean granted = facade.areSmsPermissionsGranted();
+    assertThat(granted, is(true));
+  }
+
+  @Test
+  public void areSmsPermissionsGrantedForNoSend() throws PackageManager.NameNotFoundException {
+    PackageInfo packageInfo = new PackageInfo();
+    Context context = context(packageInfo);
+    SecureSmsProxyFacade facade = new SecureSmsProxyFacadeImpl(context);
+    PackageManager packageManager = context.getPackageManager();
+    when(packageManager.checkPermission(RECEIVE_SMS, S2MSP_PACKAGE_NAME)).thenReturn(PERMISSION_GRANTED);
+    when(packageManager.checkPermission(SEND_SMS, S2MSP_PACKAGE_NAME)).thenReturn(PERMISSION_DENIED);
+    boolean granted = facade.areSmsPermissionsGranted();
+    assertThat(granted, is(false));
+  }
+
+  @Test
+  public void areSmsPermissionsGrantedForNoReceive() throws PackageManager.NameNotFoundException {
+    PackageInfo packageInfo = new PackageInfo();
+    Context context = context(packageInfo);
+    SecureSmsProxyFacade facade = new SecureSmsProxyFacadeImpl(context);
+    PackageManager packageManager = context.getPackageManager();
+    when(packageManager.checkPermission(RECEIVE_SMS, S2MSP_PACKAGE_NAME)).thenReturn(PERMISSION_DENIED);
+    when(packageManager.checkPermission(SEND_SMS, S2MSP_PACKAGE_NAME)).thenReturn(PERMISSION_GRANTED);
+    boolean granted = facade.areSmsPermissionsGranted();
+    assertThat(granted, is(false));
+  }
+
+  @Test
+  public void areSmsPermissionsGrantedForNoSendAndNoReceive() throws PackageManager.NameNotFoundException {
+    PackageInfo packageInfo = new PackageInfo();
+    Context context = context(packageInfo);
+    SecureSmsProxyFacade facade = new SecureSmsProxyFacadeImpl(context);
+    PackageManager packageManager = context.getPackageManager();
+    when(packageManager.checkPermission(RECEIVE_SMS, S2MSP_PACKAGE_NAME)).thenReturn(PERMISSION_DENIED);
+    when(packageManager.checkPermission(SEND_SMS, S2MSP_PACKAGE_NAME)).thenReturn(PERMISSION_DENIED);
+    boolean granted = facade.areSmsPermissionsGranted();
+    assertThat(granted, is(false));
+  }
 
   @Test
   public void getInstallationForExistingProxyApp() throws PackageManager.NameNotFoundException {

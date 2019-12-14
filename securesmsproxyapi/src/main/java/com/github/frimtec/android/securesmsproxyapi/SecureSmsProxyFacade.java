@@ -38,6 +38,14 @@ public interface SecureSmsProxyFacade {
   }
 
   /**
+   * Returns whether the SMS receive and send permissions are granted for the S2MSP application.
+   * <p/>
+   * If the permissions are not granted, the S2MSP application is not able to send or receive SMS.
+   * @return true: permissions are granted; false: permissions are not granted
+   */
+  boolean areSmsPermissionsGranted();
+
+  /**
    * Registration result.
    *
    * @see #getRegistrationResult(int, Intent)

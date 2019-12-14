@@ -22,9 +22,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 
+import static android.Manifest.permission.RECEIVE_SMS;
+import static android.Manifest.permission.SEND_SMS;
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 import static android.content.Intent.EXTRA_TEXT;
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static com.github.frimtec.android.securesmsproxyapi.IsAllowedPhoneNumberContract.CONTENT_URI;
 import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.RegistrationResult.ReturnCode.ALLOWED;
 import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.RegistrationResult.ReturnCode.MISSING_SMS_PERMISSION;
@@ -55,6 +58,13 @@ final class SecureSmsProxyFacadeImpl implements SecureSmsProxyFacade {
     this.context = context;
     this.packageManager = context.getPackageManager();
     this.actionIntentFactory = actionIntentFactory;
+  }
+
+  @Override
+  public boolean areSmsPermissionsGranted() {
+    PackageManager packageManager = context.getPackageManager();
+    return packageManager.checkPermission(RECEIVE_SMS, S2MSP_PACKAGE_NAME) == PERMISSION_GRANTED &&
+        packageManager.checkPermission(SEND_SMS, S2MSP_PACKAGE_NAME) == PERMISSION_GRANTED;
   }
 
   @Override
