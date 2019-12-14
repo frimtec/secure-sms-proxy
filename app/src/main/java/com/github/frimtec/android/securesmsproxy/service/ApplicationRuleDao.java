@@ -5,11 +5,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
-import com.github.frimtec.android.securesmsproxy.SecureSmsProxyApplication;
 import com.github.frimtec.android.securesmsproxy.domain.Application;
 import com.github.frimtec.android.securesmsproxy.domain.ApplicationRule;
-import com.github.frimtec.android.securesmsproxyapi.utility.RandomString;
+import com.github.frimtec.android.securesmsproxy.state.DbFactory;
 import com.github.frimtec.android.securesmsproxy.state.DbHelper;
+import com.github.frimtec.android.securesmsproxyapi.utility.RandomString;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -19,6 +19,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.github.frimtec.android.securesmsproxy.state.DbFactory.Mode.READ_ONLY;
+import static com.github.frimtec.android.securesmsproxy.state.DbFactory.Mode.WRITABLE;
 import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_APPLICATION;
 import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_APPLICATION_COLUMN_ID;
 import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_APPLICATION_COLUMN_LISTENER;
@@ -31,9 +33,9 @@ import static com.github.frimtec.android.securesmsproxy.state.DbHelper.VIEW_APPL
 
 public class ApplicationRuleDao {
 
-  private static final int SECRET_LENGTH = 24;
+  static final int SECRET_LENGTH = 24;
 
-  private static final String[] ALL_COLUMNS = {
+  static final String[] ALL_COLUMNS = {
       TABLE_APPLICATION_COLUMN_ID,
       TABLE_APPLICATION_COLUMN_NAME,
       TABLE_APPLICATION_COLUMN_LISTENER,
@@ -41,10 +43,20 @@ public class ApplicationRuleDao {
       TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER
   };
 
+  private final DbFactory dbFactory;
+
+  public ApplicationRuleDao() {
+    this(DbFactory.instance());
+  }
+
+  ApplicationRuleDao(DbFactory dbFactory) {
+    this.dbFactory = dbFactory;
+  }
+
   public String insertOrUpdate(String applicationName, String listener, Set<String> allowedPhoneNumbers) {
     ApplicationRule applicationRule = byApplicationName(applicationName);
     String secret;
-    try (SQLiteDatabase db = SecureSmsProxyApplication.getWritableDatabase()) {
+    try (SQLiteDatabase db = this.dbFactory.getDatabase(WRITABLE)) {
       if (applicationRule != null) {
         secret = applicationRule.getApplication().getSecret();
         ContentValues applicationValues = new ContentValues();
@@ -78,7 +90,7 @@ public class ApplicationRuleDao {
   }
 
   public ApplicationRule byApplicationName(String applicationName) {
-    try (Cursor cursor = SecureSmsProxyApplication.getReadableDatabase().query(
+    try (Cursor cursor = this.dbFactory.getDatabase(READ_ONLY).query(
         DbHelper.VIEW_APPLICATION_RULE, ALL_COLUMNS,
         TABLE_APPLICATION_COLUMN_NAME + "=?", new String[]{applicationName}, null, null, null)) {
       List<ApplicationRule> applicationRules = toApplicationRules(cursor);
@@ -87,7 +99,7 @@ public class ApplicationRuleDao {
   }
 
   public List<ApplicationRule> all() {
-    try (SQLiteDatabase db = SecureSmsProxyApplication.getReadableDatabase()) {
+    try (SQLiteDatabase db = this.dbFactory.getDatabase(READ_ONLY)) {
       try (Cursor cursor = db.query(
           DbHelper.VIEW_APPLICATION_RULE, ALL_COLUMNS,
           null, null, null, null, null)) {
@@ -99,13 +111,14 @@ public class ApplicationRuleDao {
   public Map<String, Set<Application>> byPhoneNumbers(Set<String> phoneNumbers) {
     Map<Long, Application> applications = new HashMap<>();
     Map<String, Set<Application>> applicationsByPhoneNumber = new HashMap<>();
-    try (SQLiteDatabase db = SecureSmsProxyApplication.getReadableDatabase()) {
+    try (SQLiteDatabase db = this.dbFactory.getDatabase(READ_ONLY)) {
       String rawQuery = "SELECT " + TextUtils.join(", ", ALL_COLUMNS) + " FROM " + VIEW_APPLICATION_RULE + " WHERE " + TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER +
           " IN (" + TextUtils.join(",", phoneNumbers.stream().map(s -> "'" + s + "'").collect(Collectors.toList())) + ")";
       try (Cursor cursor = db.rawQuery(rawQuery, null)) {
         if (cursor != null && cursor.moveToFirst()) {
           do {
-            Application application = applications.getOrDefault(cursor.getLong(0), new Application(cursor.getLong(0), cursor.getString(1), cursor.getString(2), cursor.getString(3)));
+            long id = cursor.getLong(0);
+            Application application = applications.getOrDefault(id, new Application(id, cursor.getString(1), cursor.getString(2), cursor.getString(3)));
             applications.put(application.getId(), application);
             String phoneNumber = cursor.getString(4);
             Set<Application> set = applicationsByPhoneNumber.getOrDefault(phoneNumber, new HashSet<>());
@@ -123,7 +136,8 @@ public class ApplicationRuleDao {
     Map<Application, Set<String>> applicationPhoneNumbers = new HashMap<>();
     if (cursor != null && cursor.moveToFirst()) {
       do {
-        Application application = applications.getOrDefault(cursor.getLong(0), new Application(cursor.getLong(0), cursor.getString(1), cursor.getString(2), cursor.getString(3)));
+        long id = cursor.getLong(0);
+        Application application = applications.getOrDefault(id, new Application(id, cursor.getString(1), cursor.getString(2), cursor.getString(3)));
         applications.put(application.getId(), application);
         Set<String> phoneNumbers = applicationPhoneNumbers.getOrDefault(application, new HashSet<>());
         phoneNumbers.add(cursor.getString(4));
@@ -138,7 +152,7 @@ public class ApplicationRuleDao {
   }
 
   public void delete(Application application) {
-    try (SQLiteDatabase db = SecureSmsProxyApplication.getWritableDatabase()) {
+    try (SQLiteDatabase db = this.dbFactory.getDatabase(WRITABLE)) {
       db.delete(TABLE_APPLICATION, TABLE_APPLICATION_COLUMN_ID + "=?", new String[]{String.valueOf(application.getId())});
     }
   }
