@@ -4,15 +4,28 @@
 [![Coverage Status](https://coveralls.io/repos/github/frimtec/secure-sms-proxy/badge.svg?branch=master)](https://coveralls.io/github/frimtec/secure-sms-proxy?branch=master)
 [![license](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-![Deactivated PAssist](app/src/main/res/mipmap-hdpi/ic_launcher.png) 
+![Icon](app/src/main/res/mipmap-hdpi/ic_launcher.png) 
 
 As Google strongly restricts the use of SMS permissions for applications in the Play-Store, S2MSP provides a API for third party applications
 to send and receive SMS to specific phone numbers via a secure SMS proxy.
+
+S2MSP acts like a local firewall for SMS communication.
+
 Each application that wants to send/receive SMS to a phone number can register itself on S2MSP. 
-S2MSP asks the user for permission, whether the requesting application is allowed to send/receive SMS from and to the requested phone number or not.
+S2MSP asks the user for permission, whether the requesting application is allowed to send/receive SMS from and to the requested phone numbers or not.
+
+![Permission request dialog](images/S2MSP-01.png)
+
+In the main view of S2MSP all applications with their allowed phone numbers are listed.
+
+![Main view](images/S2MSP-02.png)
+
+With the trash icon, the allowed permission for an application can be revoked again.
+
 All SMS exchanged with third party applications are strongly encrypted.
 
-Beside SMS permissions, S2MSP does not request any other permissions to ensure the integrity and security of S2MSP.
+S2SMP itself requires SMS permissions (SEND_SMS and RECEIVE_SMS) from the Android system and will request these permissions upon startup. 
+S2MSP does not need any other permissions. This ensures the integrity and security of S2MSP.
 
 ## Installation
 S2MSP cannot be offered on Google-Play as Google does only allow applications using SMS permissions in very special cases. 
