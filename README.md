@@ -28,7 +28,8 @@ S2SMP itself requires SMS permissions (SEND_SMS and RECEIVE_SMS) from the Androi
 S2MSP does not need any other permissions. This ensures the integrity and security of S2MSP.
 
 ## Installation
-S2MSP cannot be offered on Google-Play as Google does only allow applications using SMS permissions in very rare cases. 
+S2MSP cannot be offered on Google-Play as Google does only allow applications using SMS permissions in very rare cases 
+(see [Use of SMS or Call Log permission groups](https://support.google.com/googleplay/android-developer/answer/9047303?hl=en)). 
 
 ### Install pre build APK
 You can download the APK file from the [GitHub release page](https://github.com/frimtec/secure-sms-proxy/releases).
