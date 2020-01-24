@@ -123,6 +123,17 @@ public interface SecureSmsProxyFacade {
   void register(Activity callerActivity, int requestCode, Set<String> phoneNumbersToAllow, Class<? extends BroadcastReceiver> smsBroadCastReceiverClass);
 
   /**
+   * Registers the current application for communication without granting any phone numbers (no UI interactions required).
+   *
+   * @param callerActivity            caller activity; this activity will receive the result in the {@link Activity#onActivityResult(int, int, Intent)} hook
+   * @param requestCode               request code that will be used to identify the result in the {@link Activity#onActivityResult(int, int, Intent)} hook
+   * @param smsBroadCastReceiverClass broad cast receiver class of the current application where received SMS will be broadcast to
+   * @see #getRegistrationResult(int, Intent)
+   * @since 1.3.5 - noop if installed S2MSP app is older
+   */
+  void register(Activity callerActivity, int requestCode, Class<? extends BroadcastReceiver> smsBroadCastReceiverClass);
+
+  /**
    * Returns registration result from result code and data intent that your activity will receive
    * with the {@link Activity#onActivityResult(int, int, Intent)} hook upon result.
    *

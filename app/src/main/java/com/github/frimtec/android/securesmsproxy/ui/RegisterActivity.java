@@ -12,8 +12,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.frimtec.android.securesmsproxy.R;
-import com.github.frimtec.android.securesmsproxy.utility.PackageInfoAccessor;
 import com.github.frimtec.android.securesmsproxy.service.ApplicationRuleDao;
+import com.github.frimtec.android.securesmsproxy.utility.PackageInfoAccessor;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -66,6 +66,14 @@ public class RegisterActivity extends AppCompatActivity {
     List<String> phoneNumbers = extras.getStringArrayList(EXTRA_PHONE_NUMBERS);
     String packageName = referrer.getHost();
 
+    if(phoneNumbers == null || phoneNumbers.size() == 0) {
+      String randomSecret = new ApplicationRuleDao().insertOrUpdate(packageName, listener, Collections.emptySet());
+      resultIntent.putExtra(EXTRA_SECRET, randomSecret);
+      setResult(RESULT_OK, resultIntent);
+      finish();
+      return;
+    }
+
     setContentView(R.layout.activity_register);
     ImageView applicationIcon = findViewById(R.id.register_application_icon);
     packageInfoAccessor.getIcon(packageName).ifPresent(applicationIcon::setImageDrawable);
@@ -74,12 +82,12 @@ public class RegisterActivity extends AppCompatActivity {
     applicationLabel.setText(packageInfoAccessor.getLabel(packageName));
 
     TextView phoneNumbersToAllow = findViewById(R.id.register_phone_numbers);
-    phoneNumbersToAllow.setText(phoneNumbers != null ? phoneNumbers.stream()
-        .map(phoneNumber -> PhoneNumberUtils.formatNumber(phoneNumber, Locale.getDefault().getCountry()))
-        .collect(Collectors.joining("\n")) : "");
+    phoneNumbersToAllow.setText(phoneNumbers.stream()
+            .map(phoneNumber -> PhoneNumberUtils.formatNumber(phoneNumber, Locale.getDefault().getCountry()))
+            .collect(Collectors.joining("\n")));
     Button allow = findViewById(R.id.button_allow);
     allow.setOnClickListener(v -> {
-      String randomSecret = new ApplicationRuleDao().insertOrUpdate(packageName, listener, phoneNumbers != null ? new HashSet<>(phoneNumbers) : Collections.emptySet());
+      String randomSecret = new ApplicationRuleDao().insertOrUpdate(packageName, listener, new HashSet<>(phoneNumbers));
       resultIntent.putExtra(EXTRA_SECRET, randomSecret);
       setResult(RESULT_OK, resultIntent);
       finish();

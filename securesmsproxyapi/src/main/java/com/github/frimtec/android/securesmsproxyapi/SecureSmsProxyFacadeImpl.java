@@ -80,6 +80,14 @@ final class SecureSmsProxyFacadeImpl implements SecureSmsProxyFacade {
   }
 
   @Override
+  public void register(
+      Activity callerActivity,
+      int requestCode,
+      Class<? extends BroadcastReceiver> smsBroadCastReceiverClass) {
+    register(callerActivity, requestCode, Collections.emptySet(), smsBroadCastReceiverClass);
+  }
+
+  @Override
   public RegistrationResult getRegistrationResult(int resultCode, Intent data) {
     switch (resultCode) {
       case RESULT_OK:

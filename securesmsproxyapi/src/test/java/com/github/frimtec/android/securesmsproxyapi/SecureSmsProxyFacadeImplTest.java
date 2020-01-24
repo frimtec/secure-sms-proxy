@@ -181,6 +181,20 @@ public class SecureSmsProxyFacadeImplTest {
   }
 
   @Test
+  public void registerWithNoPhoneNumbers() {
+    Intent actionIntent = mock(Intent.class);
+    SecureSmsProxyFacade facade = new SecureSmsProxyFacadeImpl(mock(Context.class), (action) -> {
+      assertThat(action, is(ACTION_REGISTER));
+      return actionIntent;
+    });
+    Activity activity = mock(Activity.class);
+    facade.register(activity, 12, TestBroadCastReceiver.class);
+    verify(activity).startActivityForResult(actionIntent, 12);
+    verify(actionIntent).putStringArrayListExtra(EXTRA_PHONE_NUMBERS, new ArrayList<>());
+    verify(actionIntent).putExtra(EXTRA_LISTENER_CLASS, "com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacadeImplTest.TestBroadCastReceiver");
+  }
+
+  @Test
   public void getRegistrationResultResultCancelled() {
     SecureSmsProxyFacade facade = new SecureSmsProxyFacadeImpl(context(new HashSet<>()));
     Intent intent = mock(Intent.class);
