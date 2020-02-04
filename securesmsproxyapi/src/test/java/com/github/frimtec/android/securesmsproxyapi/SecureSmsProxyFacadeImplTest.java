@@ -13,7 +13,7 @@ import android.os.Bundle;
 
 import com.github.frimtec.android.securesmsproxyapi.utility.Aes;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
@@ -50,19 +50,18 @@ import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.
 import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.RegistrationResult.ReturnCode.REJECTED;
 import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.RegistrationResult.ReturnCode.UNKNOWN;
 import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.S2MSP_PACKAGE_NAME;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class SecureSmsProxyFacadeImplTest {
+class SecureSmsProxyFacadeImplTest {
 
-  public static final String SECRET = "1234567890123456";
+  static final String SECRET = "1234567890123456";
 
   @Test
-  public void areSmsPermissionsGrantedForYes() throws PackageManager.NameNotFoundException {
+  void areSmsPermissionsGrantedForYes() throws PackageManager.NameNotFoundException {
     PackageInfo packageInfo = new PackageInfo();
     Context context = context(packageInfo);
     SecureSmsProxyFacade facade = new SecureSmsProxyFacadeImpl(context);
@@ -70,11 +69,11 @@ public class SecureSmsProxyFacadeImplTest {
     when(packageManager.checkPermission(RECEIVE_SMS, S2MSP_PACKAGE_NAME)).thenReturn(PERMISSION_GRANTED);
     when(packageManager.checkPermission(SEND_SMS, S2MSP_PACKAGE_NAME)).thenReturn(PERMISSION_GRANTED);
     boolean granted = facade.areSmsPermissionsGranted();
-    assertThat(granted, is(true));
+    assertThat(granted).isTrue();
   }
 
   @Test
-  public void areSmsPermissionsGrantedForNoSend() throws PackageManager.NameNotFoundException {
+  void areSmsPermissionsGrantedForNoSend() throws PackageManager.NameNotFoundException {
     PackageInfo packageInfo = new PackageInfo();
     Context context = context(packageInfo);
     SecureSmsProxyFacade facade = new SecureSmsProxyFacadeImpl(context);
@@ -82,11 +81,11 @@ public class SecureSmsProxyFacadeImplTest {
     when(packageManager.checkPermission(RECEIVE_SMS, S2MSP_PACKAGE_NAME)).thenReturn(PERMISSION_GRANTED);
     when(packageManager.checkPermission(SEND_SMS, S2MSP_PACKAGE_NAME)).thenReturn(PERMISSION_DENIED);
     boolean granted = facade.areSmsPermissionsGranted();
-    assertThat(granted, is(false));
+    assertThat(granted).isFalse();
   }
 
   @Test
-  public void areSmsPermissionsGrantedForNoReceive() throws PackageManager.NameNotFoundException {
+  void areSmsPermissionsGrantedForNoReceive() throws PackageManager.NameNotFoundException {
     PackageInfo packageInfo = new PackageInfo();
     Context context = context(packageInfo);
     SecureSmsProxyFacade facade = new SecureSmsProxyFacadeImpl(context);
@@ -94,11 +93,11 @@ public class SecureSmsProxyFacadeImplTest {
     when(packageManager.checkPermission(RECEIVE_SMS, S2MSP_PACKAGE_NAME)).thenReturn(PERMISSION_DENIED);
     when(packageManager.checkPermission(SEND_SMS, S2MSP_PACKAGE_NAME)).thenReturn(PERMISSION_GRANTED);
     boolean granted = facade.areSmsPermissionsGranted();
-    assertThat(granted, is(false));
+    assertThat(granted).isFalse();
   }
 
   @Test
-  public void areSmsPermissionsGrantedForNoSendAndNoReceive() throws PackageManager.NameNotFoundException {
+  void areSmsPermissionsGrantedForNoSendAndNoReceive() throws PackageManager.NameNotFoundException {
     PackageInfo packageInfo = new PackageInfo();
     Context context = context(packageInfo);
     SecureSmsProxyFacade facade = new SecureSmsProxyFacadeImpl(context);
@@ -106,55 +105,55 @@ public class SecureSmsProxyFacadeImplTest {
     when(packageManager.checkPermission(RECEIVE_SMS, S2MSP_PACKAGE_NAME)).thenReturn(PERMISSION_DENIED);
     when(packageManager.checkPermission(SEND_SMS, S2MSP_PACKAGE_NAME)).thenReturn(PERMISSION_DENIED);
     boolean granted = facade.areSmsPermissionsGranted();
-    assertThat(granted, is(false));
+    assertThat(granted).isFalse();
   }
 
   @Test
-  public void getInstallationForExistingProxyApp() throws PackageManager.NameNotFoundException {
+  void getInstallationForExistingProxyApp() throws PackageManager.NameNotFoundException {
     PackageInfo packageInfo = new PackageInfo();
     packageInfo.packageName = S2MSP_PACKAGE_NAME;
     packageInfo.versionName = "1.0.1";
     SecureSmsProxyFacade facade = new SecureSmsProxyFacadeImpl(context(packageInfo));
     SecureSmsProxyFacade.Installation installation = facade.getInstallation();
-    assertThat(installation.getApiVersion(), is(BuildConfig.VERSION_NAME));
-    assertThat(installation.getAppVersion(), is(Optional.of("1.0.1")));
+    assertThat(installation.getApiVersion()).isEqualTo(BuildConfig.VERSION_NAME);
+    assertThat(installation.getAppVersion()).isEqualTo(Optional.of("1.0.1"));
   }
 
   @Test
-  public void getInstallationForNonExistingProxyApp() throws PackageManager.NameNotFoundException {
+  void getInstallationForNonExistingProxyApp() throws PackageManager.NameNotFoundException {
     SecureSmsProxyFacade facade = new SecureSmsProxyFacadeImpl(context((PackageInfo) null));
     SecureSmsProxyFacade.Installation installation = facade.getInstallation();
-    assertThat(installation.getApiVersion(), is(BuildConfig.VERSION_NAME));
-    assertThat(installation.getAppVersion(), is(Optional.empty()));
+    assertThat(installation.getApiVersion()).isEqualTo(BuildConfig.VERSION_NAME);
+    assertThat(installation.getAppVersion()).isEqualTo(Optional.empty());
   }
 
   @Test
-  public void isAllowedNotFound() {
+  void isAllowedNotFound() {
     SecureSmsProxyFacade facade = new SecureSmsProxyFacadeImpl(context(new HashSet<>(Arrays.asList("1", "5"))));
     boolean allowed = facade.isAllowed(new HashSet<>(Arrays.asList("111", "5")));
-    assertThat(allowed, is(false));
+    assertThat(allowed).isFalse();
   }
 
   @Test
-  public void isAllowedFound() {
+  void isAllowedFound() {
     SecureSmsProxyFacade facade = new SecureSmsProxyFacadeImpl(context(new HashSet<>(Arrays.asList("1", "5", "111"))));
     boolean allowed = facade.isAllowed(new HashSet<>(Arrays.asList("111", "5")));
-    assertThat(allowed, is(true));
+    assertThat(allowed).isTrue();
   }
 
   @Test
-  public void isAllowedNoResult() {
+  void isAllowedNoResult() {
     SecureSmsProxyFacade facade = new SecureSmsProxyFacadeImpl(context(new HashSet<>()));
     boolean allowed = facade.isAllowed(Collections.singleton("111"));
-    assertThat(allowed, is(false));
+    assertThat(allowed).isFalse();
   }
 
   @Test
-  public void isAllowedNullCursor() {
+  void isAllowedNullCursor() {
     @SuppressWarnings("unchecked")
     SecureSmsProxyFacade facade = new SecureSmsProxyFacadeImpl(context((Set) null));
     boolean allowed = facade.isAllowed(Collections.singleton("111"));
-    assertThat(allowed, is(false));
+    assertThat(allowed).isFalse();
   }
 
   private static class TestBroadCastReceiver extends BroadcastReceiver {
@@ -166,10 +165,10 @@ public class SecureSmsProxyFacadeImplTest {
   }
 
   @Test
-  public void register() {
+  void register() {
     Intent actionIntent = mock(Intent.class);
     SecureSmsProxyFacade facade = new SecureSmsProxyFacadeImpl(mock(Context.class), (action) -> {
-      assertThat(action, is(ACTION_REGISTER));
+      assertThat(action).isEqualTo(ACTION_REGISTER);
       return actionIntent;
     });
     Activity activity = mock(Activity.class);
@@ -181,10 +180,10 @@ public class SecureSmsProxyFacadeImplTest {
   }
 
   @Test
-  public void registerWithNoPhoneNumbers() {
+  void registerWithNoPhoneNumbers() {
     Intent actionIntent = mock(Intent.class);
     SecureSmsProxyFacade facade = new SecureSmsProxyFacadeImpl(mock(Context.class), (action) -> {
-      assertThat(action, is(ACTION_REGISTER));
+      assertThat(action).isEqualTo(ACTION_REGISTER);
       return actionIntent;
     });
     Activity activity = mock(Activity.class);
@@ -195,92 +194,92 @@ public class SecureSmsProxyFacadeImplTest {
   }
 
   @Test
-  public void getRegistrationResultResultCancelled() {
+  void getRegistrationResultResultCancelled() {
     SecureSmsProxyFacade facade = new SecureSmsProxyFacadeImpl(context(new HashSet<>()));
     Intent intent = mock(Intent.class);
     SecureSmsProxyFacade.RegistrationResult registrationResult = facade.getRegistrationResult(RESULT_CANCELED, intent);
-    assertThat(registrationResult.getReturnCode(), is(REJECTED));
-    assertThat(registrationResult.getSecret().isPresent(), is(false));
+    assertThat(registrationResult.getReturnCode()).isEqualTo(REJECTED);
+    assertThat(registrationResult.getSecret().isPresent()).isFalse();
   }
 
   @Test
-  public void getRegistrationResultMissingSmsPermission() {
+  void getRegistrationResultMissingSmsPermission() {
     SecureSmsProxyFacade facade = new SecureSmsProxyFacadeImpl(context(new HashSet<>()));
     Intent intent = mock(Intent.class);
     SecureSmsProxyFacade.RegistrationResult registrationResult = facade.getRegistrationResult(REGISTRATION_RESULT_CODE_MISSING_SMS_PERMISSION, intent);
-    assertThat(registrationResult.getReturnCode(), is(MISSING_SMS_PERMISSION));
-    assertThat(registrationResult.getSecret().isPresent(), is(false));
+    assertThat(registrationResult.getReturnCode()).isEqualTo(MISSING_SMS_PERMISSION);
+    assertThat(registrationResult.getSecret().isPresent()).isFalse();
   }
 
   @Test
-  public void getRegistrationResultNoReferrer() {
+  void getRegistrationResultNoReferrer() {
     SecureSmsProxyFacade facade = new SecureSmsProxyFacadeImpl(context(new HashSet<>()));
     Intent intent = mock(Intent.class);
     SecureSmsProxyFacade.RegistrationResult registrationResult = facade.getRegistrationResult(REGISTRATION_RESULT_CODE_NO_REFERRER, intent);
-    assertThat(registrationResult.getReturnCode(), is(NO_REFERRER));
-    assertThat(registrationResult.getSecret().isPresent(), is(false));
+    assertThat(registrationResult.getReturnCode()).isEqualTo(NO_REFERRER);
+    assertThat(registrationResult.getSecret().isPresent()).isFalse();
   }
 
   @Test
-  public void getRegistrationResultNoExtras() {
+  void getRegistrationResultNoExtras() {
     SecureSmsProxyFacade facade = new SecureSmsProxyFacadeImpl(context(new HashSet<>()));
     Intent intent = mock(Intent.class);
     SecureSmsProxyFacade.RegistrationResult registrationResult = facade.getRegistrationResult(REGISTRATION_RESULT_CODE_NO_EXTRAS, intent);
-    assertThat(registrationResult.getReturnCode(), is(NO_EXTRAS));
-    assertThat(registrationResult.getSecret().isPresent(), is(false));
+    assertThat(registrationResult.getReturnCode()).isEqualTo(NO_EXTRAS);
+    assertThat(registrationResult.getSecret().isPresent()).isFalse();
   }
 
   @Test
-  public void getRegistrationResultUnknown() {
+  void getRegistrationResultUnknown() {
     SecureSmsProxyFacade facade = new SecureSmsProxyFacadeImpl(context(new HashSet<>()));
     Intent intent = mock(Intent.class);
     SecureSmsProxyFacade.RegistrationResult registrationResult = facade.getRegistrationResult(999, intent);
-    assertThat(registrationResult.getReturnCode(), is(UNKNOWN));
-    assertThat(registrationResult.getSecret().isPresent(), is(false));
+    assertThat(registrationResult.getReturnCode()).isEqualTo(UNKNOWN);
+    assertThat(registrationResult.getSecret().isPresent()).isFalse();
   }
 
   @Test
-  public void getRegistrationResultResultOkButNoExtras() {
+  void getRegistrationResultResultOkButNoExtras() {
     SecureSmsProxyFacade facade = new SecureSmsProxyFacadeImpl(context(new HashSet<>()));
     Intent intent = mock(Intent.class);
     SecureSmsProxyFacade.RegistrationResult registrationResult = facade.getRegistrationResult(RESULT_OK, intent);
-    assertThat(registrationResult.getReturnCode(), is(NO_SECRET));
-    assertThat(registrationResult.getSecret().isPresent(), is(false));
+    assertThat(registrationResult.getReturnCode()).isEqualTo(NO_SECRET);
+    assertThat(registrationResult.getSecret().isPresent()).isFalse();
   }
 
   @Test
-  public void getRegistrationResultResultOkButNoSecret() {
+  void getRegistrationResultResultOkButNoSecret() {
     SecureSmsProxyFacade facade = new SecureSmsProxyFacadeImpl(context(new HashSet<>()));
     Intent intent = mock(Intent.class);
     Bundle bundle = mock(Bundle.class);
     when(intent.getExtras()).thenReturn(bundle);
     SecureSmsProxyFacade.RegistrationResult registrationResult = facade.getRegistrationResult(RESULT_OK, intent);
-    assertThat(registrationResult.getReturnCode(), is(NO_SECRET));
-    assertThat(registrationResult.getSecret().isPresent(), is(false));
+    assertThat(registrationResult.getReturnCode()).isEqualTo(NO_SECRET);
+    assertThat(registrationResult.getSecret().isPresent()).isFalse();
   }
 
   @Test
-  public void getRegistrationResultResultOk() {
+  void getRegistrationResultResultOk() {
     SecureSmsProxyFacade facade = new SecureSmsProxyFacadeImpl(context(new HashSet<>()));
     Intent intent = mock(Intent.class);
     Bundle bundle = mock(Bundle.class);
     when(bundle.getString(EXTRA_SECRET)).thenReturn("SECRET");
     when(intent.getExtras()).thenReturn(bundle);
     SecureSmsProxyFacade.RegistrationResult registrationResult = facade.getRegistrationResult(RESULT_OK, intent);
-    assertThat(registrationResult.getReturnCode(), is(ALLOWED));
-    assertThat(registrationResult.getSecret().isPresent(), is(true));
-    assertThat(registrationResult.getSecret().get(), is("SECRET"));
+    assertThat(registrationResult.getReturnCode()).isEqualTo(ALLOWED);
+    assertThat(registrationResult.getSecret().isPresent()).isTrue();
+    assertThat(registrationResult.getSecret().get()).isEqualTo("SECRET");
   }
 
   @Test
-  public void sendSms() {
+  void sendSms() {
     Intent actionIntent = mock(Intent.class);
     Context context = mock(Context.class);
     Context applicationContext = mock(Context.class);
     when(context.getApplicationContext()).thenReturn(applicationContext);
     when(applicationContext.getPackageName()).thenReturn("application");
     SecureSmsProxyFacade facade = new SecureSmsProxyFacadeImpl(context, (action) -> {
-      assertThat(action, is(ACTION_SEND_SMS));
+      assertThat(action).isEqualTo(ACTION_SEND_SMS);
       return actionIntent;
     });
     Sms sms = new Sms("number", "text");
@@ -292,11 +291,11 @@ public class SecureSmsProxyFacadeImplTest {
     verify(actionIntent).putExtra(Intent.EXTRA_PACKAGE_NAME, "application");
     verify(actionIntent).addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
     verify(actionIntent).setComponent(any(ComponentName.class));
-    assertThat(new Aes(SECRET).decrypt(smsTextCaptor.getValue()), is(sms.toJson()));
+    assertThat(new Aes(SECRET).decrypt(smsTextCaptor.getValue())).isEqualTo(sms.toJson());
   }
 
   @Test
-  public void extractReceivedSmsWrongAction() {
+  void extractReceivedSmsWrongAction() {
     Intent receivedIntent = mock(Intent.class);
     when(receivedIntent.getAction()).thenReturn("wrong");
     Context context = mock(Context.class);
@@ -306,11 +305,11 @@ public class SecureSmsProxyFacadeImplTest {
     when(bundle.getString(EXTRA_TEXT)).thenReturn(new Aes(SECRET).encrypt(Sms.toJsonArray(smsList)));
     when(receivedIntent.getExtras()).thenReturn(bundle);
     List<Sms> receivedSms = facade.extractReceivedSms(receivedIntent, SECRET);
-    assertThat(receivedSms.size(), is(0));
+    assertThat(receivedSms.size()).isEqualTo(0);
   }
 
   @Test
-  public void extractReceivedSmsWrongEncrypten() {
+  void extractReceivedSmsWrongEncrypten() {
     Intent receivedIntent = mock(Intent.class);
     when(receivedIntent.getAction()).thenReturn(ACTION_BROADCAST_SMS_RECEIVED);
     Context context = mock(Context.class);
@@ -320,11 +319,11 @@ public class SecureSmsProxyFacadeImplTest {
     when(bundle.getString(EXTRA_TEXT)).thenReturn(new Aes(SECRET.substring(1) + "A").encrypt(Sms.toJsonArray(smsList)));
     when(receivedIntent.getExtras()).thenReturn(bundle);
     List<Sms> receivedSms = facade.extractReceivedSms(receivedIntent, SECRET);
-    assertThat(receivedSms.size(), is(0));
+    assertThat(receivedSms.size()).isEqualTo(0);
   }
 
   @Test
-  public void extractReceivedSms() {
+  void extractReceivedSms() {
     Intent receivedIntent = mock(Intent.class);
     when(receivedIntent.getAction()).thenReturn(ACTION_BROADCAST_SMS_RECEIVED);
     Context context = mock(Context.class);
@@ -334,7 +333,7 @@ public class SecureSmsProxyFacadeImplTest {
     when(bundle.getString(EXTRA_TEXT)).thenReturn(new Aes(SECRET).encrypt(Sms.toJsonArray(smsList)));
     when(receivedIntent.getExtras()).thenReturn(bundle);
     List<Sms> receivedSms = facade.extractReceivedSms(receivedIntent, SECRET);
-    assertThat(Sms.toJsonArray(receivedSms), is(Sms.toJsonArray(smsList)));
+    assertThat(Sms.toJsonArray(receivedSms)).isEqualTo(Sms.toJsonArray(smsList));
   }
 
   private Context context(PackageInfo packageInfo) throws PackageManager.NameNotFoundException {

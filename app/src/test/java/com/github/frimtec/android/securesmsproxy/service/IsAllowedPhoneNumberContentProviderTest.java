@@ -7,36 +7,35 @@ import android.net.Uri;
 
 import com.github.frimtec.android.securesmsproxy.state.DbHelper;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_APPLICATION_COLUMN_NAME;
 import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class IsAllowedPhoneNumberContentProviderTest {
+class IsAllowedPhoneNumberContentProviderTest {
 
   @Test
-  public void onCreate() {
+  void onCreate() {
     IsAllowedPhoneNumberContentProvider provider = new IsAllowedPhoneNumberContentProvider();
     boolean onCreate = provider.onCreate();
     assertTrue(onCreate);
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void queryNotMatchingUri() {
+  @Test
+  void queryNotMatchingUri() {
     IsAllowedPhoneNumberContentProvider provider = new IsAllowedPhoneNumberContentProvider(null, (uri) -> false);
-    provider.query(mock(Uri.class), new String[0], null, null, null);
+    assertThrows(IllegalArgumentException.class, () -> provider.query(mock(Uri.class), new String[0], null, null, null));
   }
 
   @Test
-  public void queryMatchingUri() {
+  void queryMatchingUri() {
     SQLiteDatabase db = mock(SQLiteDatabase.class);
     when(db.isOpen()).thenReturn(false);
     when(db.isOpen()).thenReturn(true);
@@ -57,36 +56,36 @@ public class IsAllowedPhoneNumberContentProviderTest {
         null, null, null
     )).thenReturn(expectedCursor);
     Cursor cursor = provider.query(uri, new String[0], null, null, null);
-    assertThat(cursor, is(expectedCursor));
-    assertThat(dbCreationCounter.get(), is(1));
+    assertThat(cursor).isEqualTo(expectedCursor);
+    assertThat(dbCreationCounter.get()).isEqualTo(1);
 
     cursor = provider.query(uri, new String[0], null, null, null);
-    assertThat(cursor, is(expectedCursor));
-    assertThat(dbCreationCounter.get(), is(1));
+    assertThat(cursor).isEqualTo(expectedCursor);
+    assertThat(dbCreationCounter.get()).isEqualTo(1);
   }
 
   @Test
-  public void getType() {
+  void getType() {
     IsAllowedPhoneNumberContentProvider provider = new IsAllowedPhoneNumberContentProvider();
     String type = provider.getType(mock(Uri.class));
-    Assert.assertThat(type, is("vnd.android.cursor.dir/vnd.com.github.frimtec.android.securesmsproxy.provider.allowed_phone_numbers"));
+    assertThat(type).isEqualTo("vnd.android.cursor.dir/vnd.com.github.frimtec.android.securesmsproxy.provider.allowed_phone_numbers");
   }
 
-  @Test(expected = UnsupportedOperationException.class)
-  public void insert() {
+  @Test
+  void insert() {
     IsAllowedPhoneNumberContentProvider provider = new IsAllowedPhoneNumberContentProvider();
-    provider.insert(mock(Uri.class), mock(ContentValues.class));
+    assertThrows(UnsupportedOperationException.class, () -> provider.insert(mock(Uri.class), mock(ContentValues.class)));
   }
 
-  @Test(expected = UnsupportedOperationException.class)
-  public void delete() {
+  @Test
+  void delete() {
     IsAllowedPhoneNumberContentProvider provider = new IsAllowedPhoneNumberContentProvider();
-    provider.delete(mock(Uri.class), "selection", new String[0]);
+    assertThrows(UnsupportedOperationException.class, () -> provider.delete(mock(Uri.class), "selection", new String[0]));
   }
 
-  @Test(expected = UnsupportedOperationException.class)
-  public void update() {
+  @Test
+  void update() {
     IsAllowedPhoneNumberContentProvider provider = new IsAllowedPhoneNumberContentProvider();
-    provider.update(mock(Uri.class), mock(ContentValues.class), "selection", new String[0]);
+    assertThrows(UnsupportedOperationException.class, () -> provider.update(mock(Uri.class), mock(ContentValues.class), "selection", new String[0]));
   }
 }

@@ -1,53 +1,52 @@
 package com.github.frimtec.android.securesmsproxy.domain;
 
-import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.junit.Assert.assertThat;
+import org.junit.jupiter.api.Test;
 
-public class ApplicationTest {
+import static org.assertj.core.api.Assertions.assertThat;
+
+class ApplicationTest {
 
   @Test
-  public void testProperties() {
+  void testProperties() {
     Application application = new Application(12L, "name", "listener", "secret");
-    assertThat(application.getId(), is(12L));
-    assertThat(application.getName(), is("name"));
-    assertThat(application.getListener(), is("listener"));
-    assertThat(application.getSecret(), is("secret"));
+    assertThat(application.getId()).isEqualTo(12L);
+    assertThat(application.getName()).isEqualTo("name");
+    assertThat(application.getListener()).isEqualTo("listener");
+    assertThat(application.getSecret()).isEqualTo("secret");
   }
 
   @Test
-  public void testEquals() {
+  void testEquals() {
     Application application1 = new Application(12L, "name", "listener", "secret");
     Application application2 = new Application(11L, "name", "listener", "secret");
-    assertThat(application1.equals(application2), is(false));
-    assertThat(application2.equals(application1), is(false));
+    assertThat(application1.equals(application2)).isFalse();
+    assertThat(application2.equals(application1)).isFalse();
 
-    assertThat(application1.equals(new Application(12L, null, null, null)), is(true));
+    assertThat(application1.equals(new Application(12L, null, null, null))).isTrue();
     //noinspection EqualsWithItself
-    assertThat(application1.equals(application1), is(true));
+    assertThat(application1.equals(application1)).isTrue();
 
     //noinspection ConstantConditions
-    assertThat(application1.equals(null), is(false));
+    assertThat(application1.equals(null)).isFalse();
 
     //noinspection EqualsBetweenInconvertibleTypes
-    assertThat(application1.equals("Test"), is(false));
+    assertThat(application1.equals("Test")).isFalse();
   }
 
   @Test
-  public void testHashCode() {
+  void testHashCode() {
     Application application1 = new Application(12L, "name", "listener", "secret");
     Application application2 = new Application(11L, "name", "listener", "secret");
-    assertThat(application1.hashCode(), is(not(application2.hashCode())));
-    assertThat(application2.equals(application1), is(false));
-    assertThat(application1.hashCode(), is(new Application(12L, null, null, null).hashCode()));
+    assertThat(application1.hashCode()).isNotEqualTo(application2.hashCode());
+    assertThat(application2.equals(application1)).isFalse();
+    assertThat(application1.hashCode()).isEqualTo(new Application(12L, null, null, null).hashCode());
   }
 
   @Test
-  public void testToString() {
+  void testToString() {
     Application application = new Application(12L, "name", "listener", "secret");
-    assertThat(application.toString(), is("Application{id=12, name='name', listener='listener', secret='secret'}"));
+    assertThat(application.toString()).isEqualTo("Application{id=12, name='name', listener='listener', secret='secret'}");
   }
 
 }

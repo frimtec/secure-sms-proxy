@@ -3,7 +3,7 @@ package com.github.frimtec.android.securesmsproxy.state;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_APPLICATION;
@@ -14,10 +14,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
-public class DbHelperTest {
+class DbHelperTest {
 
   @Test
-  public void onCreate() {
+  void onCreate() {
     DbHelper dbHelper = new DbHelper(mock(Context.class));
     SQLiteDatabase db = mock(SQLiteDatabase.class);
     dbHelper.onCreate(db);
@@ -28,7 +28,7 @@ public class DbHelperTest {
   }
 
   @Test
-  public void onUpgradeV1ToV1() {
+  void onUpgradeV1ToV1() {
     DbHelper dbHelper = new DbHelper(mock(Context.class));
     SQLiteDatabase db = mock(SQLiteDatabase.class);
     dbHelper.onUpgrade(db, 1, 1);

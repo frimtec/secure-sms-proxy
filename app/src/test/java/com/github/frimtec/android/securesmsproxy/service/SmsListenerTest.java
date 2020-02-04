@@ -8,7 +8,7 @@ import com.github.frimtec.android.securesmsproxy.utility.SmsHelper;
 import com.github.frimtec.android.securesmsproxyapi.Sms;
 import com.github.frimtec.android.securesmsproxyapi.utility.Aes;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
 import java.util.Arrays;
@@ -20,9 +20,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.BiFunction;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
@@ -32,18 +30,19 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-public class SmsListenerTest {
 
-  public static final String SECRET = "1234567890123456";
+class SmsListenerTest {
+
+  static final String SECRET = "1234567890123456";
 
   @Test
-  public void constructor() {
+  void constructor() {
     SmsListener smsListener = new SmsListener();
-    assertThat(smsListener, notNullValue());
+    assertThat(smsListener).isNotNull();
   }
 
   @Test
-  public void broadcastReceivedSms() {
+  void broadcastReceivedSms() {
     Context context = mock(Context.class);
     Application application = new Application(1L, "app1", "listener1", SECRET);
     List<Sms> smsList = Collections.singletonList(new Sms("number", "text"));
@@ -52,7 +51,7 @@ public class SmsListenerTest {
   }
 
   @Test
-  public void onReceiveSmsWithNoRegisteredApplicationNoBroadcast() {
+  void onReceiveSmsWithNoRegisteredApplicationNoBroadcast() {
     ApplicationRuleDao dao = mock(ApplicationRuleDao.class);
     Intent intent = createIntent();
     BiFunction<Application, String, Intent> smsBroadcastIntentFactory = broadcastIntentFactory(mock(Intent.class), ArgumentCaptor.forClass(String.class));
@@ -68,7 +67,7 @@ public class SmsListenerTest {
   }
 
   @Test
-  public void onReceiveSmsWithWithRegisteredApplicationSendBroadcast() {
+  void onReceiveSmsWithWithRegisteredApplicationSendBroadcast() {
     ApplicationRuleDao dao = mock(ApplicationRuleDao.class);
     Intent intent = createIntent();
     Intent broadcastIntent = mock(Intent.class);
@@ -87,11 +86,11 @@ public class SmsListenerTest {
 
     String encryptedSms = encryptedSmsCaptor.getValue();
     verify(smsBroadcastIntentFactory).apply(application, encryptedSms);
-    assertThat(new Aes(SECRET).decrypt(encryptedSms), is(Sms.toJsonArray(smsList)));
+    assertThat(new Aes(SECRET).decrypt(encryptedSms)).isEqualTo(Sms.toJsonArray(smsList));
   }
 
   @Test
-  public void onReceiveSmsWithWithRegisteredApplicationSendBroadcastWithOriginalBroadcastIntentSupplier() {
+  void onReceiveSmsWithWithRegisteredApplicationSendBroadcastWithOriginalBroadcastIntentSupplier() {
     ApplicationRuleDao dao = mock(ApplicationRuleDao.class);
     Intent intent = createIntent();
     SmsHelper smsHelper = mock(SmsHelper.class);
@@ -107,7 +106,7 @@ public class SmsListenerTest {
   }
 
   @Test
-  public void onReceiveSmsWithWithTwoRegisteredApplicationSendBroadcastTwice() {
+  void onReceiveSmsWithWithTwoRegisteredApplicationSendBroadcastTwice() {
     ApplicationRuleDao dao = mock(ApplicationRuleDao.class);
     Intent intent = createIntent();
     Intent broadcastIntent = mock(Intent.class);
@@ -128,12 +127,12 @@ public class SmsListenerTest {
     List<String> encryptedSmsList = encryptedSmsCaptor.getAllValues();
     verify(smsBroadcastIntentFactory).apply(application1, encryptedSmsList.get(0));
     verify(smsBroadcastIntentFactory).apply(application2, encryptedSmsList.get(1));
-    assertThat(new Aes(SECRET).decrypt(encryptedSmsList.get(0)), is(Sms.toJsonArray(smsList)));
-    assertThat(new Aes(SECRET.replaceAll("1", "A")).decrypt(encryptedSmsList.get(1)), is(Sms.toJsonArray(smsList)));
+    assertThat(new Aes(SECRET).decrypt(encryptedSmsList.get(0))).isEqualTo(Sms.toJsonArray(smsList));
+    assertThat(new Aes(SECRET.replaceAll("1", "A")).decrypt(encryptedSmsList.get(1))).isEqualTo(Sms.toJsonArray(smsList));
   }
 
   @Test
-  public void onReceiveMixedSms() {
+  void onReceiveMixedSms() {
     ApplicationRuleDao dao = mock(ApplicationRuleDao.class);
     Intent intent = createIntent();
     Intent broadcastIntent = mock(Intent.class);
@@ -161,8 +160,8 @@ public class SmsListenerTest {
     List<String> encryptedSmsList = encryptedSmsCaptor.getAllValues();
     verify(smsBroadcastIntentFactory).apply(application1, encryptedSmsList.get(0));
     verify(smsBroadcastIntentFactory).apply(application2, encryptedSmsList.get(1));
-    assertThat(new Aes(SECRET).decrypt(encryptedSmsList.get(0)), is(Sms.toJsonArray(Arrays.asList(sms1, sms3))));
-    assertThat(new Aes(SECRET.replaceAll("1", "A")).decrypt(encryptedSmsList.get(1)), is(Sms.toJsonArray(Collections.singletonList(sms2))));
+    assertThat(new Aes(SECRET).decrypt(encryptedSmsList.get(0))).isEqualTo(Sms.toJsonArray(Arrays.asList(sms1, sms3)));
+    assertThat(new Aes(SECRET.replaceAll("1", "A")).decrypt(encryptedSmsList.get(1))).isEqualTo(Sms.toJsonArray(Collections.singletonList(sms2)));
   }
 
   private Intent createIntent() {

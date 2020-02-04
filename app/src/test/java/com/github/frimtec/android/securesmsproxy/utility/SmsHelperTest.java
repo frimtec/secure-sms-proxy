@@ -7,52 +7,51 @@ import android.telephony.SmsMessage;
 
 import com.github.frimtec.android.securesmsproxyapi.Sms;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-public class SmsHelperTest {
+class SmsHelperTest {
 
   @Test
-  public void getSmsFromIntentNullBundleReturnsEmptyList() {
+  void getSmsFromIntentNullBundleReturnsEmptyList() {
     SmsHelper smsHelper = new SmsHelper();
     List<Sms> sms = smsHelper.getSmsFromIntent(createIntent(null));
-    assertThat(sms.size(), is(0));
+    assertThat(sms.size()).isEqualTo(0);
   }
 
   @Test
-  public void getSmsFromIntentWithNullPdusReturnsEmptyList() {
+  void getSmsFromIntentWithNullPdusReturnsEmptyList() {
     SmsHelper smsHelper = new SmsHelper();
     List<Sms> sms = smsHelper.getSmsFromIntent(createIntent(createBundle(1, null)));
-    assertThat(sms.size(), is(0));
+    assertThat(sms.size()).isEqualTo(0);
   }
 
   @Test
-  public void getSmsFromIntentWithSubscriptionReturnsSmsWithSubscription() {
+  void getSmsFromIntentWithSubscriptionReturnsSmsWithSubscription() {
     SmsHelper smsHelper = new SmsHelper((bytes, s) -> createSmsMessage("number", "text"), null, null);
     List<Sms> smsList = smsHelper.getSmsFromIntent(createIntent(createBundle(1, new Object[]{"pdu1".getBytes()})));
-    assertThat(smsList.size(), is(1));
-    assertThat(smsList.get(0).toString(), is("Sms{number='number', text='text', subscriptionId='1'}"));
+    assertThat(smsList.size()).isEqualTo(1);
+    assertThat(smsList.get(0).toString()).isEqualTo("Sms{number='number', text='text', subscriptionId='1'}");
   }
 
   @Test
-  public void getSmsFromIntentWithNoSubscriptionReturnsSmsWithDefaultSubscription() {
+  void getSmsFromIntentWithNoSubscriptionReturnsSmsWithDefaultSubscription() {
     SmsHelper smsHelper = new SmsHelper((bytes, s) -> createSmsMessage("number", "text"), null, null);
     List<Sms> smsList = smsHelper.getSmsFromIntent(createIntent(createBundle(null, new Object[]{"pdu1".getBytes()})));
-    assertThat(smsList.size(), is(1));
-    assertThat(smsList.get(0).toString(), is("Sms{number='number', text='text', subscriptionId='null'}"));
+    assertThat(smsList.size()).isEqualTo(1);
+    assertThat(smsList.get(0).toString()).isEqualTo("Sms{number='number', text='text', subscriptionId='null'}");
   }
 
   @Test
-  public void getSmsFromIntentWithSplitSmsReturnsMergedSms() {
+  void getSmsFromIntentWithSplitSmsReturnsMergedSms() {
     SmsHelper smsHelper = new SmsHelper((bytes, format) -> {
       if (Arrays.equals(bytes, "pdu1".getBytes()) || Arrays.equals(bytes, "pdu3".getBytes())) {
         return createSmsMessage("number1", new String(bytes));
@@ -61,17 +60,17 @@ public class SmsHelperTest {
       }
     }, null, null);
     List<Sms> smsList = smsHelper.getSmsFromIntent(createIntent(createBundle(1, new Object[]{"pdu1".getBytes(), "pdu2".getBytes(), "pdu3".getBytes()})));
-    assertThat(smsList.size(), is(2));
-    assertThat(smsList.get(0).toString(), is("Sms{number='number1', text='pdu1pdu3', subscriptionId='1'}"));
-    assertThat(smsList.get(1).toString(), is("Sms{number='number2', text='text', subscriptionId='1'}"));
+    assertThat(smsList.size()).isEqualTo(2);
+    assertThat(smsList.get(0).toString()).isEqualTo("Sms{number='number1', text='pdu1pdu3', subscriptionId='1'}");
+    assertThat(smsList.get(1).toString()).isEqualTo("Sms{number='number2', text='text', subscriptionId='1'}");
   }
 
   @Test
-  public void sendWithSubscriptionId() {
+  void sendWithSubscriptionId() {
     SmsManager defaultManager = mock(SmsManager.class);
     SmsManager subscriptionManager = mock(SmsManager.class);
     SmsHelper smsHelper = new SmsHelper(null, defaultManager, (subscriptionId) -> {
-      assertThat(subscriptionId, is(1));
+      assertThat(subscriptionId).isEqualTo(1);
       return subscriptionManager;
     });
     smsHelper.send(new Sms("number", "text", 1));
@@ -80,7 +79,7 @@ public class SmsHelperTest {
   }
 
   @Test
-  public void sendWithNoSubscriptionId() {
+  void sendWithNoSubscriptionId() {
     SmsManager defaultManager = mock(SmsManager.class);
     SmsManager subscriptionManager = mock(SmsManager.class);
     SmsHelper smsHelper = new SmsHelper(null, defaultManager, (subscriptionId) -> subscriptionManager);

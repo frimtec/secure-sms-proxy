@@ -6,30 +6,30 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class PackageInfoAccessorTest {
+
+class PackageInfoAccessorTest {
 
   @Test
-  public void getIconNotFound() throws PackageManager.NameNotFoundException {
+  void getIconNotFound() throws PackageManager.NameNotFoundException {
     Context context = mock(Context.class);
     PackageManager packageManager = mock(PackageManager.class);
     when(context.getPackageManager()).thenReturn(packageManager);
     when(packageManager.getApplicationIcon("package")).thenThrow(new PackageManager.NameNotFoundException());
     PackageInfoAccessor packageInfoAccessor = new PackageInfoAccessor(context);
     Optional<Drawable> icon = packageInfoAccessor.getIcon("package");
-    assertThat(icon.isPresent(), is(false));
+    assertThat(icon.isPresent()).isFalse();
   }
 
   @Test
-  public void getIcon() throws PackageManager.NameNotFoundException {
+  void getIcon() throws PackageManager.NameNotFoundException {
     Context context = mock(Context.class);
     PackageManager packageManager = mock(PackageManager.class);
     when(context.getPackageManager()).thenReturn(packageManager);
@@ -37,33 +37,33 @@ public class PackageInfoAccessorTest {
     when(packageManager.getApplicationIcon("package")).thenReturn(expectedIcon);
     PackageInfoAccessor packageInfoAccessor = new PackageInfoAccessor(context);
     Optional<Drawable> icon = packageInfoAccessor.getIcon("package");
-    assertThat(icon.orElse(null), is(expectedIcon));
+    assertThat(icon.orElse(null)).isEqualTo(expectedIcon);
   }
 
   @Test
-  public void getLabelNotFound() throws PackageManager.NameNotFoundException {
+  void getLabelNotFound() throws PackageManager.NameNotFoundException {
     Context context = mock(Context.class);
     PackageManager packageManager = mock(PackageManager.class);
     when(context.getPackageManager()).thenReturn(packageManager);
     when(packageManager.getApplicationInfo("com.package", PackageManager.GET_META_DATA)).thenThrow(new PackageManager.NameNotFoundException());
     PackageInfoAccessor packageInfoAccessor = new PackageInfoAccessor(context);
     CharSequence label = packageInfoAccessor.getLabel("com.package");
-    assertThat(label, is("package"));
+    assertThat(label).isEqualTo("package");
   }
 
   @Test
-  public void getLabelNotFoundNoDots() throws PackageManager.NameNotFoundException {
+  void getLabelNotFoundNoDots() throws PackageManager.NameNotFoundException {
     Context context = mock(Context.class);
     PackageManager packageManager = mock(PackageManager.class);
     when(context.getPackageManager()).thenReturn(packageManager);
     when(packageManager.getApplicationInfo("package", PackageManager.GET_META_DATA)).thenThrow(new PackageManager.NameNotFoundException());
     PackageInfoAccessor packageInfoAccessor = new PackageInfoAccessor(context);
     CharSequence label = packageInfoAccessor.getLabel("package");
-    assertThat(label, is("package"));
+    assertThat(label).isEqualTo("package");
   }
 
   @Test
-  public void getLabel() throws PackageManager.NameNotFoundException {
+  void getLabel() throws PackageManager.NameNotFoundException {
     Context context = mock(Context.class);
     PackageManager packageManager = mock(PackageManager.class);
     when(context.getPackageManager()).thenReturn(packageManager);
@@ -72,22 +72,22 @@ public class PackageInfoAccessorTest {
     when(packageManager.getApplicationLabel(applicationInfo)).thenReturn("label");
     PackageInfoAccessor packageInfoAccessor = new PackageInfoAccessor(context);
     CharSequence label = packageInfoAccessor.getLabel("com.package");
-    assertThat(label, is("label"));
+    assertThat(label).isEqualTo("label");
   }
 
   @Test
-  public void isInstalledNotFound() throws PackageManager.NameNotFoundException {
+  void isInstalledNotFound() throws PackageManager.NameNotFoundException {
     Context context = mock(Context.class);
     PackageManager packageManager = mock(PackageManager.class);
     when(context.getPackageManager()).thenReturn(packageManager);
     when(packageManager.getPackageInfo("com.package", PackageManager.GET_META_DATA)).thenThrow(new PackageManager.NameNotFoundException());
     PackageInfoAccessor packageInfoAccessor = new PackageInfoAccessor(context);
     boolean installed = packageInfoAccessor.isInstalled("com.package");
-    assertThat(installed, is(false));
+    assertThat(installed).isFalse();
   }
 
   @Test
-  public void isInstalled() throws PackageManager.NameNotFoundException {
+  void isInstalled() throws PackageManager.NameNotFoundException {
     Context context = mock(Context.class);
     PackageManager packageManager = mock(PackageManager.class);
     when(context.getPackageManager()).thenReturn(packageManager);
@@ -95,6 +95,6 @@ public class PackageInfoAccessorTest {
     when(packageManager.getPackageInfo("com.package", PackageManager.GET_META_DATA)).thenReturn(packageInfo);
     PackageInfoAccessor packageInfoAccessor = new PackageInfoAccessor(context);
     boolean installed = packageInfoAccessor.isInstalled("com.package");
-    assertThat(installed, is(true));
+    assertThat(installed).isTrue();
   }
 }

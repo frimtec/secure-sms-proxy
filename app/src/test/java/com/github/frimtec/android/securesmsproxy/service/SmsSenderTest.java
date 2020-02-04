@@ -10,33 +10,31 @@ import com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade;
 import com.github.frimtec.android.securesmsproxyapi.Sms;
 import com.github.frimtec.android.securesmsproxyapi.utility.Aes;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
 import java.util.Collections;
 
 import static android.content.Intent.EXTRA_TEXT;
 import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.PHONE_NUMBER_LOOPBACK;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-public class SmsSenderTest {
+class SmsSenderTest {
 
-  public static final String SECRET = "1234567890123456";
+  static final String SECRET = "1234567890123456";
 
   @Test
-  public void constructor() {
+  void constructor() {
     SmsSender smsSender = new SmsSender();
-    assertThat(smsSender, notNullValue());
+    assertThat(smsSender).isNotNull();
   }
 
   @Test
-  public void onHandleIntentNullIntent() {
+  void onHandleIntentNullIntent() {
     ApplicationRuleDao dao = mock(ApplicationRuleDao.class);
     SmsHelper smsHelper = mock(SmsHelper.class);
     SmsSender smsSender = new SmsSender(smsHelper, dao);
@@ -47,7 +45,7 @@ public class SmsSenderTest {
   }
 
   @Test
-  public void onHandleIntentBadAction() {
+  void onHandleIntentBadAction() {
     ApplicationRuleDao dao = mock(ApplicationRuleDao.class);
     SmsHelper smsHelper = mock(SmsHelper.class);
     SmsSender smsSender = new SmsSender(smsHelper, dao);
@@ -60,7 +58,7 @@ public class SmsSenderTest {
   }
 
   @Test
-  public void onHandleIntentNullExtras() {
+  void onHandleIntentNullExtras() {
     ApplicationRuleDao dao = mock(ApplicationRuleDao.class);
     SmsHelper smsHelper = mock(SmsHelper.class);
     SmsSender smsSender = new SmsSender(smsHelper, dao);
@@ -73,7 +71,7 @@ public class SmsSenderTest {
   }
 
   @Test
-  public void onHandleIntentNoExtraText() {
+  void onHandleIntentNoExtraText() {
     ApplicationRuleDao dao = mock(ApplicationRuleDao.class);
     SmsHelper smsHelper = mock(SmsHelper.class);
     SmsSender smsSender = new SmsSender(smsHelper, dao);
@@ -88,7 +86,7 @@ public class SmsSenderTest {
   }
 
   @Test
-  public void onHandleIntentNoApplicationName() {
+  void onHandleIntentNoApplicationName() {
     ApplicationRuleDao dao = mock(ApplicationRuleDao.class);
     SmsHelper smsHelper = mock(SmsHelper.class);
     SmsSender smsSender = new SmsSender(smsHelper, dao);
@@ -104,7 +102,7 @@ public class SmsSenderTest {
   }
 
   @Test
-  public void onHandleIntentApplicationNameNotFound() {
+  void onHandleIntentApplicationNameNotFound() {
     ApplicationRuleDao dao = mock(ApplicationRuleDao.class);
     SmsHelper smsHelper = mock(SmsHelper.class);
     SmsSender smsSender = new SmsSender(smsHelper, dao);
@@ -121,7 +119,7 @@ public class SmsSenderTest {
   }
 
   @Test
-  public void onHandleIntentBadEncryption() {
+  void onHandleIntentBadEncryption() {
     ApplicationRuleDao dao = mock(ApplicationRuleDao.class);
     SmsHelper smsHelper = mock(SmsHelper.class);
     SmsSender smsSender = new SmsSender(smsHelper, dao);
@@ -139,7 +137,7 @@ public class SmsSenderTest {
   }
 
   @Test
-  public void onHandleIntentOk() {
+  void onHandleIntentOk() {
     ApplicationRuleDao dao = mock(ApplicationRuleDao.class);
     SmsHelper smsHelper = mock(SmsHelper.class);
     SmsSender smsSender = new SmsSender(smsHelper, dao);
@@ -156,11 +154,11 @@ public class SmsSenderTest {
 
     ArgumentCaptor<Sms> smsCaptor = ArgumentCaptor.forClass(Sms.class);
     verify(smsHelper).send(smsCaptor.capture());
-    assertThat(smsCaptor.getValue().toString(), is(sms.toString()));
+    assertThat(smsCaptor.getValue().toString()).isEqualTo(sms.toString());
   }
 
   @Test
-  public void onHandleIntentLoopback() {
+  void onHandleIntentLoopback() {
     ApplicationRuleDao dao = mock(ApplicationRuleDao.class);
     SmsHelper smsHelper = mock(SmsHelper.class);
     SmsSender smsSender = new SmsSender(smsHelper, dao);
@@ -179,7 +177,7 @@ public class SmsSenderTest {
   }
 
   @Test
-  public void onHandleIntentNotAllowedNumber() {
+  void onHandleIntentNotAllowedNumber() {
     ApplicationRuleDao dao = mock(ApplicationRuleDao.class);
     SmsHelper smsHelper = mock(SmsHelper.class);
     SmsSender smsSender = new SmsSender(smsHelper, dao);

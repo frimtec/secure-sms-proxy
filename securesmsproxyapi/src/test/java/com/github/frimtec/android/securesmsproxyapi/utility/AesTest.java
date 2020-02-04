@@ -1,19 +1,19 @@
 package com.github.frimtec.android.securesmsproxyapi.utility;
 
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
-public class AesTest {
+
+class AesTest {
 
   private static final String SECRET = "this-is-a-test-secret-12";
 
   @Test
-  public void testAes() {
+  void testAes() {
     Aes aes = new Aes(SECRET);
     String message = aes.decrypt(aes.encrypt("message"));
-    assertThat(message, is("message"));
+    assertThat(message).isEqualTo("message");
   }
 }
