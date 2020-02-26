@@ -1,9 +1,6 @@
 <component name="ProjectCodeStyleConfiguration">
   <code_scheme name="Project" version="173">
     <option name="LINE_SEPARATOR" value="&#10;" />
-    <AndroidXmlCodeStyleSettings>
-      <option name="ARRANGEMENT_SETTINGS_MIGRATED_TO_191" value="true" />
-    </AndroidXmlCodeStyleSettings>
     <codeStyleSettings language="JAVA">
       <option name="BLANK_LINES_AFTER_CLASS_HEADER" value="1" />
       <indentOptions>
