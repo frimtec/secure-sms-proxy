@@ -63,7 +63,6 @@ class ApplicationRuleDaoTest {
     assertThat(secret.length()).isEqualTo(SECRET_LENGTH);
     verify(dbWrite).insert(eq(TABLE_APPLICATION), Mockito.isNull(), any());
     verify(dbWrite, times(2)).insert(eq(TABLE_RULE), Mockito.isNull(), any());
-    verify(dbWrite).close();
     verifyNoMoreInteractions(dbWrite);
   }
 
@@ -87,7 +86,6 @@ class ApplicationRuleDaoTest {
     assertThat(secret).isEqualTo("secret_1");
     verify(dbWrite).update(eq(TABLE_APPLICATION), any(), eq(TABLE_APPLICATION_COLUMN_ID + "=?"), eq(new String[]{String.valueOf(1L)}));
     verify(dbWrite, times(3)).insert(eq(TABLE_RULE), Mockito.isNull(), any());
-    verify(dbWrite).close();
     verifyNoMoreInteractions(dbWrite);
   }
 

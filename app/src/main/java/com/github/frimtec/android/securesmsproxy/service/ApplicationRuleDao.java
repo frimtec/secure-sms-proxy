@@ -56,41 +56,41 @@ public class ApplicationRuleDao {
   public String insertOrUpdate(String applicationName, String listener, Set<String> allowedPhoneNumbers) {
     ApplicationRule applicationRule = byApplicationName(applicationName);
     String secret;
-    try (SQLiteDatabase db = this.dbFactory.getDatabase(WRITABLE)) {
-      if (applicationRule != null) {
-        secret = applicationRule.getApplication().getSecret();
-        ContentValues applicationValues = new ContentValues();
-        applicationValues.put(TABLE_APPLICATION_COLUMN_LISTENER, listener);
-        db.update(TABLE_APPLICATION, applicationValues, TABLE_APPLICATION_COLUMN_ID + "=?",
-            new String[]{String.valueOf(applicationRule.getApplication().getId())});
-        ContentValues ruleValues = new ContentValues();
-        ruleValues.put(TABLE_RULE_COLUMN_APPLICATION_ID, applicationRule.getApplication().getId());
-        allowedPhoneNumbers.stream()
-            .filter(phoneNumber -> !applicationRule.getAllowedPhoneNumbers().contains(phoneNumber))
-            .forEach(phoneNumber -> {
-              ruleValues.put(TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER, phoneNumber);
-              db.insert(TABLE_RULE, null, ruleValues);
-            });
-      } else {
-        secret = RandomString.nextString(SECRET_LENGTH);
-        ContentValues values = new ContentValues();
-        values.put(TABLE_APPLICATION_COLUMN_NAME, applicationName);
-        values.put(TABLE_APPLICATION_COLUMN_LISTENER, listener);
-        values.put(TABLE_APPLICATION_COLUMN_SECRET, secret);
-        long id = db.insert(TABLE_APPLICATION, null, values);
-        ContentValues ruleValues = new ContentValues();
-        ruleValues.put(TABLE_RULE_COLUMN_APPLICATION_ID, id);
-        allowedPhoneNumbers.forEach(phoneNumber -> {
-          ruleValues.put(TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER, phoneNumber);
-          db.insert(TABLE_RULE, null, ruleValues);
-        });
-      }
+    SQLiteDatabase db = this.dbFactory.getDatabase(WRITABLE);
+    if (applicationRule != null) {
+      secret = applicationRule.getApplication().getSecret();
+      ContentValues applicationValues = new ContentValues();
+      applicationValues.put(TABLE_APPLICATION_COLUMN_LISTENER, listener);
+      db.update(TABLE_APPLICATION, applicationValues, TABLE_APPLICATION_COLUMN_ID + "=?",
+          new String[]{String.valueOf(applicationRule.getApplication().getId())});
+      ContentValues ruleValues = new ContentValues();
+      ruleValues.put(TABLE_RULE_COLUMN_APPLICATION_ID, applicationRule.getApplication().getId());
+      allowedPhoneNumbers.stream()
+          .filter(phoneNumber -> !applicationRule.getAllowedPhoneNumbers().contains(phoneNumber))
+          .forEach(phoneNumber -> {
+            ruleValues.put(TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER, phoneNumber);
+            db.insert(TABLE_RULE, null, ruleValues);
+          });
+    } else {
+      secret = RandomString.nextString(SECRET_LENGTH);
+      ContentValues values = new ContentValues();
+      values.put(TABLE_APPLICATION_COLUMN_NAME, applicationName);
+      values.put(TABLE_APPLICATION_COLUMN_LISTENER, listener);
+      values.put(TABLE_APPLICATION_COLUMN_SECRET, secret);
+      long id = db.insert(TABLE_APPLICATION, null, values);
+      ContentValues ruleValues = new ContentValues();
+      ruleValues.put(TABLE_RULE_COLUMN_APPLICATION_ID, id);
+      allowedPhoneNumbers.forEach(phoneNumber -> {
+        ruleValues.put(TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER, phoneNumber);
+        db.insert(TABLE_RULE, null, ruleValues);
+      });
     }
     return secret;
   }
 
   public ApplicationRule byApplicationName(String applicationName) {
-    try (Cursor cursor = this.dbFactory.getDatabase(READ_ONLY).query(
+    SQLiteDatabase db = this.dbFactory.getDatabase(READ_ONLY);
+    try (Cursor cursor = db.query(
         DbHelper.VIEW_APPLICATION_RULE, ALL_COLUMNS,
         TABLE_APPLICATION_COLUMN_NAME + "=?", new String[]{applicationName}, null, null, null)) {
       List<ApplicationRule> applicationRules = toApplicationRules(cursor);
@@ -99,33 +99,31 @@ public class ApplicationRuleDao {
   }
 
   public List<ApplicationRule> all() {
-    try (SQLiteDatabase db = this.dbFactory.getDatabase(READ_ONLY)) {
-      try (Cursor cursor = db.query(
-          DbHelper.VIEW_APPLICATION_RULE, ALL_COLUMNS,
-          null, null, null, null, null)) {
-        return toApplicationRules(cursor);
-      }
+    SQLiteDatabase db = this.dbFactory.getDatabase(READ_ONLY);
+    try (Cursor cursor = db.query(
+        DbHelper.VIEW_APPLICATION_RULE, ALL_COLUMNS,
+        null, null, null, null, null)) {
+      return toApplicationRules(cursor);
     }
   }
 
   public Map<String, Set<Application>> byPhoneNumbers(Set<String> phoneNumbers) {
     Map<Long, Application> applications = new HashMap<>();
     Map<String, Set<Application>> applicationsByPhoneNumber = new HashMap<>();
-    try (SQLiteDatabase db = this.dbFactory.getDatabase(READ_ONLY)) {
-      String rawQuery = "SELECT " + TextUtils.join(", ", ALL_COLUMNS) + " FROM " + VIEW_APPLICATION_RULE + " WHERE " + TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER +
-          " IN (" + TextUtils.join(",", phoneNumbers.stream().map(s -> "'" + s + "'").collect(Collectors.toList())) + ")";
-      try (Cursor cursor = db.rawQuery(rawQuery, null)) {
-        if (cursor != null && cursor.moveToFirst()) {
-          do {
-            long id = cursor.getLong(0);
-            Application application = applications.getOrDefault(id, new Application(id, cursor.getString(1), cursor.getString(2), cursor.getString(3)));
-            applications.put(application.getId(), application);
-            String phoneNumber = cursor.getString(4);
-            Set<Application> set = applicationsByPhoneNumber.getOrDefault(phoneNumber, new HashSet<>());
-            set.add(application);
-            applicationsByPhoneNumber.put(phoneNumber, set);
-          } while (cursor.moveToNext());
-        }
+    SQLiteDatabase db = this.dbFactory.getDatabase(READ_ONLY);
+    String rawQuery = "SELECT " + TextUtils.join(", ", ALL_COLUMNS) + " FROM " + VIEW_APPLICATION_RULE + " WHERE " + TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER +
+        " IN (" + TextUtils.join(",", phoneNumbers.stream().map(s -> "'" + s + "'").collect(Collectors.toList())) + ")";
+    try (Cursor cursor = db.rawQuery(rawQuery, null)) {
+      if (cursor != null && cursor.moveToFirst()) {
+        do {
+          long id = cursor.getLong(0);
+          Application application = applications.getOrDefault(id, new Application(id, cursor.getString(1), cursor.getString(2), cursor.getString(3)));
+          applications.put(application.getId(), application);
+          String phoneNumber = cursor.getString(4);
+          Set<Application> set = applicationsByPhoneNumber.getOrDefault(phoneNumber, new HashSet<>());
+          set.add(application);
+          applicationsByPhoneNumber.put(phoneNumber, set);
+        } while (cursor.moveToNext());
       }
     }
     return applicationsByPhoneNumber;
@@ -152,8 +150,7 @@ public class ApplicationRuleDao {
   }
 
   public void delete(Application application) {
-    try (SQLiteDatabase db = this.dbFactory.getDatabase(WRITABLE)) {
-      db.delete(TABLE_APPLICATION, TABLE_APPLICATION_COLUMN_ID + "=?", new String[]{String.valueOf(application.getId())});
-    }
+    SQLiteDatabase db = this.dbFactory.getDatabase(WRITABLE);
+    db.delete(TABLE_APPLICATION, TABLE_APPLICATION_COLUMN_ID + "=?", new String[]{String.valueOf(application.getId())});
   }
 }
