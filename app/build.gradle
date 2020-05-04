@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: "de.mannodermaus.android-junit5"
-apply plugin: 'jacoco-android'
+apply plugin: "com.hiya.jacoco-android"
 
 jacoco {
     toolVersion = "0.8.4"
@@ -60,9 +60,9 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation project(path: ':securesmsproxyapi')
-    testImplementation "org.junit.jupiter:junit-jupiter-api:5.6.0"
-    testImplementation "org.junit.jupiter:junit-jupiter-params:5.6.0"
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.6.0"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:5.6.2"
+    testImplementation "org.junit.jupiter:junit-jupiter-params:5.6.2"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.6.2"
     testImplementation "org.assertj:assertj-core:3.11.1"
     testImplementation "org.mockito:mockito-core:3.1.0"
     testImplementation 'org.json:json:20190722'
