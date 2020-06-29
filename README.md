@@ -5,6 +5,7 @@
 [![license](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 ![Icon](app/src/main/res/mipmap-hdpi/ic_launcher.png) 
+<a href='https://apt.izzysoft.de/fdroid/index/apk/com.github.frimtec.android.securesmsproxy'><img alt='Get it on IzzyOnDroid' width='180' src='https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png'/></a>
 
 As Google strongly restricts the use of SMS permissions for applications in the Play-Store, S2MSP provides an API for third party applications
 to send and receive SMS to specific phone numbers via a secure SMS proxy.
@@ -30,6 +31,10 @@ S2MSP does not need any other permissions. This ensures the integrity and securi
 ## Installation
 S2MSP cannot be offered on Google-Play as Google does only allow applications using SMS permissions in very rare cases 
 (see [Use of SMS or Call Log permission groups](https://support.google.com/googleplay/android-developer/answer/9047303?hl=en)). 
+
+### Install from IzzyOnDroid
+The easiest way to install S2MSP and keep it up-to-date is to install it from [IzzyOnDroid](https://apt.izzysoft.de/fdroid/index/apk/com.github.frimtec.android.securesmsproxy).  
+<a href='https://apt.izzysoft.de/fdroid/index/apk/com.github.frimtec.android.securesmsproxy'><img alt='Get it on IzzyOnDroid' width='180' src='https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png'/></a>
 
 ### Install pre build APK
 You can download the APK file from the [GitHub release page](https://github.com/frimtec/secure-sms-proxy/releases).
