@@ -6,7 +6,7 @@
 
 ![Icon](app/src/main/res/mipmap-hdpi/ic_launcher.png) 
 
-As Google strongly restricts the use of SMS permissions for applications in the Play-Store, S2MSP provides a API for third party applications
+As Google strongly restricts the use of SMS permissions for applications in the Play-Store, S2MSP provides an API for third party applications
 to send and receive SMS to specific phone numbers via a secure SMS proxy.
 
 S2MSP acts like a local firewall for SMS communication.
@@ -47,7 +47,7 @@ The API is provided as an AAR (Android Archive) file and is available on [Maven 
 You can add the following dependency to your application project:
 ```
 dependencies {
-    implementation 'com.github.frimtec:secure-sms-proxy-api:1.3.4'
+    implementation 'com.github.frimtec:secure-sms-proxy-api:1.3.6'
 }
 ```
 
