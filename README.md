@@ -168,3 +168,4 @@ You can send an email to [frimtec@gmx.ch](mailto:frimtec@gmx.ch) or [open an iss
 
 ## Credits
 * [bakito](https://github.com/bakito): For implementing dual SIM support.
+* [IzzySoft](https://github.com/IzzySoft): For offering S2MSP on IzzyOnDroid F-Droid repository.
