@@ -5,8 +5,9 @@
 [![license](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 ![Icon](app/src/main/res/mipmap-hdpi/ic_launcher.png) 
+<a href='https://apt.izzysoft.de/fdroid/index/apk/com.github.frimtec.android.securesmsproxy'><img alt='Get it on IzzyOnDroid' width='180' src='https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png'/></a>
 
-As Google strongly restricts the use of SMS permissions for applications in the Play-Store, S2MSP provides a API for third party applications
+As Google strongly restricts the use of SMS permissions for applications in the Play-Store, S2MSP provides an API for third party applications
 to send and receive SMS to specific phone numbers via a secure SMS proxy.
 
 S2MSP acts like a local firewall for SMS communication.
@@ -31,6 +32,10 @@ S2MSP does not need any other permissions. This ensures the integrity and securi
 S2MSP cannot be offered on Google-Play as Google does only allow applications using SMS permissions in very rare cases 
 (see [Use of SMS or Call Log permission groups](https://support.google.com/googleplay/android-developer/answer/9047303?hl=en)). 
 
+### Install from IzzyOnDroid
+The easiest way to install S2MSP and keep it up-to-date is to install it from [IzzyOnDroid](https://apt.izzysoft.de/fdroid/index/apk/com.github.frimtec.android.securesmsproxy).  
+<a href='https://apt.izzysoft.de/fdroid/index/apk/com.github.frimtec.android.securesmsproxy'><img alt='Get it on IzzyOnDroid' width='180' src='https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png'/></a>
+
 ### Install pre build APK
 You can download the APK file from the [GitHub release page](https://github.com/frimtec/secure-sms-proxy/releases).
 To install the APK you need to allow installation from unknown source.
@@ -47,7 +52,7 @@ The API is provided as an AAR (Android Archive) file and is available on [Maven 
 You can add the following dependency to your application project:
 ```
 dependencies {
-    implementation 'com.github.frimtec:secure-sms-proxy-api:1.3.4'
+    implementation 'com.github.frimtec:secure-sms-proxy-api:1.3.6'
 }
 ```
 
@@ -163,3 +168,4 @@ You can send an email to [frimtec@gmx.ch](mailto:frimtec@gmx.ch) or [open an iss
 
 ## Credits
 * [bakito](https://github.com/bakito): For implementing dual SIM support.
+* [IzzySoft](https://github.com/IzzySoft): For offering S2MSP on IzzyOnDroid F-Droid repository.
