@@ -52,7 +52,7 @@ class ApplicationRuleArrayAdapter extends ArrayAdapter<ApplicationRule> {
 
       CharSequence labelText = this.packageInfoAccessor.getLabel(application.getName());
       if (!packageInfoAccessor.isInstalled(application.getName())) {
-        labelText = labelText + " (not installed)";
+        labelText = labelText + "\n(not installed)";
       }
       label.setText(labelText);
       TextView phoneNumbers = convertView.findViewById(R.id.application_allowed_phone_numbers);
