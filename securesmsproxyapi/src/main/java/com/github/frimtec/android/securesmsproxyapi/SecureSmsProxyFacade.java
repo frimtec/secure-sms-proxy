@@ -41,6 +41,7 @@ public interface SecureSmsProxyFacade {
    * Returns whether the SMS receive and send permissions are granted for the S2MSP application.
    * <p/>
    * If the permissions are not granted, the S2MSP application is not able to send or receive SMS.
+   *
    * @return true: permissions are granted; false: permissions are not granted
    */
   boolean areSmsPermissionsGranted();
@@ -209,6 +210,19 @@ public interface SecureSmsProxyFacade {
 
   /**
    * Returns the installation of the S2MSP application.
+   * <p/>
+   * For Android 11-R and higher it is required to declare the following queries section in your
+   * applications {@code AndroidManifest.xml}, otherwise you will get always empty installation
+   * information as the result:
+   * <code>
+   * <br>
+   * <br>
+   * &lt;manifest package="your.app"&gt;<br>
+   * &nbsp;&nbsp;&lt;queries&gt;<br>
+   * &nbsp;&nbsp;&nbsp;&nbsp;&lt;package android:name="com.github.frimtec.android.securesmsproxy" /&gt;<br>
+   * &nbsp;&nbsp;&lt;/queries&gt;<br>
+   * &nbsp;&nbsp;...
+   * </code>
    *
    * @return installation
    */
