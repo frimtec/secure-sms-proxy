@@ -150,7 +150,7 @@ class SecureSmsProxyFacadeImplTest {
 
   @Test
   void isAllowedNullCursor() {
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     SecureSmsProxyFacade facade = new SecureSmsProxyFacadeImpl(context((Set) null));
     boolean allowed = facade.isAllowed(Collections.singleton("111"));
     assertThat(allowed).isFalse();
