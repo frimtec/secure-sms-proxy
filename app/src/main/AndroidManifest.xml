@@ -3,6 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.github.frimtec.android.securesmsproxy">
 
+    <queries>
+        <intent>
+            <action android:name="com.github.frimtec.android.securesmsproxy.SMS_RECEIVED" />
+        </intent>
+    </queries>
+
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
 
