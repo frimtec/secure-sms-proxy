@@ -1,5 +1,5 @@
 # Secure SMS Proxy (S2MSP)
-[![Build Status](https://travis-ci.org/frimtec/secure-sms-proxy.svg?branch=master)](https://travis-ci.org/frimtec/secure-sms-proxy) 
+[![Build Status](https://travis-ci.com/frimtec/secure-sms-proxy.svg?branch=master)](https://travis-ci.com/frimtec/secure-sms-proxy) 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.frimtec/secure-sms-proxy-api/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.frimtec/secure-sms-proxy-api) 
 [![Coverage Status](https://coveralls.io/repos/github/frimtec/secure-sms-proxy/badge.svg?branch=master)](https://coveralls.io/github/frimtec/secure-sms-proxy?branch=master)
 [![license](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
