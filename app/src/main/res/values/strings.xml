@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name" translatable="false">Secure SMS Proxy</string>
     <string name="title_activity_about">About</string>
     <string name="title_activity_logcat">Logcat</string>
     <string name="menu_about">About</string>
@@ -35,4 +34,7 @@
     <string name="permission_accepted">Permission was accepted.</string>
     <string name="permission_rejected">Permission was rejected!</string>
     <string name="content_description_logo">Application logo</string>
+    <string name="image_description_permission_requesting_app_logo">Logo of the app that requests SMS permissions</string>
+    <string name="image_description_s2msp_app_logo">S2MSP app logo</string>
+    <string name="image_description_delete_icon">Trashcan</string>
 </resources>

@@ -29,7 +29,6 @@ import static android.app.Activity.RESULT_OK;
 import static android.content.Intent.EXTRA_TEXT;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static com.github.frimtec.android.securesmsproxyapi.IsAllowedPhoneNumberContract.CONTENT_URI;
-import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.RegistrationResult.ReturnCode.ALLOWED;
 import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.RegistrationResult.ReturnCode.MISSING_SMS_PERMISSION;
 import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.RegistrationResult.ReturnCode.NO_EXTRAS;
 import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.RegistrationResult.ReturnCode.NO_REFERRER;
@@ -93,7 +92,7 @@ final class SecureSmsProxyFacadeImpl implements SecureSmsProxyFacade {
       case RESULT_OK:
         Bundle extras = data.getExtras();
         String secret = extras != null ? extras.getString(EXTRA_SECRET) : null;
-        return secret != null ? new RegistrationResult(ALLOWED, secret) : new RegistrationResult(NO_SECRET);
+        return secret != null ? new RegistrationResult(secret) : new RegistrationResult(NO_SECRET);
       case RESULT_CANCELED:
         return new RegistrationResult(REJECTED);
       case REGISTRATION_RESULT_CODE_MISSING_SMS_PERMISSION:
@@ -126,7 +125,8 @@ final class SecureSmsProxyFacadeImpl implements SecureSmsProxyFacade {
     Bundle bundle = smsReceivedIntent.getExtras();
     Aes aes = new Aes(secret);
     try {
-      return bundle != null ? Sms.fromJsonArray(aes.decrypt(bundle.getString(EXTRA_TEXT))) : Collections.emptyList();
+      String encryptedMessages = bundle != null ? bundle.getString(EXTRA_TEXT) : null;
+      return encryptedMessages != null ? Sms.fromJsonArray(aes.decrypt(encryptedMessages)) : Collections.emptyList();
     } catch (Exception e) {
       Log.e(TAG, "Cannot decrypt received message, secret must be wrong.");
       return Collections.emptyList();

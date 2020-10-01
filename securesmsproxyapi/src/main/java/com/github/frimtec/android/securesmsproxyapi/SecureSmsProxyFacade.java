@@ -83,8 +83,8 @@ public interface SecureSmsProxyFacade {
     private final ReturnCode returnCode;
     private final String secret;
 
-    RegistrationResult(ReturnCode returnCode, String secret) {
-      this.returnCode = returnCode;
+    RegistrationResult(String secret) {
+      this.returnCode = ReturnCode.ALLOWED;
       this.secret = secret;
     }
 

@@ -13,8 +13,9 @@
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_marginEnd="10dp"
-        android:layout_alignParentStart="true"/>
-        <!-- android:src="@mipmap/ic_launcher_round"-->
+        android:layout_alignParentStart="true"
+        android:src="@mipmap/ic_launcher_round"
+        android:contentDescription="@string/image_description_s2msp_app_logo" />
 
     <TextView
         android:id="@+id/send_log_title"

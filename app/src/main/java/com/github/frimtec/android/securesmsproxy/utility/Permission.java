@@ -44,6 +44,7 @@ public enum Permission {
         .noneMatch(permission -> ActivityCompat.checkSelfPermission(context, permission) != PERMISSION_GRANTED);
   }
 
+  @SuppressWarnings("SameParameterValue")
   private static void requestPermissionsWithExplanation(Activity activity, String[] permissions, int titleResourceId, int textResourceId) {
     AlertDialogHelper.requirePermissions(activity, titleResourceId, textResourceId, (dialogInterface, integer) -> requestPermissions(activity, permissions));
   }
