@@ -12,6 +12,8 @@ import java.util.Set;
 
 public interface SecureSmsProxyFacade {
 
+  String PERMISSION_S2MSP_COMMUNICATION = "com.github.frimtec.android.securesmsproxy.permission.S2MSP_COMMUNICATION";
+
   String ACTION_REGISTER = "com.github.frimtec.android.securesmsproxy.intent.action.REGISTER";
   String EXTRA_LISTENER_CLASS = "com.github.frimtec.android.securesmsproxy.intent.extra.LISTENER_CLASS";
   String EXTRA_PHONE_NUMBERS = "com.github.frimtec.android.securesmsproxy.intent.extra.PHONE_NUMBERS";

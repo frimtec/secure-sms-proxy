@@ -18,6 +18,8 @@ import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
+import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.PERMISSION_S2MSP_COMMUNICATION;
+
 public class SmsListener extends BroadcastReceiver {
 
   private static final String TAG = "SmsListener";
@@ -71,7 +73,7 @@ public class SmsListener extends BroadcastReceiver {
     Log.i(TAG, "broadcastReceivedSms,  count: " + smsList.size() + "; to application: " + application.getName());
     Aes aes = new Aes(application.getSecret());
     String serializedEncryptedSmsList = aes.encrypt(Sms.toJsonArray(smsList));
-    context.sendOrderedBroadcast(smsBroadcastIntentFactory.apply(application, serializedEncryptedSmsList), null);
+    context.sendOrderedBroadcast(smsBroadcastIntentFactory.apply(application, serializedEncryptedSmsList), PERMISSION_S2MSP_COMMUNICATION);
   }
 
 }

@@ -272,9 +272,9 @@ class SecureSmsProxyFacadeImplTest {
   }
 
   @Test
-  void sendSms() {
+  void sendSmsForUnknownAppVersion() throws PackageManager.NameNotFoundException {
     Intent actionIntent = mock(Intent.class);
-    Context context = mock(Context.class);
+    Context context = context(new PackageInfo());
     Context applicationContext = mock(Context.class);
     when(context.getApplicationContext()).thenReturn(applicationContext);
     when(applicationContext.getPackageName()).thenReturn("application");
@@ -287,7 +287,7 @@ class SecureSmsProxyFacadeImplTest {
     when(actionIntent.putExtra(Mockito.eq(EXTRA_TEXT), smsTextCaptor.capture())).thenReturn(actionIntent);
 
     facade.sendSms(sms, SECRET);
-    verify(context).startService(actionIntent);
+    verify(context).sendBroadcast(actionIntent);
     verify(actionIntent).putExtra(Intent.EXTRA_PACKAGE_NAME, "application");
     verify(actionIntent).addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
     verify(actionIntent).setComponent(any(ComponentName.class));
@@ -364,6 +364,7 @@ class SecureSmsProxyFacadeImplTest {
     when(context.getContentResolver()).thenReturn(contentResolver);
     when(context.getApplicationContext()).thenReturn(context);
     when(context.getPackageName()).thenReturn(clientApplication);
+    when(context.getPackageManager()).thenReturn(mock(PackageManager.class));
     return context;
   }
 

@@ -114,7 +114,17 @@ final class SecureSmsProxyFacadeImpl implements SecureSmsProxyFacade {
     sendSmsIntent.putExtra(EXTRA_TEXT, aes.encrypt(sms.toJson()));
     sendSmsIntent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
     sendSmsIntent.setComponent(SECURE_SMS_PROXY_COMPONENT);
-    context.startService(sendSmsIntent);
+    if (isLegacyAppVersion()) {
+      // use legacy intent service
+      Log.i(TAG, "Legacy app version, use old intent service.");
+      context.startService(sendSmsIntent);
+      return;
+    }
+    context.sendBroadcast(sendSmsIntent, PERMISSION_S2MSP_COMMUNICATION);
+  }
+
+  private Boolean isLegacyAppVersion() {
+    return getInstallation().getAppVersion().map(version -> version.startsWith("1")).orElse(false);
   }
 
   @Override
