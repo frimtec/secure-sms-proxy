@@ -1,11 +1,10 @@
 package com.github.frimtec.android.securesmsproxy.service;
 
-import android.app.IntentService;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-
-import androidx.annotation.Nullable;
 
 import com.github.frimtec.android.securesmsproxy.domain.ApplicationRule;
 import com.github.frimtec.android.securesmsproxy.utility.Permission;
@@ -19,7 +18,7 @@ import static android.content.Intent.EXTRA_TEXT;
 import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.ACTION_SEND_SMS;
 import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.PHONE_NUMBER_LOOPBACK;
 
-public class SmsSender extends IntentService {
+public class SmsSender extends BroadcastReceiver {
 
   private static final String TAG = "SmsSender";
 
@@ -31,18 +30,18 @@ public class SmsSender extends IntentService {
   }
 
   SmsSender(SmsHelper smsHelper, ApplicationRuleDao dao) {
-    super(TAG);
+    super();
     this.smsHelper = smsHelper;
     this.dao = dao;
   }
 
   @Override
-  protected void onHandleIntent(@Nullable Intent intent) {
-    if (intent == null || !ACTION_SEND_SMS.equals(intent.getAction())) {
+  public void onReceive(Context context, Intent intent) {
+    if (!ACTION_SEND_SMS.equals(intent.getAction())) {
       Log.w(TAG, "SMS sending blocked because of unrecognized intent.");
       return;
     }
-    if (!Permission.SMS.isAllowed(this)) {
+    if (!Permission.SMS.isAllowed(context)) {
       Log.w(TAG, "SMS sending blocked because of missing SMS permissions.");
       return;
     }
@@ -62,7 +61,7 @@ public class SmsSender extends IntentService {
         try {
           Sms sms = Sms.fromJson(aes.decrypt(text));
           if (PHONE_NUMBER_LOOPBACK.equals(sms.getNumber())) {
-            SmsListener.broadcastReceivedSms(this, applicationRule.getApplication(), Collections.singletonList(sms));
+            SmsListener.broadcastReceivedSms(context, applicationRule.getApplication(), Collections.singletonList(sms));
           } else {
             if (applicationRule.getAllowedPhoneNumbers().contains(sms.getNumber())) {
               this.smsHelper.send(sms);

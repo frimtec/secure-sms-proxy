@@ -1,5 +1,6 @@
 package com.github.frimtec.android.securesmsproxy.service;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -34,17 +35,6 @@ class SmsSenderTest {
   }
 
   @Test
-  void onHandleIntentNullIntent() {
-    ApplicationRuleDao dao = mock(ApplicationRuleDao.class);
-    SmsHelper smsHelper = mock(SmsHelper.class);
-    SmsSender smsSender = new SmsSender(smsHelper, dao);
-
-    smsSender.onHandleIntent(null);
-
-    verifyNoInteractions(smsHelper);
-  }
-
-  @Test
   void onHandleIntentBadAction() {
     ApplicationRuleDao dao = mock(ApplicationRuleDao.class);
     SmsHelper smsHelper = mock(SmsHelper.class);
@@ -52,7 +42,7 @@ class SmsSenderTest {
 
     Intent intent = mock(Intent.class);
     when(intent.getAction()).thenReturn("BAD_ACTION");
-    smsSender.onHandleIntent(intent);
+    smsSender.onReceive(mock(Context.class), intent);
 
     verifyNoInteractions(smsHelper);
   }
@@ -65,7 +55,7 @@ class SmsSenderTest {
 
     Intent intent = mock(Intent.class);
     when(intent.getAction()).thenReturn(SecureSmsProxyFacade.ACTION_SEND_SMS);
-    smsSender.onHandleIntent(intent);
+    smsSender.onReceive(mock(Context.class), intent);
 
     verifyNoInteractions(smsHelper);
   }
@@ -80,7 +70,7 @@ class SmsSenderTest {
     when(intent.getAction()).thenReturn(SecureSmsProxyFacade.ACTION_SEND_SMS);
     Bundle bundle = mock(Bundle.class);
     when(intent.getExtras()).thenReturn(bundle);
-    smsSender.onHandleIntent(intent);
+    smsSender.onReceive(mock(Context.class), intent);
 
     verifyNoInteractions(smsHelper);
   }
@@ -96,7 +86,7 @@ class SmsSenderTest {
     Bundle bundle = mock(Bundle.class);
     when(bundle.getString(EXTRA_TEXT)).thenReturn("any");
     when(intent.getExtras()).thenReturn(bundle);
-    smsSender.onHandleIntent(intent);
+    smsSender.onReceive(mock(Context.class), intent);
 
     verifyNoInteractions(smsHelper);
   }
@@ -113,7 +103,7 @@ class SmsSenderTest {
     when(bundle.getString(EXTRA_TEXT)).thenReturn("any");
     when(bundle.getString(Intent.EXTRA_PACKAGE_NAME)).thenReturn("application");
     when(intent.getExtras()).thenReturn(bundle);
-    smsSender.onHandleIntent(intent);
+    smsSender.onReceive(mock(Context.class), intent);
 
     verifyNoInteractions(smsHelper);
   }
@@ -131,7 +121,7 @@ class SmsSenderTest {
     when(bundle.getString(Intent.EXTRA_PACKAGE_NAME)).thenReturn("application");
     when(intent.getExtras()).thenReturn(bundle);
     when(dao.byApplicationName("application")).thenReturn(new ApplicationRule(new Application(1L, "application", "listener", SECRET), Collections.singleton("number")));
-    smsSender.onHandleIntent(intent);
+    smsSender.onReceive(mock(Context.class), intent);
 
     verifyNoInteractions(smsHelper);
   }
@@ -150,7 +140,7 @@ class SmsSenderTest {
     when(bundle.getString(Intent.EXTRA_PACKAGE_NAME)).thenReturn("application");
     when(intent.getExtras()).thenReturn(bundle);
     when(dao.byApplicationName("application")).thenReturn(new ApplicationRule(new Application(1L, "application", "listener", SECRET), Collections.singleton("number")));
-    smsSender.onHandleIntent(intent);
+    smsSender.onReceive(mock(Context.class), intent);
 
     ArgumentCaptor<Sms> smsCaptor = ArgumentCaptor.forClass(Sms.class);
     verify(smsHelper).send(smsCaptor.capture());
@@ -171,7 +161,7 @@ class SmsSenderTest {
     when(bundle.getString(Intent.EXTRA_PACKAGE_NAME)).thenReturn("application");
     when(intent.getExtras()).thenReturn(bundle);
     when(dao.byApplicationName("application")).thenReturn(new ApplicationRule(new Application(1L, "application", "listener", SECRET), Collections.singleton(PHONE_NUMBER_LOOPBACK)));
-    smsSender.onHandleIntent(intent);
+    smsSender.onReceive(mock(Context.class), intent);
 
     verifyNoInteractions(smsHelper);
   }
@@ -190,7 +180,7 @@ class SmsSenderTest {
     when(bundle.getString(Intent.EXTRA_PACKAGE_NAME)).thenReturn("application");
     when(intent.getExtras()).thenReturn(bundle);
     when(dao.byApplicationName("application")).thenReturn(new ApplicationRule(new Application(1L, "application", "listener", SECRET), Collections.singleton("otherNumber")));
-    smsSender.onHandleIntent(intent);
+    smsSender.onReceive(mock(Context.class), intent);
 
     verifyNoInteractions(smsHelper);
   }

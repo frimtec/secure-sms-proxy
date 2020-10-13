@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.github.frimtec.android.securesmsproxy">
 
     <queries>
@@ -9,8 +8,15 @@
         </intent>
     </queries>
 
+    <permission
+        android:name="com.github.frimtec.android.securesmsproxy.permission.S2MSP_COMMUNICATION"
+        android:label="@string/s2msp_permission_label"
+        android:description="@string/s2msp_permission_description"
+        android:protectionLevel="normal" />
+
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="com.github.frimtec.android.securesmsproxy.permission.S2MSP_COMMUNICATION" />
 
     <application
         android:name=".SecureSmsProxyApplication"
@@ -69,16 +75,21 @@
             </intent-filter>
         </receiver>
 
-        <service
+        <receiver
             android:name=".service.SmsSender"
             android:exported="true"
-            tools:ignore="ExportedService" />
+            android:permission="com.github.frimtec.android.securesmsproxy.permission.S2MSP_COMMUNICATION">
+            <intent-filter>
+                <action android:name="com.github.frimtec.android.securesmsproxy.SEND_SMS" />
+            </intent-filter>
+        </receiver>
 
         <provider
             android:name=".service.IsAllowedPhoneNumberContentProvider"
             android:authorities="com.github.frimtec.android.securesmsproxy.provider"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="true"
+            android:permission="com.github.frimtec.android.securesmsproxy.permission.S2MSP_COMMUNICATION" />
     </application>
 
 </manifest>
