@@ -39,6 +39,7 @@ import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.
 import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.EXTRA_LISTENER_CLASS;
 import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.EXTRA_PHONE_NUMBERS;
 import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.EXTRA_SECRET;
+import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.PERMISSION_S2MSP_COMMUNICATION;
 import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.REGISTRATION_RESULT_CODE_MISSING_SMS_PERMISSION;
 import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.REGISTRATION_RESULT_CODE_NO_EXTRAS;
 import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.REGISTRATION_RESULT_CODE_NO_REFERRER;
@@ -287,7 +288,7 @@ class SecureSmsProxyFacadeImplTest {
     when(actionIntent.putExtra(Mockito.eq(EXTRA_TEXT), smsTextCaptor.capture())).thenReturn(actionIntent);
 
     facade.sendSms(sms, SECRET);
-    verify(context).sendBroadcast(actionIntent);
+    verify(context).sendBroadcast(actionIntent, PERMISSION_S2MSP_COMMUNICATION);
     verify(actionIntent).putExtra(Intent.EXTRA_PACKAGE_NAME, "application");
     verify(actionIntent).addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
     verify(actionIntent).setComponent(any(ComponentName.class));
