@@ -56,6 +56,25 @@ dependencies {
 }
 ```
 
+### Define required permissions
+In your applications Android-Manifest add the following queries and permissions:
+```
+<manifest package="your.application.package"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    ...
+
+    <queries>
+        <package android:name="com.github.frimtec.android.securesmsproxy" />
+    </queries>
+    
+    ... 
+
+    <uses-permission android:name="com.github.frimtec.android.securesmsproxy.permission.S2MSP_COMMUNICATION" />
+
+   ...
+```
+
 ### Register your application with S2MSP to communicate via SMS for some defined phone numbers
 In you activity do the following:
 
