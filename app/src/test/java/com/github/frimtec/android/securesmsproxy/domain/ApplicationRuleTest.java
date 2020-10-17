@@ -34,7 +34,6 @@ class ApplicationRuleTest {
     //noinspection EqualsWithItself
     assertThat(applicationRule1.equals(applicationRule1)).isTrue();
 
-    //noinspection ConstantConditions
     assertThat(applicationRule1.equals(null)).isFalse();
 
     //noinspection EqualsBetweenInconvertibleTypes

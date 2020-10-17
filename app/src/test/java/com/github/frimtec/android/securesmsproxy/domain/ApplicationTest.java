@@ -27,7 +27,6 @@ class ApplicationTest {
     //noinspection EqualsWithItself
     assertThat(application1.equals(application1)).isTrue();
 
-    //noinspection ConstantConditions
     assertThat(application1.equals(null)).isFalse();
 
     //noinspection EqualsBetweenInconvertibleTypes
