@@ -130,10 +130,11 @@ public class MainActivity extends AppCompatActivity {
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    if (item.getItemId() == R.id.about) {
+    int itemId = item.getItemId();
+    if (itemId == R.id.about) {
       startActivity(new Intent(this, AboutActivity.class));
       return true;
-    } else if (item.getItemId() == R.id.logcat) {
+    } else if (itemId == R.id.logcat) {
       startActivity(new Intent(this, LogcatActivity.class));
       return true;
     }
