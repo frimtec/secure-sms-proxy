@@ -52,7 +52,6 @@ android {
     compileSdkVersion 30
     buildToolsVersion "29.0.3"
 
-
     defaultConfig {
         minSdkVersion 24
         targetSdkVersion 30
@@ -61,6 +60,8 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
+        buildConfigField 'int', 'VERSION_CODE', "${vcode}"
+        buildConfigField 'String', 'VERSION_NAME', "\"${vname}\""
     }
 
     buildTypes {
