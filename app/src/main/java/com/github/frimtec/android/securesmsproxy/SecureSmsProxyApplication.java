@@ -70,7 +70,7 @@ public class SecureSmsProxyApplication extends Application {
     }
 
     writer.println("App name: S2MSP" + (info == null ? "" : " (" + info.packageName + ")"));
-    writer.println("App version: " + (info == null ? "NOT AVAILABLE" : info.versionCode));
+    writer.println("App version: " + (info == null ? "NOT AVAILABLE" : BuildConfig.VERSION_CODE));
     writer.println("Android version: " + Build.VERSION.SDK_INT);
     writer.println("Device: " + model);
     writer.println("Thread name: " + thread.getName());

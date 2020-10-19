@@ -120,7 +120,7 @@ final class SecureSmsProxyFacadeImpl implements SecureSmsProxyFacade {
       context.startService(sendSmsIntent);
       return;
     }
-    context.sendBroadcast(sendSmsIntent, PERMISSION_S2MSP_COMMUNICATION);
+    context.sendBroadcast(sendSmsIntent, null);
   }
 
   private Boolean isLegacyAppVersion() {

@@ -20,10 +20,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.BiFunction;
 
-import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.PERMISSION_S2MSP_COMMUNICATION;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -47,7 +47,7 @@ class SmsListenerTest {
     Application application = new Application(1L, "app1", "listener1", SECRET);
     List<Sms> smsList = Collections.singletonList(new Sms("number", "text"));
     SmsListener.broadcastReceivedSms(context, application, smsList);
-    verify(context).sendOrderedBroadcast(any(), eq(PERMISSION_S2MSP_COMMUNICATION));
+    verify(context).sendOrderedBroadcast(any(), isNull());
   }
 
   @Test
@@ -82,7 +82,7 @@ class SmsListenerTest {
 
     Context context = mock(Context.class);
     smsListener.onReceive(context, intent);
-    verify(context).sendOrderedBroadcast(eq(broadcastIntent), eq(PERMISSION_S2MSP_COMMUNICATION));
+    verify(context).sendOrderedBroadcast(eq(broadcastIntent), isNull());
 
     String encryptedSms = encryptedSmsCaptor.getValue();
     verify(smsBroadcastIntentFactory).apply(application, encryptedSms);
@@ -102,7 +102,7 @@ class SmsListenerTest {
 
     Context context = mock(Context.class);
     smsListener.onReceive(context, intent);
-    verify(context).sendOrderedBroadcast(any(), eq(PERMISSION_S2MSP_COMMUNICATION));
+    verify(context).sendOrderedBroadcast(any(), isNull());
   }
 
   @Test
@@ -122,7 +122,7 @@ class SmsListenerTest {
 
     Context context = mock(Context.class);
     smsListener.onReceive(context, intent);
-    verify(context, times(2)).sendOrderedBroadcast(eq(broadcastIntent), eq(PERMISSION_S2MSP_COMMUNICATION));
+    verify(context, times(2)).sendOrderedBroadcast(eq(broadcastIntent), isNull());
 
     List<String> encryptedSmsList = encryptedSmsCaptor.getAllValues();
     verify(smsBroadcastIntentFactory).apply(application1, encryptedSmsList.get(0));
@@ -155,7 +155,7 @@ class SmsListenerTest {
 
     Context context = mock(Context.class);
     smsListener.onReceive(context, intent);
-    verify(context, times(2)).sendOrderedBroadcast(eq(broadcastIntent), eq(PERMISSION_S2MSP_COMMUNICATION));
+    verify(context, times(2)).sendOrderedBroadcast(eq(broadcastIntent), isNull());
 
     List<String> encryptedSmsList = encryptedSmsCaptor.getAllValues();
     verify(smsBroadcastIntentFactory).apply(application1, encryptedSmsList.get(0));

@@ -1,7 +1,4 @@
 <resources>
-    <string name="s2msp_permission_label">Communication S2MSP</string>
-    <string name="s2msp_permission_description">The communication with S2MSP is allowed.</string>
-
     <string name="title_activity_about">About</string>
     <string name="title_activity_logcat">Logcat</string>
     <string name="menu_about">About</string>
