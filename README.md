@@ -1,8 +1,9 @@
 # Secure SMS Proxy (S2MSP)
-[![Build Status](https://travis-ci.com/frimtec/secure-sms-proxy.svg?branch=master)](https://travis-ci.com/frimtec/secure-sms-proxy) 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.frimtec/secure-sms-proxy-api/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.frimtec/secure-sms-proxy-api) 
-[![Coverage Status](https://coveralls.io/repos/github/frimtec/secure-sms-proxy/badge.svg?branch=master)](https://coveralls.io/github/frimtec/secure-sms-proxy?branch=master)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.frimtec/secure-sms-proxy-api/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.frimtec/secure-sms-proxy-api)
+[![codecov](https://codecov.io/gh/frimtec/secure-sms-proxy/branch/master/graph/badge.svg?token=3GBTDIFRC7)](https://codecov.io/gh/frimtec/secure-sms-proxy)
 [![license](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
+[![Build](https://github.com/frimtec/secure-sms-proxy/workflows/Build/badge.svg)](https://github.com/frimtec/secure-sms-proxy/actions?query=workflow%3ABuild)
 
 ![Icon](app/src/main/res/mipmap-hdpi/ic_launcher.png) 
 <a href='https://apt.izzysoft.de/fdroid/index/apk/com.github.frimtec.android.securesmsproxy'><img alt='Get it on IzzyOnDroid' width='180' src='https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png'/></a>

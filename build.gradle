@@ -13,10 +13,6 @@ buildscript {
     }
 }
 
-plugins {
-    id 'com.github.kt3k.coveralls' version '2.10.2'
-}
-
 allprojects {
     tasks.withType(JavaCompile) {
         options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
@@ -32,38 +28,3 @@ task clean(type: Delete) {
 }
 
 apply plugin: 'jacoco'
-
-task jacocoMergeAll(type: JacocoMerge) {
-    executionData = files('app/build/jacoco/testDebugUnitTest.exec', 'securesmsproxyapi/build/jacoco/testDebugUnitTest.exec')
-}
-
-task jacocoRootReport(type: JacocoReport, group: 'Coverage reports') {
-    description = 'Generates an aggregate report from all subprojects'
-    dependsOn jacocoMergeAll
-
-    sourceDirectories.from =
-            files('app/src/main/java', 'securesmsproxyapi/src/main/java')
-    additionalSourceDirs.from =
-            files('app/src/main/java', 'securesmsproxyapi/src/main/java')
-    classDirectories.from =
-            files('app/build/intermediates/javac/debug/classes', 'securesmsproxyapi/build/intermediates/javac/debug/classes')
-    executionData.from =
-            files("${buildDir}/jacoco/jacocoMergeAll.exec")
-    reports {
-        html.enabled = true
-        xml.enabled = true
-    }
-}
-
-tasks.coveralls {
-    group = 'Coverage reports'
-    description = 'Uploads the aggregated coverage report to Coveralls'
-
-    dependsOn jacocoRootReport
-}
-
-
-coveralls {
-    jacocoReportPath 'build/reports/jacoco/jacocoRootReport/jacocoRootReport.xml'
-    sourceDirs += ['app/src/main/java', 'securesmsproxyapi/src/main/java']
-}
