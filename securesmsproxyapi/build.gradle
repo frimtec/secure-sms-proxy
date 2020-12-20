@@ -17,25 +17,15 @@ if (versionPropsFile.exists()) {
 int vcode = (versionProps['VERSION_CODE'] ?: "0").toInteger()
 String vname = (versionProps['VERSION_NAME'] ?: "0.0.1")
 
-ext["signing.gnupg.useLegacyGpg"] = ''
-ext["signing.gnupg.keyName"] = ''
-ext["ossrhUsername"] = ''
-ext["ossrhPassword"] = ''
-
-File secretPropsFile = project.rootProject.file('publish.properties')
-if (secretPropsFile.exists()) {
-    println "Found secret props file, loading props"
-    Properties p = new Properties()
-    p.load(new FileInputStream(secretPropsFile))
-    p.each { name, value ->
-        ext[name] = value
+ext {
+    if (!project.hasProperty('ossUsername')) {
+        ossUsername = ''
     }
-} else {
-    println "No props file, loading env vars"
-    ext["signing.gnupg.useLegacyGpg"] = System.getenv('SIGNING_GNUPG_USELEGACYGPG')
-    ext["signing.gnupg.keyName"] = System.getenv('SIGNING_GNUPG_KEYNAME')
-    ext["ossUsername"] = System.getenv('OSS_USERNAME')
-    ext["ossPassword"] = System.getenv('OSS_PASSWORD')
+}
+ext {
+    if (!project.hasProperty('ossPassword')) {
+        ossPassword = ''
+    }
 }
 
 jacocoAndroidUnitTestReport {
@@ -116,10 +106,6 @@ publishing {
                     developerConnection = 'scm:git:git@github.com:frimtec/secure-sms-proxy'
                     url = 'https://github.com/frimtec/secure-sms-proxy'
                 }
-                ciManagement {
-                    system = 'travis-ci'
-                    url = 'https://travis-ci.org/frimtec/secure-sms-proxy'
-                }
                 issueManagement {
                     system = 'github'
                     url = 'https://github.com/frimtec/secure-sms-proxy/issues'
@@ -137,11 +123,6 @@ publishing {
             }
         }
     }
-}
-
-signing {
-    useGpgCmd()
-    sign publishing.publications
 }
 
 dependencies {
