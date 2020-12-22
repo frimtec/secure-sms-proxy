@@ -136,7 +136,6 @@ jobs:
           git commit -m "Update release version to ${{ steps.get_version.outputs.VERSION }}"
 
       - name: Push changes
-        if: steps.get_release.outputs.prerelease == 'false'
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
