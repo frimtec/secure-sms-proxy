@@ -103,7 +103,13 @@ jobs:
 
       - name: Publish AAR
         if: steps.get_release.outputs.prerelease == 'false'
-        run: bash ./gradlew :securesmsproxyapi:publish --stacktrace  -PossUsername=${{ secrets.nexus_username }} -PossPassword=${{ secrets.nexus_password }} -Psignatory.keyId=${{ secrets.gpg_key_id }} -Psigning.password="${{ secrets.gpg_passphrase }}" -Psigning.secretKeyRingFile=ringfile
+        run: bash ./gradlew :securesmsproxyapi:publish --stacktrace
+        env:
+          SIGNING_KEYID: ${{ secrets.gpg_key_id }}
+          SIGNING_PASSWORD: ${{ secrets.gpg_passphrase }}
+          SIGNING_RINGFILE: ../ringfile
+          OSS_USERNAME: ${{ secrets.nexus_username }}
+          OSS_PASSWORD: ${{ secrets.nexus_password }}
 
   update-read-me:
 

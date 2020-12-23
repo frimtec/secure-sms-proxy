@@ -17,16 +17,17 @@ if (versionPropsFile.exists()) {
 int vcode = (versionProps['VERSION_CODE'] ?: "0").toInteger()
 String vname = (versionProps['VERSION_NAME'] ?: "0.0.1")
 
-ext {
-    if (!project.hasProperty('ossUsername')) {
-        ossUsername = ''
-    }
-}
-ext {
-    if (!project.hasProperty('ossPassword')) {
-        ossPassword = ''
-    }
-}
+ext["signing.keyId"] = ''
+ext["signing.password"] = ''
+ext["signing.secretKeyRingFile"] = ''
+ext["ossrhUsername"] = ''
+ext["ossrhPassword"] = ''
+
+ext["signing.keyId"] = System.getenv('SIGNING_KEYID')
+ext["signing.password"] = System.getenv('SIGNING_PASSWORD')
+ext["signing.secretKeyRingFile"] = System.getenv('SIGNING_RINGFILE')
+ext["ossUsername"] = System.getenv('OSS_USERNAME')
+ext["ossPassword"] = System.getenv('OSS_PASSWORD')
 
 jacocoAndroidUnitTestReport {
     csv.enabled false
@@ -123,6 +124,10 @@ publishing {
             }
         }
     }
+}
+
+signing {
+    sign publishing.publications
 }
 
 dependencies {
