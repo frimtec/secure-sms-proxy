@@ -39,7 +39,7 @@ public class AboutActivity extends AppCompatActivity {
     textView.setText(Html.fromHtml(
         "<h2><a href='https://github.com/frimtec/secure-sms-proxy'>Secure SMS Proxy</a></h2>" +
             "<p>Version: <b>" + version + "</b><br/>" + "Build: " + build + "</p>" +
-            "<p>&copy; 2019-2020 <a href='https://github.com/frimtec'>frimTEC</a></p>" +
+            "<p>&copy; 2019-2021 <a href='https://github.com/frimtec'>frimTEC</a></p>" +
             ""
         , Html.FROM_HTML_MODE_COMPACT));
     textView.setMovementMethod(LinkMovementMethod.getInstance());
