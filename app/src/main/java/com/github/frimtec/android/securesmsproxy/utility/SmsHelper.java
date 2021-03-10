@@ -42,6 +42,10 @@ public class SmsHelper {
         for (Object pdu : pdus) {
           SmsMessage message = this.pduDecoder.apply((byte[]) pdu, format);
           String number = message.getOriginatingAddress();
+          // some carriers do not send the "+"
+          if (number != null && isDigitsOnly(number)) {
+            number = "+" + number;
+          }
           String text = smsTextByNumber.getOrDefault(number, "");
           smsTextByNumber.put(number, text + message.getMessageBody());
         }
@@ -57,5 +61,16 @@ public class SmsHelper {
   public void send(Sms sms) {
     SmsManager smsManager = sms.getSubscriptionId() == null ? this.defaultSmsManager : this.subscriptionSmsManagerFactory.apply(sms.getSubscriptionId());
     smsManager.sendTextMessage(sms.getNumber(), null, sms.getText(), null, null);
+  }
+
+  private static boolean isDigitsOnly(CharSequence str) {
+    final int len = str.length();
+    for (int cp, i = 0; i < len; i += Character.charCount(cp)) {
+      cp = Character.codePointAt(str, i);
+      if (!Character.isDigit(cp)) {
+        return false;
+      }
+    }
+    return true;
   }
 }

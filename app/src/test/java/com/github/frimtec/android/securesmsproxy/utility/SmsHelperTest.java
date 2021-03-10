@@ -35,6 +35,22 @@ class SmsHelperTest {
   }
 
   @Test
+  void getSmsFromIntentWithInternationalNumber() {
+    SmsHelper smsHelper = new SmsHelper((bytes, s) -> createSmsMessage("+4179000000", "text"), null, null);
+    List<Sms> smsList = smsHelper.getSmsFromIntent(createIntent(createBundle(1, new Object[]{"pdu1".getBytes()})));
+    assertThat(smsList.size()).isEqualTo(1);
+    assertThat(smsList.get(0).toString()).isEqualTo("Sms{number='+4179000000', text='text', subscriptionId='1'}");
+  }
+
+  @Test
+  void getSmsFromIntentWithInternationalNumberMissingPlus() {
+    SmsHelper smsHelper = new SmsHelper((bytes, s) -> createSmsMessage("4179000000", "text"), null, null);
+    List<Sms> smsList = smsHelper.getSmsFromIntent(createIntent(createBundle(1, new Object[]{"pdu1".getBytes()})));
+    assertThat(smsList.size()).isEqualTo(1);
+    assertThat(smsList.get(0).toString()).isEqualTo("Sms{number='+4179000000', text='text', subscriptionId='1'}");
+  }
+
+  @Test
   void getSmsFromIntentWithSubscriptionReturnsSmsWithSubscription() {
     SmsHelper smsHelper = new SmsHelper((bytes, s) -> createSmsMessage("number", "text"), null, null);
     List<Sms> smsList = smsHelper.getSmsFromIntent(createIntent(createBundle(1, new Object[]{"pdu1".getBytes()})));
