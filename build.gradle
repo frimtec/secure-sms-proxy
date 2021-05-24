@@ -8,7 +8,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.2.1'
-        classpath "de.mannodermaus.gradle.plugins:android-junit5:1.7.0.0"
+        classpath "de.mannodermaus.gradle.plugins:android-junit5:1.7.1.1"
         classpath 'com.hiya:jacoco-android:0.2'
     }
 }
