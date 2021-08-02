@@ -1,19 +1,22 @@
 package com.github.frimtec.android.securesmsproxy.ui;
 
+import static android.content.Intent.EXTRA_BUG_REPORT;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
-import androidx.annotation.Nullable;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.frimtec.android.securesmsproxy.R;
 
-import static android.content.Intent.EXTRA_BUG_REPORT;
-
 public class SendLogActivity extends AppCompatActivity {
 
   public static final String ACTION_SEND_LOG = "com.github.frimtec.android.securesmsproxy.SEND_LOG";
+
+  private ActivityResultLauncher<Intent> someActivityResultLauncher;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -25,12 +28,11 @@ public class SendLogActivity extends AppCompatActivity {
 
     Button exitButton = findViewById(R.id.send_log_button_exit);
     exitButton.setOnClickListener(v -> terminate());
-  }
 
-  @Override
-  protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-    super.onActivityResult(requestCode, resultCode, data);
-    terminate();
+    someActivityResultLauncher = registerForActivityResult(
+        new ActivityResultContracts.StartActivityForResult(),
+        result -> terminate()
+    );
   }
 
   private void sendCrashReport(String report) {
@@ -39,7 +41,7 @@ public class SendLogActivity extends AppCompatActivity {
     intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"frimtec@gmx.ch"});
     intent.putExtra(Intent.EXTRA_SUBJECT, "S2MSP crash report");
     intent.putExtra(Intent.EXTRA_TEXT, report);
-    startActivityForResult(intent, 1);
+    someActivityResultLauncher.launch(intent);
   }
 
   private void terminate() {
