@@ -51,15 +51,14 @@ public class SmsListener extends BroadcastReceiver {
       Map<String, List<Sms>> smsByNumber = this.smsHelper.getSmsFromIntent(intent).stream()
           .collect(Collectors.groupingBy(Sms::getNumber));
       Map<String, Set<Application>> applicationsByNumber = this.dao.byPhoneNumbers(smsByNumber.keySet());
-      smsByNumber.entrySet()
-          .forEach(entry -> {
-            Set<Application> applications = applicationsByNumber.get(entry.getKey());
-            if (applications == null || applications.isEmpty()) {
-              // no registrations for this number
-              return;
-            }
-            applications.forEach(application -> broadcastReceivedSms(context, application, entry.getValue(), smsBroadcastIntentFactory));
-          });
+      smsByNumber.forEach((key, value) -> {
+        Set<Application> applications = applicationsByNumber.get(key);
+        if (applications == null || applications.isEmpty()) {
+          // no registrations for this number
+          return;
+        }
+        applications.forEach(application -> broadcastReceivedSms(context, application, value, smsBroadcastIntentFactory));
+      });
     }
   }
 
