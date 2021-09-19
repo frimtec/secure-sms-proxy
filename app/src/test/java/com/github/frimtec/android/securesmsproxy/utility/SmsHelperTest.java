@@ -1,5 +1,11 @@
 package com.github.frimtec.android.securesmsproxy.utility;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsManager;
@@ -11,12 +17,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.when;
+import java.util.Objects;
 
 class SmsHelperTest {
 
@@ -113,11 +114,7 @@ class SmsHelperTest {
 
   private Bundle createBundle(Integer subscription, Object[] pdus) {
     Bundle bundle = mock(Bundle.class);
-    if (subscription != null) {
-      when(bundle.getInt("subscription", -1)).thenReturn(subscription);
-    } else {
-      when(bundle.getInt("subscription", -1)).thenReturn(-1);
-    }
+    when(bundle.getInt("subscription", -1)).thenReturn(Objects.requireNonNullElse(subscription, -1));
 
     when(bundle.get("pdus")).thenReturn(pdus);
     when(bundle.getString("format")).thenReturn("format");

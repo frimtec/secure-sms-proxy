@@ -31,11 +31,11 @@ tasks.withType(Test) {
 }
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
     defaultConfig {
         applicationId "com.github.frimtec.android.securesmsproxy"
         minSdkVersion 24
-        targetSdkVersion 30
+        targetSdkVersion 31
         versionCode vcode
         versionName vname
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
