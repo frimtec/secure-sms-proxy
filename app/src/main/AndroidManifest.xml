@@ -22,21 +22,26 @@
         <activity
             android:name=".ui.MainActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.RegisterActivity">
+        <activity
+            android:name=".ui.RegisterActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.github.frimtec.android.securesmsproxy.intent.action.REGISTER" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.SendLogActivity">
+        <activity
+            android:name=".ui.SendLogActivity"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.github.frimtec.android.securesmsproxy.SEND_LOG" />
 
@@ -46,7 +51,8 @@
         <activity
             android:name=".ui.LogcatActivity"
             android:label="@string/title_activity_logcat"
-            android:parentActivityName=".ui.MainActivity">
+            android:parentActivityName=".ui.MainActivity"
+            android:exported="false">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.github.frimtec.android.securesmsproxy.ui.MainActivity" />
@@ -54,7 +60,8 @@
         <activity
             android:name=".ui.AboutActivity"
             android:label="@string/title_activity_about"
-            android:parentActivityName=".ui.MainActivity">
+            android:parentActivityName=".ui.MainActivity"
+            android:exported="false">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.github.frimtec.android.securesmsproxy.ui.MainActivity" />
@@ -62,7 +69,8 @@
 
         <receiver
             android:name=".service.SmsListener"
-            android:permission="android.permission.BROADCAST_SMS">
+            android:permission="android.permission.BROADCAST_SMS"
+            android:exported="true">
             <intent-filter android:priority="999">
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
