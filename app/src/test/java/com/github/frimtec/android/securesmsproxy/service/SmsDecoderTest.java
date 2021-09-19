@@ -1,14 +1,11 @@
-package com.github.frimtec.android.securesmsproxy.utility;
+package com.github.frimtec.android.securesmsproxy.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 
 import com.github.frimtec.android.securesmsproxyapi.Sms;
@@ -19,90 +16,67 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-class SmsHelperTest {
+class SmsDecoderTest {
 
   @Test
   void getSmsFromIntentNullBundleReturnsEmptyList() {
-    SmsHelper smsHelper = new SmsHelper();
-    List<Sms> sms = smsHelper.getSmsFromIntent(createIntent(null));
+    SmsDecoder smsDecoder = new SmsDecoder();
+    List<Sms> sms = smsDecoder.getSmsFromIntent(createIntent(null));
     assertThat(sms.size()).isEqualTo(0);
   }
 
   @Test
   void getSmsFromIntentWithNullPdusReturnsEmptyList() {
-    SmsHelper smsHelper = new SmsHelper();
-    List<Sms> sms = smsHelper.getSmsFromIntent(createIntent(createBundle(1, null)));
+    SmsDecoder smsDecoder = new SmsDecoder();
+    List<Sms> sms = smsDecoder.getSmsFromIntent(createIntent(createBundle(1, null)));
     assertThat(sms.size()).isEqualTo(0);
   }
 
   @Test
   void getSmsFromIntentWithInternationalNumber() {
-    SmsHelper smsHelper = new SmsHelper((bytes, s) -> createSmsMessage("+4179000000", "text"), null, null);
-    List<Sms> smsList = smsHelper.getSmsFromIntent(createIntent(createBundle(1, new Object[]{"pdu1".getBytes()})));
+    SmsDecoder smsDecoder = new SmsDecoder((bytes, s) -> createSmsMessage("+4179000000", "text"));
+    List<Sms> smsList = smsDecoder.getSmsFromIntent(createIntent(createBundle(1, new Object[]{"pdu1".getBytes()})));
     assertThat(smsList.size()).isEqualTo(1);
     assertThat(smsList.get(0).toString()).isEqualTo("Sms{number='+4179000000', text='text', subscriptionId='1'}");
   }
 
   @Test
   void getSmsFromIntentWithInternationalNumberMissingPlus() {
-    SmsHelper smsHelper = new SmsHelper((bytes, s) -> createSmsMessage("4179000000", "text"), null, null);
-    List<Sms> smsList = smsHelper.getSmsFromIntent(createIntent(createBundle(1, new Object[]{"pdu1".getBytes()})));
+    SmsDecoder smsDecoder = new SmsDecoder((bytes, s) -> createSmsMessage("4179000000", "text"));
+    List<Sms> smsList = smsDecoder.getSmsFromIntent(createIntent(createBundle(1, new Object[]{"pdu1".getBytes()})));
     assertThat(smsList.size()).isEqualTo(1);
     assertThat(smsList.get(0).toString()).isEqualTo("Sms{number='+4179000000', text='text', subscriptionId='1'}");
   }
 
   @Test
   void getSmsFromIntentWithSubscriptionReturnsSmsWithSubscription() {
-    SmsHelper smsHelper = new SmsHelper((bytes, s) -> createSmsMessage("number", "text"), null, null);
-    List<Sms> smsList = smsHelper.getSmsFromIntent(createIntent(createBundle(1, new Object[]{"pdu1".getBytes()})));
+    SmsDecoder smsDecoder = new SmsDecoder((bytes, s) -> createSmsMessage("number", "text"));
+    List<Sms> smsList = smsDecoder.getSmsFromIntent(createIntent(createBundle(1, new Object[]{"pdu1".getBytes()})));
     assertThat(smsList.size()).isEqualTo(1);
     assertThat(smsList.get(0).toString()).isEqualTo("Sms{number='number', text='text', subscriptionId='1'}");
   }
 
   @Test
   void getSmsFromIntentWithNoSubscriptionReturnsSmsWithDefaultSubscription() {
-    SmsHelper smsHelper = new SmsHelper((bytes, s) -> createSmsMessage("number", "text"), null, null);
-    List<Sms> smsList = smsHelper.getSmsFromIntent(createIntent(createBundle(null, new Object[]{"pdu1".getBytes()})));
+    SmsDecoder smsDecoder = new SmsDecoder((bytes, s) -> createSmsMessage("number", "text"));
+    List<Sms> smsList = smsDecoder.getSmsFromIntent(createIntent(createBundle(null, new Object[]{"pdu1".getBytes()})));
     assertThat(smsList.size()).isEqualTo(1);
     assertThat(smsList.get(0).toString()).isEqualTo("Sms{number='number', text='text', subscriptionId='null'}");
   }
 
   @Test
   void getSmsFromIntentWithSplitSmsReturnsMergedSms() {
-    SmsHelper smsHelper = new SmsHelper((bytes, format) -> {
+    SmsDecoder smsDecoder = new SmsDecoder((bytes, format) -> {
       if (Arrays.equals(bytes, "pdu1".getBytes()) || Arrays.equals(bytes, "pdu3".getBytes())) {
         return createSmsMessage("number1", new String(bytes));
       } else {
         return createSmsMessage("number2", "text");
       }
-    }, null, null);
-    List<Sms> smsList = smsHelper.getSmsFromIntent(createIntent(createBundle(1, new Object[]{"pdu1".getBytes(), "pdu2".getBytes(), "pdu3".getBytes()})));
+    });
+    List<Sms> smsList = smsDecoder.getSmsFromIntent(createIntent(createBundle(1, new Object[]{"pdu1".getBytes(), "pdu2".getBytes(), "pdu3".getBytes()})));
     assertThat(smsList.size()).isEqualTo(2);
     assertThat(smsList.get(0).toString()).isEqualTo("Sms{number='number1', text='pdu1pdu3', subscriptionId='1'}");
     assertThat(smsList.get(1).toString()).isEqualTo("Sms{number='number2', text='text', subscriptionId='1'}");
-  }
-
-  @Test
-  void sendWithSubscriptionId() {
-    SmsManager defaultManager = mock(SmsManager.class);
-    SmsManager subscriptionManager = mock(SmsManager.class);
-    SmsHelper smsHelper = new SmsHelper(null, defaultManager, (subscriptionId) -> {
-      assertThat(subscriptionId).isEqualTo(1);
-      return subscriptionManager;
-    });
-    smsHelper.send(new Sms("number", "text", 1));
-    verifyNoInteractions(defaultManager);
-    verify(subscriptionManager).sendTextMessage("number", null, "text", null, null);
-  }
-
-  @Test
-  void sendWithNoSubscriptionId() {
-    SmsManager defaultManager = mock(SmsManager.class);
-    SmsManager subscriptionManager = mock(SmsManager.class);
-    SmsHelper smsHelper = new SmsHelper(null, defaultManager, (subscriptionId) -> subscriptionManager);
-    smsHelper.send(new Sms("number", "text"));
-    verify(defaultManager).sendTextMessage("number", null, "text", null, null);
-    verifyNoInteractions(subscriptionManager);
   }
 
   private SmsMessage createSmsMessage(String number, String text) {

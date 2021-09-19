@@ -1,10 +1,19 @@
 package com.github.frimtec.android.securesmsproxy.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
+
 import android.content.Context;
 import android.content.Intent;
 
 import com.github.frimtec.android.securesmsproxy.domain.Application;
-import com.github.frimtec.android.securesmsproxy.utility.SmsHelper;
 import com.github.frimtec.android.securesmsproxyapi.Sms;
 import com.github.frimtec.android.securesmsproxyapi.utility.Aes;
 
@@ -19,16 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiFunction;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.isNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.when;
 
 
 class SmsListenerTest {
@@ -55,9 +54,9 @@ class SmsListenerTest {
     ApplicationRuleDao dao = mock(ApplicationRuleDao.class);
     Intent intent = createIntent();
     BiFunction<Application, String, Intent> smsBroadcastIntentFactory = broadcastIntentFactory(mock(Intent.class), ArgumentCaptor.forClass(String.class));
-    SmsHelper smsHelper = mock(SmsHelper.class);
-    when(smsHelper.getSmsFromIntent(intent)).thenReturn(Collections.singletonList(new Sms("number", "text")));
-    SmsListener smsListener = new SmsListener(smsHelper, dao, smsBroadcastIntentFactory);
+    SmsDecoder smsDecoder = mock(SmsDecoder.class);
+    when(smsDecoder.getSmsFromIntent(intent)).thenReturn(Collections.singletonList(new Sms("number", "text")));
+    SmsListener smsListener = new SmsListener(smsDecoder, dao, smsBroadcastIntentFactory);
     when(dao.byPhoneNumbers(any())).thenReturn(Collections.emptyMap());
 
     Context context = mock(Context.class);
@@ -73,10 +72,10 @@ class SmsListenerTest {
     Intent broadcastIntent = mock(Intent.class);
     ArgumentCaptor<String> encryptedSmsCaptor = ArgumentCaptor.forClass(String.class);
     BiFunction<Application, String, Intent> smsBroadcastIntentFactory = broadcastIntentFactory(broadcastIntent, encryptedSmsCaptor);
-    SmsHelper smsHelper = mock(SmsHelper.class);
+    SmsDecoder smsDecoder = mock(SmsDecoder.class);
     List<Sms> smsList = Collections.singletonList(new Sms("number", "text"));
-    when(smsHelper.getSmsFromIntent(intent)).thenReturn(smsList);
-    SmsListener smsListener = new SmsListener(smsHelper, dao, smsBroadcastIntentFactory);
+    when(smsDecoder.getSmsFromIntent(intent)).thenReturn(smsList);
+    SmsListener smsListener = new SmsListener(smsDecoder, dao, smsBroadcastIntentFactory);
     Application application = new Application(1L, "app1", "listener1", SECRET);
     when(dao.byPhoneNumbers(any())).thenReturn(Collections.singletonMap("number", Collections.singleton(application)));
 
@@ -93,10 +92,10 @@ class SmsListenerTest {
   void onReceiveSmsWithWithRegisteredApplicationSendBroadcastWithOriginalBroadcastIntentSupplier() {
     ApplicationRuleDao dao = mock(ApplicationRuleDao.class);
     Intent intent = createIntent();
-    SmsHelper smsHelper = mock(SmsHelper.class);
+    SmsDecoder smsDecoder = mock(SmsDecoder.class);
     List<Sms> smsList = Collections.singletonList(new Sms("number", "text"));
-    when(smsHelper.getSmsFromIntent(intent)).thenReturn(smsList);
-    SmsListener smsListener = new SmsListener(smsHelper, dao, SmsListener.SMS_BROADCAST_INTENT_SUPPLIER);
+    when(smsDecoder.getSmsFromIntent(intent)).thenReturn(smsList);
+    SmsListener smsListener = new SmsListener(smsDecoder, dao, SmsListener.SMS_BROADCAST_INTENT_SUPPLIER);
     Application application = new Application(1L, "app1", "listener1", SECRET);
     when(dao.byPhoneNumbers(any())).thenReturn(Collections.singletonMap("number", Collections.singleton(application)));
 
@@ -111,11 +110,11 @@ class SmsListenerTest {
     Intent intent = createIntent();
     Intent broadcastIntent = mock(Intent.class);
     ArgumentCaptor<String> encryptedSmsCaptor = ArgumentCaptor.forClass(String.class);
-    SmsHelper smsHelper = mock(SmsHelper.class);
+    SmsDecoder smsDecoder = mock(SmsDecoder.class);
     List<Sms> smsList = Collections.singletonList(new Sms("number", "text"));
-    when(smsHelper.getSmsFromIntent(intent)).thenReturn(smsList);
+    when(smsDecoder.getSmsFromIntent(intent)).thenReturn(smsList);
     BiFunction<Application, String, Intent> smsBroadcastIntentFactory = broadcastIntentFactory(broadcastIntent, encryptedSmsCaptor);
-    SmsListener smsListener = new SmsListener(smsHelper, dao, smsBroadcastIntentFactory);
+    SmsListener smsListener = new SmsListener(smsDecoder, dao, smsBroadcastIntentFactory);
     Application application1 = new Application(1L, "app1", "listener1", SECRET);
     Application application2 = new Application(2L, "app2", "listener2", SECRET.replaceAll("1", "A"));
     when(dao.byPhoneNumbers(any())).thenReturn(Collections.singletonMap("number", new HashSet<>(Arrays.asList(application1, application2))));
@@ -137,14 +136,14 @@ class SmsListenerTest {
     Intent intent = createIntent();
     Intent broadcastIntent = mock(Intent.class);
     ArgumentCaptor<String> encryptedSmsCaptor = ArgumentCaptor.forClass(String.class);
-    SmsHelper smsHelper = mock(SmsHelper.class);
+    SmsDecoder smsDecoder = mock(SmsDecoder.class);
     Sms sms1 = new Sms("number1", "text1");
     Sms sms2 = new Sms("number2", "text2");
     Sms sms3 = new Sms("number1", "text3");
     List<Sms> smsList = Arrays.asList(sms1, sms2, sms3);
-    when(smsHelper.getSmsFromIntent(intent)).thenReturn(smsList);
+    when(smsDecoder.getSmsFromIntent(intent)).thenReturn(smsList);
     BiFunction<Application, String, Intent> smsBroadcastIntentFactory = broadcastIntentFactory(broadcastIntent, encryptedSmsCaptor);
-    SmsListener smsListener = new SmsListener(smsHelper, dao, smsBroadcastIntentFactory);
+    SmsListener smsListener = new SmsListener(smsDecoder, dao, smsBroadcastIntentFactory);
     Application application1 = new Application(1L, "name1", "listener1", SECRET);
     Application application2 = new Application(2L, "name2", "listener2", SECRET.replaceAll("1", "A"));
 
