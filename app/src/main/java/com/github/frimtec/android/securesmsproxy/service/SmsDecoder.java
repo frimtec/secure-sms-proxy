@@ -1,8 +1,7 @@
-package com.github.frimtec.android.securesmsproxy.utility;
+package com.github.frimtec.android.securesmsproxy.service;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 
 import com.github.frimtec.android.securesmsproxyapi.Sms;
@@ -12,23 +11,18 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class SmsHelper {
+public class SmsDecoder {
 
   private final BiFunction<byte[], String, SmsMessage> pduDecoder;
-  private final SmsManager defaultSmsManager;
-  private final Function<Integer, SmsManager> subscriptionSmsManagerFactory;
 
-  public SmsHelper() {
-    this(SmsMessage::createFromPdu, SmsManager.getDefault(), SmsManager::getSmsManagerForSubscriptionId);
+  public SmsDecoder() {
+    this(SmsMessage::createFromPdu);
   }
 
-  SmsHelper(BiFunction<byte[], String, SmsMessage> pduDecoder, SmsManager defaultSmsManager, Function<Integer, SmsManager> subscriptionSmsManagerFactory) {
+  SmsDecoder(BiFunction<byte[], String, SmsMessage> pduDecoder) {
     this.pduDecoder = pduDecoder;
-    this.defaultSmsManager = defaultSmsManager;
-    this.subscriptionSmsManagerFactory = subscriptionSmsManagerFactory;
   }
 
   public List<Sms> getSmsFromIntent(Intent intent) {
@@ -56,11 +50,6 @@ public class SmsHelper {
       }
     }
     return Collections.emptyList();
-  }
-
-  public void send(Sms sms) {
-    SmsManager smsManager = sms.getSubscriptionId() == null ? this.defaultSmsManager : this.subscriptionSmsManagerFactory.apply(sms.getSubscriptionId());
-    smsManager.sendTextMessage(sms.getNumber(), null, sms.getText(), null, null);
   }
 
   private static boolean isDigitsOnly(CharSequence str) {

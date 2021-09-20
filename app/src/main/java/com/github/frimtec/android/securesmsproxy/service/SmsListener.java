@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.github.frimtec.android.securesmsproxy.domain.Application;
-import com.github.frimtec.android.securesmsproxy.utility.SmsHelper;
 import com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade;
 import com.github.frimtec.android.securesmsproxyapi.Sms;
 import com.github.frimtec.android.securesmsproxyapi.utility.Aes;
@@ -30,16 +29,16 @@ public class SmsListener extends BroadcastReceiver {
     return intent;
   };
 
-  private final SmsHelper smsHelper;
+  private final SmsDecoder smsDecoder;
   private final ApplicationRuleDao dao;
   private final BiFunction<Application, String, Intent> smsBroadcastIntentFactory;
 
   public SmsListener() {
-    this(new SmsHelper(), new ApplicationRuleDao(), SMS_BROADCAST_INTENT_SUPPLIER);
+    this(new SmsDecoder(), new ApplicationRuleDao(), SMS_BROADCAST_INTENT_SUPPLIER);
   }
 
-  SmsListener(SmsHelper smsHelper, ApplicationRuleDao dao, BiFunction<Application, String, Intent> smsBroadcastIntentFactory) {
-    this.smsHelper = smsHelper;
+  SmsListener(SmsDecoder smsDecoder, ApplicationRuleDao dao, BiFunction<Application, String, Intent> smsBroadcastIntentFactory) {
+    this.smsDecoder = smsDecoder;
     this.dao = dao;
     this.smsBroadcastIntentFactory = smsBroadcastIntentFactory;
   }
@@ -48,7 +47,7 @@ public class SmsListener extends BroadcastReceiver {
   public void onReceive(Context context, Intent intent) {
     if ("android.provider.Telephony.SMS_RECEIVED".equals(intent.getAction())) {
       Log.i(TAG, "SMS received");
-      Map<String, List<Sms>> smsByNumber = this.smsHelper.getSmsFromIntent(intent).stream()
+      Map<String, List<Sms>> smsByNumber = this.smsDecoder.getSmsFromIntent(intent).stream()
           .collect(Collectors.groupingBy(Sms::getNumber));
       Map<String, Set<Application>> applicationsByNumber = this.dao.byPhoneNumbers(smsByNumber.keySet());
       smsByNumber.forEach((key, value) -> {

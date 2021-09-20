@@ -1,5 +1,9 @@
 package com.github.frimtec.android.securesmsproxy.service;
 
+import static android.content.Intent.EXTRA_TEXT;
+import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.ACTION_SEND_SMS;
+import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.PHONE_NUMBER_LOOPBACK;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -8,30 +12,25 @@ import android.util.Log;
 
 import com.github.frimtec.android.securesmsproxy.domain.ApplicationRule;
 import com.github.frimtec.android.securesmsproxy.utility.Permission;
-import com.github.frimtec.android.securesmsproxy.utility.SmsHelper;
 import com.github.frimtec.android.securesmsproxyapi.Sms;
 import com.github.frimtec.android.securesmsproxyapi.utility.Aes;
 
 import java.util.Collections;
 
-import static android.content.Intent.EXTRA_TEXT;
-import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.ACTION_SEND_SMS;
-import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.PHONE_NUMBER_LOOPBACK;
-
 public class SmsSender extends BroadcastReceiver {
 
   private static final String TAG = "SmsSender";
 
-  private final SmsHelper smsHelper;
+  private final SmsManagerResolver smsManagerResolver;
   private final ApplicationRuleDao dao;
 
   public SmsSender() {
-    this(new SmsHelper(), new ApplicationRuleDao());
+    this(SmsManagerResolver.create(), new ApplicationRuleDao());
   }
 
-  SmsSender(SmsHelper smsHelper, ApplicationRuleDao dao) {
+  SmsSender(SmsManagerResolver smsManagerResolver, ApplicationRuleDao dao) {
     super();
-    this.smsHelper = smsHelper;
+    this.smsManagerResolver = smsManagerResolver;
     this.dao = dao;
   }
 
@@ -64,7 +63,7 @@ public class SmsSender extends BroadcastReceiver {
             SmsListener.broadcastReceivedSms(context, applicationRule.getApplication(), Collections.singletonList(sms));
           } else {
             if (applicationRule.getAllowedPhoneNumbers().contains(sms.getNumber())) {
-              this.smsHelper.send(sms);
+              send(context, sms);
             } else {
               Log.w(TAG, String.format("SMS sending blocked because of not allowed phone number %s of application %s.",
                   sms.getNumber(), applicationRule.getApplication().getName()));
@@ -76,4 +75,10 @@ public class SmsSender extends BroadcastReceiver {
       }
     }
   }
+
+  void send(Context context, Sms sms) {
+    smsManagerResolver.resolve(context, sms.getSubscriptionId())
+        .sendTextMessage(sms.getNumber(), null, sms.getText(), null, null);
+  }
+
 }

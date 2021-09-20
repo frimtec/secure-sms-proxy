@@ -1,28 +1,31 @@
 package com.github.frimtec.android.securesmsproxy.service;
 
+import static android.content.Intent.EXTRA_TEXT;
+import static com.github.frimtec.android.securesmsproxy.service.SmsManagerResolver.resolverForAndroidFromS;
+import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.PHONE_NUMBER_LOOPBACK;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 
 import com.github.frimtec.android.securesmsproxy.domain.Application;
 import com.github.frimtec.android.securesmsproxy.domain.ApplicationRule;
-import com.github.frimtec.android.securesmsproxy.utility.SmsHelper;
 import com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade;
 import com.github.frimtec.android.securesmsproxyapi.Sms;
 import com.github.frimtec.android.securesmsproxyapi.utility.Aes;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 
 import java.util.Collections;
-
-import static android.content.Intent.EXTRA_TEXT;
-import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.PHONE_NUMBER_LOOPBACK;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.when;
 
 class SmsSenderTest {
 
@@ -37,65 +40,69 @@ class SmsSenderTest {
   @Test
   void onHandleIntentBadAction() {
     ApplicationRuleDao dao = mock(ApplicationRuleDao.class);
-    SmsHelper smsHelper = mock(SmsHelper.class);
-    SmsSender smsSender = new SmsSender(smsHelper, dao);
+    SmsManagerResolver smsManagerResolver = mock(SmsManagerResolver.class);
+    SmsSender smsSender = new SmsSender(smsManagerResolver, dao);
 
     Intent intent = mock(Intent.class);
     when(intent.getAction()).thenReturn("BAD_ACTION");
-    smsSender.onReceive(mock(Context.class), intent);
+    Context context = mock(Context.class);
+    smsSender.onReceive(context, intent);
 
-    verifyNoInteractions(smsHelper);
+    verifyNoInteractions(smsManagerResolver);
   }
 
   @Test
   void onHandleIntentNullExtras() {
     ApplicationRuleDao dao = mock(ApplicationRuleDao.class);
-    SmsHelper smsHelper = mock(SmsHelper.class);
-    SmsSender smsSender = new SmsSender(smsHelper, dao);
+    SmsManagerResolver smsManagerResolver = mock(SmsManagerResolver.class);
+    SmsSender smsSender = new SmsSender(smsManagerResolver, dao);
 
     Intent intent = mock(Intent.class);
     when(intent.getAction()).thenReturn(SecureSmsProxyFacade.ACTION_SEND_SMS);
-    smsSender.onReceive(mock(Context.class), intent);
+    Context context = mock(Context.class);
+    smsSender.onReceive(context, intent);
 
-    verifyNoInteractions(smsHelper);
+    verifyNoInteractions(smsManagerResolver);
   }
 
   @Test
   void onHandleIntentNoExtraText() {
     ApplicationRuleDao dao = mock(ApplicationRuleDao.class);
-    SmsHelper smsHelper = mock(SmsHelper.class);
-    SmsSender smsSender = new SmsSender(smsHelper, dao);
+    SmsManagerResolver smsManagerResolver = mock(SmsManagerResolver.class);
+    SmsSender smsSender = new SmsSender(smsManagerResolver, dao);
 
     Intent intent = mock(Intent.class);
     when(intent.getAction()).thenReturn(SecureSmsProxyFacade.ACTION_SEND_SMS);
     Bundle bundle = mock(Bundle.class);
     when(intent.getExtras()).thenReturn(bundle);
-    smsSender.onReceive(mock(Context.class), intent);
+    Context context = mock(Context.class);
+    smsSender.onReceive(context, intent);
 
-    verifyNoInteractions(smsHelper);
+    verifyNoInteractions(smsManagerResolver);
   }
 
   @Test
   void onHandleIntentNoApplicationName() {
     ApplicationRuleDao dao = mock(ApplicationRuleDao.class);
-    SmsHelper smsHelper = mock(SmsHelper.class);
-    SmsSender smsSender = new SmsSender(smsHelper, dao);
+    SmsManagerResolver smsManagerResolver = mock(SmsManagerResolver.class);
+    SmsSender smsSender = new SmsSender(smsManagerResolver, dao);
 
     Intent intent = mock(Intent.class);
     when(intent.getAction()).thenReturn(SecureSmsProxyFacade.ACTION_SEND_SMS);
     Bundle bundle = mock(Bundle.class);
     when(bundle.getString(EXTRA_TEXT)).thenReturn("any");
     when(intent.getExtras()).thenReturn(bundle);
-    smsSender.onReceive(mock(Context.class), intent);
+    Context context = mock(Context.class);
+    smsSender.onReceive(context, intent);
 
-    verifyNoInteractions(smsHelper);
+    verifyNoInteractions(smsManagerResolver);
   }
 
   @Test
   void onHandleIntentApplicationNameNotFound() {
     ApplicationRuleDao dao = mock(ApplicationRuleDao.class);
-    SmsHelper smsHelper = mock(SmsHelper.class);
-    SmsSender smsSender = new SmsSender(smsHelper, dao);
+    SmsManagerResolver smsManagerResolver = mock(SmsManagerResolver.class);
+    SmsSender smsSender = new SmsSender(smsManagerResolver, dao);
 
     Intent intent = mock(Intent.class);
     when(intent.getAction()).thenReturn(SecureSmsProxyFacade.ACTION_SEND_SMS);
@@ -103,16 +110,17 @@ class SmsSenderTest {
     when(bundle.getString(EXTRA_TEXT)).thenReturn("any");
     when(bundle.getString(Intent.EXTRA_PACKAGE_NAME)).thenReturn("application");
     when(intent.getExtras()).thenReturn(bundle);
-    smsSender.onReceive(mock(Context.class), intent);
+    Context context = mock(Context.class);
+    smsSender.onReceive(context, intent);
 
-    verifyNoInteractions(smsHelper);
+    verifyNoInteractions(smsManagerResolver);
   }
 
   @Test
   void onHandleIntentBadEncryption() {
     ApplicationRuleDao dao = mock(ApplicationRuleDao.class);
-    SmsHelper smsHelper = mock(SmsHelper.class);
-    SmsSender smsSender = new SmsSender(smsHelper, dao);
+    SmsManagerResolver smsManagerResolver = mock(SmsManagerResolver.class);
+    SmsSender smsSender = new SmsSender(smsManagerResolver, dao);
 
     Intent intent = mock(Intent.class);
     when(intent.getAction()).thenReturn(SecureSmsProxyFacade.ACTION_SEND_SMS);
@@ -121,16 +129,17 @@ class SmsSenderTest {
     when(bundle.getString(Intent.EXTRA_PACKAGE_NAME)).thenReturn("application");
     when(intent.getExtras()).thenReturn(bundle);
     when(dao.byApplicationName("application")).thenReturn(new ApplicationRule(new Application(1L, "application", "listener", SECRET), Collections.singleton("number")));
-    smsSender.onReceive(mock(Context.class), intent);
+    Context context = mock(Context.class);
+    smsSender.onReceive(context, intent);
 
-    verifyNoInteractions(smsHelper);
+    verifyNoInteractions(smsManagerResolver);
   }
 
   @Test
   void onHandleIntentOk() {
     ApplicationRuleDao dao = mock(ApplicationRuleDao.class);
-    SmsHelper smsHelper = mock(SmsHelper.class);
-    SmsSender smsSender = new SmsSender(smsHelper, dao);
+    SmsManager smsManager = mock(SmsManager.class);
+    SmsSender smsSender = new SmsSender((context, subscriptionId) -> smsManager, dao);
 
     Intent intent = mock(Intent.class);
     when(intent.getAction()).thenReturn(SecureSmsProxyFacade.ACTION_SEND_SMS);
@@ -140,18 +149,18 @@ class SmsSenderTest {
     when(bundle.getString(Intent.EXTRA_PACKAGE_NAME)).thenReturn("application");
     when(intent.getExtras()).thenReturn(bundle);
     when(dao.byApplicationName("application")).thenReturn(new ApplicationRule(new Application(1L, "application", "listener", SECRET), Collections.singleton("number")));
-    smsSender.onReceive(mock(Context.class), intent);
+    Context context = mock(Context.class);
+    when(context.getSystemService(eq(SmsManager.class))).thenReturn(smsManager);
+    smsSender.onReceive(context, intent);
 
-    ArgumentCaptor<Sms> smsCaptor = ArgumentCaptor.forClass(Sms.class);
-    verify(smsHelper).send(smsCaptor.capture());
-    assertThat(smsCaptor.getValue().toString()).isEqualTo(sms.toString());
+    verify(smsManager).sendTextMessage(eq(sms.getNumber()), isNull(), eq(sms.getText()), isNull(), isNull());
   }
 
   @Test
   void onHandleIntentLoopback() {
     ApplicationRuleDao dao = mock(ApplicationRuleDao.class);
-    SmsHelper smsHelper = mock(SmsHelper.class);
-    SmsSender smsSender = new SmsSender(smsHelper, dao);
+    SmsManagerResolver smsManagerResolver = mock(SmsManagerResolver.class);
+    SmsSender smsSender = new SmsSender(smsManagerResolver, dao);
 
     Intent intent = mock(Intent.class);
     when(intent.getAction()).thenReturn(SecureSmsProxyFacade.ACTION_SEND_SMS);
@@ -161,16 +170,17 @@ class SmsSenderTest {
     when(bundle.getString(Intent.EXTRA_PACKAGE_NAME)).thenReturn("application");
     when(intent.getExtras()).thenReturn(bundle);
     when(dao.byApplicationName("application")).thenReturn(new ApplicationRule(new Application(1L, "application", "listener", SECRET), Collections.singleton(PHONE_NUMBER_LOOPBACK)));
-    smsSender.onReceive(mock(Context.class), intent);
+    Context context = mock(Context.class);
+    smsSender.onReceive(context, intent);
 
-    verifyNoInteractions(smsHelper);
+    verifyNoInteractions(smsManagerResolver);
   }
 
   @Test
   void onHandleIntentNotAllowedNumber() {
     ApplicationRuleDao dao = mock(ApplicationRuleDao.class);
-    SmsHelper smsHelper = mock(SmsHelper.class);
-    SmsSender smsSender = new SmsSender(smsHelper, dao);
+    SmsManagerResolver smsManagerResolver = mock(SmsManagerResolver.class);
+    SmsSender smsSender = new SmsSender(smsManagerResolver, dao);
 
     Intent intent = mock(Intent.class);
     when(intent.getAction()).thenReturn(SecureSmsProxyFacade.ACTION_SEND_SMS);
@@ -180,8 +190,36 @@ class SmsSenderTest {
     when(bundle.getString(Intent.EXTRA_PACKAGE_NAME)).thenReturn("application");
     when(intent.getExtras()).thenReturn(bundle);
     when(dao.byApplicationName("application")).thenReturn(new ApplicationRule(new Application(1L, "application", "listener", SECRET), Collections.singleton("otherNumber")));
-    smsSender.onReceive(mock(Context.class), intent);
+    Context context = mock(Context.class);
+    smsSender.onReceive(context, intent);
 
-    verifyNoInteractions(smsHelper);
+    verifyNoInteractions(smsManagerResolver);
+  }
+
+  @Test
+  void sendWithSubscriptionId() {
+    SmsManager defaultSmsManager = mock(SmsManager.class);
+    SmsManager subscriptionManager = mock(SmsManager.class);
+    SmsSender smsSender = new SmsSender(resolverForAndroidFromS(), null);
+    Context context = mock(Context.class);
+    when(context.getSystemService(eq(SmsManager.class))).thenReturn(defaultSmsManager);
+    when(defaultSmsManager.createForSubscriptionId(1)).thenReturn(subscriptionManager);
+    smsSender.send(context, new Sms("number", "text", 1));
+    verify(defaultSmsManager).createForSubscriptionId(1);
+    verifyNoMoreInteractions(defaultSmsManager);
+    verify(subscriptionManager).sendTextMessage("number", null, "text", null, null);
+  }
+
+  @Test
+  void sendWithNoSubscriptionId() {
+    SmsManager defaultSmsManager = mock(SmsManager.class);
+    SmsManager subscriptionManager = mock(SmsManager.class);
+    SmsSender smsSender = new SmsSender(resolverForAndroidFromS(), null);
+    Context context = mock(Context.class);
+    when(context.getSystemService(eq(SmsManager.class))).thenReturn(defaultSmsManager);
+    when(defaultSmsManager.createForSubscriptionId(1)).thenReturn(subscriptionManager);
+    smsSender.send(context, new Sms("number", "text"));
+    verify(defaultSmsManager).sendTextMessage("number", null, "text", null, null);
+    verifyNoInteractions(subscriptionManager);
   }
 }
