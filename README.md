@@ -1,10 +1,12 @@
 # Secure SMS Proxy (S2MSP)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.frimtec/secure-sms-proxy-api/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.frimtec/secure-sms-proxy-api)
-[![codecov](https://codecov.io/gh/frimtec/secure-sms-proxy/branch/master/graph/badge.svg?token=3GBTDIFRC7)](https://codecov.io/gh/frimtec/secure-sms-proxy)
-[![license](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Maven Central][maven-central-shield]][maven-central]
 
-[![Build](https://github.com/frimtec/secure-sms-proxy/workflows/Build/badge.svg)](https://github.com/frimtec/secure-sms-proxy/actions?query=workflow%3ABuild)
-[![Deploy release](https://github.com/frimtec/secure-sms-proxy/workflows/Deploy%20release/badge.svg)](https://github.com/frimtec/secure-sms-proxy/actions?query=workflow%3A%22Deploy+release%22)
+![Project Maintenance][maintenance-shield]
+[![Code Coverage][codecov-shield]][codecov]
+[![License][license-shield]][license]
+
+[![Build Status][build-status-shield]][build-status]
+[![Deploy Status][deploy-status-shield]][deploy-status]
 
 ![Icon](app/src/main/res/mipmap-hdpi/ic_launcher.png) 
 <a href='https://apt.izzysoft.de/fdroid/index/apk/com.github.frimtec.android.securesmsproxy'><img alt='Get it on IzzyOnDroid' width='180' src='https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png'/></a>
@@ -32,14 +34,14 @@ S2MSP does not need any other permissions. This ensures the integrity and securi
 
 ## Installation
 S2MSP cannot be offered on Google-Play as Google does only allow applications using SMS permissions in very rare cases 
-(see [Use of SMS or Call Log permission groups](https://support.google.com/googleplay/android-developer/answer/9047303?hl=en)). 
+(see [Use of SMS or Call Log permission groups][use-sms-call-log-permission-groups]). 
 
 ### Install from IzzyOnDroid
-The easiest way to install S2MSP and keep it up-to-date is to install it from [IzzyOnDroid](https://apt.izzysoft.de/fdroid/index/apk/com.github.frimtec.android.securesmsproxy).  
+The easiest way to install S2MSP and keep it up-to-date is to install it from [IzzyOnDroid][izzy-on-droid].  
 <a href='https://apt.izzysoft.de/fdroid/index/apk/com.github.frimtec.android.securesmsproxy'><img alt='Get it on IzzyOnDroid' width='180' src='https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png'/></a>
 
 ### Install pre build APK
-You can download the APK file from the [GitHub release page](https://github.com/frimtec/secure-sms-proxy/releases).
+You can download the APK file from the [GitHub release page][releases].
 To install the APK you need to allow installation from unknown source.
 
 ### Self build
@@ -50,7 +52,7 @@ S2MSP provides an easy API to integrate applications. The API supports the regis
 as well as querying if specific phone numbers are already granted for the application.
 
 ### Adding the library to your project
-The API is provided as an AAR (Android Archive) file and is available on [Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.frimtec/secure-sms-proxy-api).
+The API is provided as an AAR (Android Archive) file and is available on [Maven Central][maven-central].
 You can add the following dependency to your application project:
 ```
 dependencies {
@@ -176,13 +178,34 @@ The use of S2MSP is at your own risk. The author assumes no liability for malfun
 Any warranty claims are excluded.
 
 ## Development
-S2MSP is developed with [Android-Studio 2021.1.1](https://developer.android.com/studio) with Java 11.
+S2MSP is developed with [Android-Studio][android-studio] with Java 11.
 The current Android target SDK is 31 (Android 12-S) and the minimal SDK is 24 (Android 7.0-Nougat).
 
 ## Feedback
 Feedback, bug reports or feature requests are very welcome.
-You can send an email to [frimtec@gmx.ch](mailto:frimtec@gmx.ch) or [open an issue on GitHub](https://github.com/frimtec/secure-sms-proxy/issues).
+You can send an email to [frimtec@gmx.ch](mailto:frimtec@gmx.ch) or [open an issue on GitHub][issues].
 
 ## Credits
-* [bakito](https://github.com/bakito): For implementing dual SIM support.
-* [IzzySoft](https://github.com/IzzySoft): For offering S2MSP on IzzyOnDroid F-Droid repository.
+* [bakito][github-bakito]: For implementing dual SIM support.
+* [IzzySoft][github-izzysoft]: For offering S2MSP on IzzyOnDroid F-Droid repository.
+
+
+[maven-central-shield]: https://maven-badges.herokuapp.com/maven-central/com.github.frimtec/secure-sms-proxy-api/badge.svg
+[maven-central]: https://maven-badges.herokuapp.com/maven-central/com.github.frimtec/secure-sms-proxy-api
+[maintenance-shield]: https://img.shields.io/maintenance/yes/2022.svg
+[license-shield]: https://img.shields.io/github/license/frimtec/secure-sms-proxy.svg
+[license]: https://opensource.org/licenses/Apache-2.0
+[codecov-shield]: https://codecov.io/gh/frimtec/secure-sms-proxy/branch/master/graph/badge.svg?token=3GBTDIFRC7
+[codecov]: https://codecov.io/gh/frimtec/secure-sms-proxy
+[build-status-shield]: https://github.com/frimtec/secure-sms-proxy/workflows/Build/badge.svg
+[build-status]: https://github.com/frimtec/secure-sms-proxy/actions?query=workflow%3ABuild
+[deploy-status-shield]: https://github.com/frimtec/secure-sms-proxy/workflows/Deploy%20release/badge.svg
+[deploy-status]: https://github.com/frimtec/secure-sms-proxy/actions?query=workflow%3A%22Deploy+release%22
+[issues]: https://github.com/frimtec/secure-sms-proxy/issues
+[releases]: https://github.com/frimtec/secure-sms-proxy/releases
+[github-bakito]: https://github.com/bakito
+[github-izzysoft]: https://github.com/IzzySoft
+[android-studio]: https://developer.android.com/studio
+[izzy-on-droid]: https://apt.izzysoft.de/fdroid/index/apk/com.github.frimtec.android.securesmsproxy
+[maven-central]: https://maven-badges.herokuapp.com/maven-central/com.github.frimtec/secure-sms-proxy-api
+[use-sms-call-log-permission-groups]: https://support.google.com/googleplay/android-developer/answer/9047303?hl=en
