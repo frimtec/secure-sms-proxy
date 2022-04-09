@@ -1,9 +1,9 @@
 # Secure SMS Proxy (S2MSP)
 [![Maven Central][maven-central-shield]][maven-central]
-![Project Maintenance][maintenance-shield]
-
-[![Code Coverage][codecov-shield]][codecov]
 [![License][license-shield]][license]
+
+![Project Maintenance][maintenance-shield]
+[![Code Coverage][codecov-shield]][codecov]
 
 [![Build Status][build-status-shield]][build-status]
 [![Deploy Status][deploy-status-shield]][deploy-status]
