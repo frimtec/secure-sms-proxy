@@ -1,1 +1,1 @@
-Ermöglicht die SMS-Kommunikation von Apps eingeschränkt auf definierten Telefonnummern pro App.
+SMS-Kommunikation von Apps eingeschränkt auf Telefonnummern

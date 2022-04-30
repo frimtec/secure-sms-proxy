@@ -1,1 +1,1 @@
-Allows the SMS communication from apps restricted on defined phone numbers per app.
+SMS communication for apps restricted on phone numbers
