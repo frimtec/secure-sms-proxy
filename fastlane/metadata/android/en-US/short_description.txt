@@ -1,0 +1,1 @@
+send and receive SMS for android applications on single phone number base

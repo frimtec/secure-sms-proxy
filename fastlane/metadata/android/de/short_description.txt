@@ -1,0 +1,1 @@
+SMS Versand & Empfang für Android-Apps auf Basis einer einzigen Telefonnummer
