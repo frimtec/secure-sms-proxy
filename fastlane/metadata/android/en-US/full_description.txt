@@ -1,7 +1,12 @@
-As Google strongly restricts the use of SMS permissions for applications in the Play-Store, S2MSP provides a API for third party applications to send and receive SMS to specific phone numbers via a secure SMS proxy. <i>S2MSP</i> acts like a local firewall for SMS communication.
+As Google strongly restricts the use of SMS permissions for applications in the Play-Store, S2MSP provides an API for third party applications to send and receive SMS to specific phone numbers via a secure SMS proxy.
+
+S2MSP acts like a local firewall for SMS communication.
 
 Each application that wants to send/receive SMS to a phone number can register itself on S2MSP. S2MSP asks the user for permission, whether the requesting application is allowed to send/receive SMS from and to the requested phone numbers or not.
 
 All SMS exchanged with third party applications are strongly encrypted.
 
-<i>S2SMP</i> itself requires SMS permissions (<code>SEND_SMS</code> and <code>RECEIVE_SMS</code>) from the Android system and will request these permissions upon startup. <i>S2MSP</i> does not need any other permissions. This ensures the integrity and security of <i>S2MSP</i>.
+S2SMP itself requires SMS permissions (<code>SEND_SMS</code> and <code>RECEIVE_SMS</code>) from the Android system and will request these permissions upon startup.
+S2MSP does not need any other permissions. This ensures the integrity and security of S2MSP.
+
+The API to integrate a third party application with S2MSP is available in Maven-Central.

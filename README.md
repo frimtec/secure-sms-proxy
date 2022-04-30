@@ -19,11 +19,11 @@ S2MSP acts like a local firewall for SMS communication.
 Each application that wants to send/receive SMS to a phone number can register itself on S2MSP. 
 S2MSP asks the user for permission, whether the requesting application is allowed to send/receive SMS from and to the requested phone numbers or not.
 
-![Permission request dialog](images/S2MSP-01.png)
+![Permission request dialog](fastlane/metadata/android/en-US/images/phoneScreenshots/S2MSP-01.png)
 
 In the main view of S2MSP all applications with their allowed phone numbers are listed.
 
-![Main view](images/S2MSP-02.png)
+![Main view](fastlane/metadata/android/en-US/images/phoneScreenshots/S2MSP-02.png)
 
 With the trash icon, the allowed permission for an application can be revoked again.
 

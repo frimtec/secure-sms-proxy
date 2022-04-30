@@ -1,0 +1,2 @@
+* Try fix missing icon in F-Droid store
+* Update dependencies

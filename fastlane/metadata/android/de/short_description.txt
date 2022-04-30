@@ -1,1 +1,1 @@
-SMS Versand & Empfang für Android-Apps auf Basis einer einzigen Telefonnummer
+Ermöglicht die SMS-Kommunikation von Apps eingeschränkt auf definierten Telefonnummern pro App.
