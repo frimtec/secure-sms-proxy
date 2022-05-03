@@ -1,0 +1,1 @@
+* Set metadata for F-Droid with fastlane
