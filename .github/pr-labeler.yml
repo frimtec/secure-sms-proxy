@@ -1,0 +1,4 @@
+new-feature: ['feature/*', 'feat/*']
+bugfix: ['bugfix/*', 'bug/*', 'fix/*']
+documentation: ['documentation/*', 'doc/*']
+dependencies: ['dependencies/*', 'dep/*']
