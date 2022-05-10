@@ -53,6 +53,7 @@ android {
     testOptions {
         unitTests.returnDefaultValues = true
     }
+    namespace 'com.github.frimtec.android.securesmsproxy'
 }
 
 dependencies {
