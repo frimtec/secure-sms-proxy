@@ -17,7 +17,7 @@ if (versionPropsFile.exists()) {
     versionProps.load(new FileInputStream(versionPropsFile))
 }
 
-int vcode = (Integer.parseInt(System.getProperty("version.code.time", String.valueOf((int) (System.currentTimeMillis() / 1000)))) / 60) - 26_797_800
+int vcode = Integer.parseInt(System.getProperty("version.code", String.valueOf((int) ((System.currentTimeMillis() / 1000 / 60) - 26_797_800))))
 String vname = (versionProps['VERSION_NAME'] == null || versionProps['VERSION_NAME'].startsWith('$')) ? '0.0.0' : versionProps['VERSION_NAME']
 
 jacocoAndroidUnitTestReport {
