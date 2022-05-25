@@ -152,7 +152,7 @@ jobs:
       - name: Create fastlane changelog
         run: |
           mkdir -p fastlane/metadata/android/en-US/changelogs
-          echo "${{ steps.get_release.outputs.body }}" >> fastlane/metadata/android/en-US/changelogs/${{needs.deploy-apk.outputs.VCODE}}.txt
+          echo "${{ steps.get_release.outputs.body }}" | sed '/^-/!d;s/- #[[:digit:]]\+ \(.*\) @\(.*\)/- \1/g' | head -n 10 >> fastlane/metadata/android/en-US/changelogs/${{needs.deploy-apk.outputs.VCODE}}.txt
 
       - name: Commit changes
         run: |
