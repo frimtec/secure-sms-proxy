@@ -1,0 +1,6 @@
+- Setup release-drafter and pr-labeler
+- Migrate to android studio chipmunk
+- Generate fastlane changelog from release body
+- Bump material from 1.5.0 to 1.6.0
+- Bump release-drafter/release-drafter from 5.19.0 to 5.20.0
+- Bump constraintlayout from 2.1.3 to 2.1.4
