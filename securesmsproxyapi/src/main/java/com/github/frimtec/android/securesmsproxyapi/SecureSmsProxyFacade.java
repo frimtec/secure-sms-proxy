@@ -56,6 +56,7 @@ public interface SecureSmsProxyFacade {
     /**
      * Registration return code.
      */
+    @SuppressWarnings("unused")
     public enum ReturnCode {
       ALLOWED(true),
       NO_SECRET(false),
@@ -168,6 +169,7 @@ public interface SecureSmsProxyFacade {
    *
    * @see #getInstallation()
    */
+  @SuppressWarnings("unused")
   class Installation {
 
     private final String apiVersion;

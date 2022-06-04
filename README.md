@@ -179,7 +179,7 @@ Any warranty claims are excluded.
 
 ## Development
 S2MSP is developed with [Android-Studio][android-studio] with Java 11.
-The current Android target SDK is 31 (Android 12-S) and the minimal SDK is 24 (Android 7.0-Nougat).
+The current Android target SDK is 32 (Android 13) and the minimal SDK is 24 (Android 7.0-Nougat).
 
 ## Feedback
 Feedback, bug reports or feature requests are very welcome.

@@ -1,5 +1,7 @@
 package com.github.frimtec.android.securesmsproxy.domain;
 
+import androidx.annotation.NonNull;
+
 import java.util.Objects;
 import java.util.Set;
 
@@ -39,6 +41,7 @@ public final class ApplicationRule {
   }
 
   @Override
+  @NonNull
   public String toString() {
     return "ApplicationRule{" +
         "application=" + application +

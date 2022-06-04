@@ -1,5 +1,8 @@
 package com.github.frimtec.android.securesmsproxy;
 
+import static android.content.Intent.EXTRA_BUG_REPORT;
+import static com.github.frimtec.android.securesmsproxy.ui.SendLogActivity.ACTION_SEND_LOG;
+
 import android.app.Application;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -13,9 +16,6 @@ import com.github.frimtec.android.securesmsproxy.state.DbHelper;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-
-import static android.content.Intent.EXTRA_BUG_REPORT;
-import static com.github.frimtec.android.securesmsproxy.ui.SendLogActivity.ACTION_SEND_LOG;
 
 public class SecureSmsProxyApplication extends Application {
 
@@ -41,8 +41,7 @@ public class SecureSmsProxyApplication extends Application {
     }
   }
 
-
-  public void handleUncaughtException(Thread thread, Throwable e) {
+  private void handleUncaughtException(Thread thread, Throwable e) {
     Log.e(TAG, "Unhandled exception occurred", e);
     Intent intent = new Intent();
     intent.setAction(ACTION_SEND_LOG);

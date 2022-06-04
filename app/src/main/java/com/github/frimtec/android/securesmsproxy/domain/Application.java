@@ -1,5 +1,7 @@
 package com.github.frimtec.android.securesmsproxy.domain;
 
+import androidx.annotation.NonNull;
+
 import java.util.Objects;
 
 public final class Application {
@@ -50,6 +52,7 @@ public final class Application {
   }
 
   @Override
+  @NonNull
   public String toString() {
     return "Application{" +
         "id=" + id +
