@@ -40,7 +40,7 @@ public class SmsSender extends BroadcastReceiver {
       Log.w(TAG, "SMS sending blocked because of unrecognized intent.");
       return;
     }
-    if (!Permission.SMS.isAllowed(context)) {
+    if (Permission.SMS.isForbidden(context)) {
       Log.w(TAG, "SMS sending blocked because of missing SMS permissions.");
       return;
     }

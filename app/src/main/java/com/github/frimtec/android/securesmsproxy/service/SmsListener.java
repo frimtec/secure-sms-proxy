@@ -65,7 +65,7 @@ public class SmsListener extends BroadcastReceiver {
     broadcastReceivedSms(context, application, smsList, SMS_BROADCAST_INTENT_SUPPLIER);
   }
 
-  static void broadcastReceivedSms(Context context, Application application, List<Sms> smsList, BiFunction<Application, String, Intent> smsBroadcastIntentFactory) {
+  private static void broadcastReceivedSms(Context context, Application application, List<Sms> smsList, BiFunction<Application, String, Intent> smsBroadcastIntentFactory) {
     Log.i(TAG, "broadcastReceivedSms,  count: " + smsList.size() + "; to application: " + application.getName());
     Aes aes = new Aes(application.getSecret());
     String serializedEncryptedSmsList = aes.encrypt(Sms.toJsonArray(smsList));

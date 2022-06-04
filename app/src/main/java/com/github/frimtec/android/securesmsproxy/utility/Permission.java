@@ -31,8 +31,8 @@ public enum Permission {
     this.request = request;
   }
 
-  public final boolean isAllowed(Context context) {
-    return this.allowed.apply(context);
+  public final boolean isForbidden(Context context) {
+    return !this.allowed.apply(context);
   }
 
   public final void request(Activity activity) {
@@ -66,7 +66,7 @@ public enum Permission {
       this.permissions = permissions.toArray(new String[0]);
     }
 
-    public String[] getPermissions() {
+    String[] getPermissions() {
       return permissions;
     }
   }

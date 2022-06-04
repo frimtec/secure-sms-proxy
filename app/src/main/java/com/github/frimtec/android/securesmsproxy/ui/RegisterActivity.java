@@ -43,7 +43,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     Intent resultIntent = new Intent();
-    if (!SMS.isAllowed(this)) {
+    if (SMS.isForbidden(this)) {
       setResult(REGISTRATION_RESULT_CODE_MISSING_SMS_PERMISSION, resultIntent);
       finish();
       return;

@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
-    if (!SMS.isAllowed(this)) {
+    if (SMS.isForbidden(this)) {
       SMS.request(this);
     }
 

@@ -1,5 +1,17 @@
 package com.github.frimtec.android.securesmsproxy.service;
 
+import static com.github.frimtec.android.securesmsproxy.state.DbFactory.Mode.READ_ONLY;
+import static com.github.frimtec.android.securesmsproxy.state.DbFactory.Mode.WRITABLE;
+import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_APPLICATION;
+import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_APPLICATION_COLUMN_ID;
+import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_APPLICATION_COLUMN_LISTENER;
+import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_APPLICATION_COLUMN_NAME;
+import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_APPLICATION_COLUMN_SECRET;
+import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_RULE;
+import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER;
+import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_RULE_COLUMN_APPLICATION_ID;
+import static com.github.frimtec.android.securesmsproxy.state.DbHelper.VIEW_APPLICATION_RULE;
+
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -16,20 +28,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import static com.github.frimtec.android.securesmsproxy.state.DbFactory.Mode.READ_ONLY;
-import static com.github.frimtec.android.securesmsproxy.state.DbFactory.Mode.WRITABLE;
-import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_APPLICATION;
-import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_APPLICATION_COLUMN_ID;
-import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_APPLICATION_COLUMN_LISTENER;
-import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_APPLICATION_COLUMN_NAME;
-import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_APPLICATION_COLUMN_SECRET;
-import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_RULE;
-import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER;
-import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_RULE_COLUMN_APPLICATION_ID;
-import static com.github.frimtec.android.securesmsproxy.state.DbHelper.VIEW_APPLICATION_RULE;
 
 public class ApplicationRuleDao {
 
@@ -117,10 +118,14 @@ public class ApplicationRuleDao {
       if (cursor != null && cursor.moveToFirst()) {
         do {
           long id = cursor.getLong(0);
-          Application application = applications.getOrDefault(id, new Application(id, cursor.getString(1), cursor.getString(2), cursor.getString(3)));
+          Application application = Objects.requireNonNull(
+              applications.getOrDefault(id, new Application(id, cursor.getString(1), cursor.getString(2), cursor.getString(3)))
+          );
           applications.put(application.getId(), application);
           String phoneNumber = cursor.getString(4);
-          Set<Application> set = applicationsByPhoneNumber.getOrDefault(phoneNumber, new HashSet<>());
+          Set<Application> set = Objects.requireNonNull(
+              applicationsByPhoneNumber.getOrDefault(phoneNumber, new HashSet<>())
+          );
           set.add(application);
           applicationsByPhoneNumber.put(phoneNumber, set);
         } while (cursor.moveToNext());
@@ -135,9 +140,13 @@ public class ApplicationRuleDao {
     if (cursor != null && cursor.moveToFirst()) {
       do {
         long id = cursor.getLong(0);
-        Application application = applications.getOrDefault(id, new Application(id, cursor.getString(1), cursor.getString(2), cursor.getString(3)));
+        Application application = Objects.requireNonNull(
+            applications.getOrDefault(id, new Application(id, cursor.getString(1), cursor.getString(2), cursor.getString(3)))
+        );
         applications.put(application.getId(), application);
-        Set<String> phoneNumbers = applicationPhoneNumbers.getOrDefault(application, new HashSet<>());
+        Set<String> phoneNumbers = Objects.requireNonNull(
+            applicationPhoneNumbers.getOrDefault(application, new HashSet<>())
+        );
         phoneNumbers.add(cursor.getString(4));
         applicationPhoneNumbers.put(application, phoneNumbers);
       } while (cursor.moveToNext());
