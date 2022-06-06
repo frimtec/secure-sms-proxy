@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <string name="title_activity_about">Über</string>
+  <string name="title_activity_logcat">Logcat</string>
+  <string name="menu_about">Über</string>
+  <string name="menu_logcat">Logcat</string>
+  <string name="menu_logcat_refresh">Aktualisieren</string>
+  <string name="menu_logcat_clear">Leeren</string>
+  <string name="about_documentation"><![CDATA[<h3>Dokumentation</h3><p>Eine Dokumentation für die Benutzung von Secure SMS Proxy findest Du hier: <a href=https://github.com/frimtec/secure-sms-proxy/blob/master/README.md#secure-sms-proxy>Anleitung</a>.</p>]]></string>
+  <string name="about_disclaimer"><![CDATA[<h3>Haftungsausschluss</h3><p>Der Autor übernimmt keine Verantwortung, gibt keinerlei Garantie bei der Nutzung der Anwendung.</p><p>Die Anwendung ist kostenlos. Der Quellcode steht als Open-Source unter der <a href=https://opensource.org/licenses/Apache-2.0>Apache 2.0 Lizenz</a> zur Verfügung.</p>]]></string>
+  <string name="general_no">Nein</string>
+  <string name="general_yes">Ja</string>
+  <string name="general_are_you_sure">Bist Du sicher?</string>
+  <string name="general_entry_deleted">Eintrag wurde gelöscht.</string>
+  <string name="general_no_data">Noch keine Daten vorhanden.</string>
+  <string name="permission_required">Benötigte Berechtigung:</string>
+  <string name="permission_sms_title">SMS Senden/Empfangen</string>
+  <string name="permission_sms_text">
+        Damit S2MSP funktioniert, ist die Berechtigung zum Senden und Empfangen von SMS notwendigig.
+        S2MSP ermöglicht es anderen Applikationen mit SMS zu kommunizieren. Dies nur für vorher berechtigte Telefonnummern.
+        Der SMS Austausch zwischen S2MSP und berechtigten Applikationen, erfolgt ausschliesslich verschlüsselt.
+        S2MSP verwendet keine weiteren Rechte, um die Sicherheit und Integrität zu gewährleisten.
+    </string>
+  <string name="send_log_title">Secure SMS Proxy Crash-Report</string>
+  <string name="send_log_message">Secure SMS Proxy wurde unerwarteterweise beendet. Bitte sende den Crash-Report via E-Mail an den Autor, um die Stabilität von Secure SMS Proxy zu erhöhen.</string>
+  <string name="send_log_button_send">Senden</string>
+  <string name="action_delete">Löschen</string>
+  <string name="header_application">Applikation</string>
+  <string name="header_phone_numbers">Erlaubte Telefonnummern</string>
+  <string name="register_comment">Die genannte Applikation verlangt die Berechtigung SMS via S2MSP zu Empfangen und zu Senden, eingeschränkt auf folgende Telefonnummern:</string>
+  <string name="register_reject">Ablehnen</string>
+  <string name="register_allow">Erlauben</string>
+  <string name="permission_accepted">Berechtigung erhalten.</string>
+  <string name="permission_rejected">Berechtigung NICHT erhalten!</string>
+  <string name="content_description_logo">Applikationslogo</string>
+  <string name="image_description_permission_requesting_app_logo">Logo der App, die SMS-Berechtigungen beantragt</string>
+  <string name="image_description_s2msp_app_logo">S2MSP App-Logo</string>
+  <string name="image_description_delete_icon">Mülleimer</string>
+</resources>

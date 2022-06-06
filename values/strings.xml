@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <string name="title_activity_about">About</string>
+  <string name="title_activity_logcat">Logcat</string>
+  <string name="menu_about">About</string>
+  <string name="menu_logcat">Logcat</string>
+  <string name="menu_logcat_refresh">Refresh</string>
+  <string name="menu_logcat_clear">Clear</string>
+  <string name="about_documentation"><![CDATA[<h3>Documentation</h3><p>A manual for the use of Secure SMS Proxy can be found here: <a href=https://github.com/frimtec/secure-sms-proxy/blob/master/README.md#secure-sms-proxy>Manual</a>.</p>]]></string>
+  <string name="about_disclaimer"><![CDATA[<h3>Disclaimer</h3><p>The author assumes no responsibility, gives no guarantee when using the application.</p><p>The application is free.
+    The source code is available as open source under the <a href=https://opensource.org/licenses/Apache-2.0>Apache 2.0 license</a>.</p>]]></string>
+  <string name="general_no">No</string>
+  <string name="general_yes">Yes</string>
+  <string name="general_are_you_sure">Are you sure?</string>
+  <string name="general_entry_deleted">Entry has been deleted.</string>
+  <string name="general_no_data">No data available yet.</string>
+  <string name="permission_required">Required permission:</string>
+  <string name="permission_sms_title">SMS send/receive</string>
+  <string name="permission_sms_text">
+        S2MSP only works with the permissions to send and receive SMS.
+        S2MSP provides SMS communication to other applications for previously authorised phone numbers.
+        The SMS exchange between S2MSP and authorized applications is always encrypted.
+        S2MSP uses no other permissions to ensure the security and integrity.
+    </string>
+  <string name="send_log_title">Secure SMS Proxy crash report</string>
+  <string name="send_log_message">S2MSP was crashed unexpectedly. To improve the stability of Secure SMS Proxy, please send the crash report to the author via e-mail.</string>
+  <string name="send_log_button_send">Send</string>
+  <string name="action_delete">Delete</string>
+  <string name="header_application">Application</string>
+  <string name="header_phone_numbers">Allowed phone numbers</string>
+  <string name="register_comment">The stated application requests permissions to send and receive SMS via S2MSP restricted to the following phone numbers:</string>
+  <string name="register_reject">Reject</string>
+  <string name="register_allow">Allow</string>
+  <string name="permission_accepted">Permission was accepted.</string>
+  <string name="permission_rejected">Permission was rejected!</string>
+  <string name="content_description_logo">Application logo</string>
+  <string name="image_description_permission_requesting_app_logo">Logo of the app that requests SMS permissions</string>
+  <string name="image_description_s2msp_app_logo">S2MSP app logo</string>
+  <string name="image_description_delete_icon">Trashcan</string>
+</resources>
