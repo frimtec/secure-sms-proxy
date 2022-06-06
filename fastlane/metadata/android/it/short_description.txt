@@ -1,0 +1,1 @@
+Comunicazione SMS da app limitata a numeri di telefono

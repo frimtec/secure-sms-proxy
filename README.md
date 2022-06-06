@@ -168,6 +168,8 @@ You can check if you application is allowed to communicate to a given set of pho
 Currently the following languages are supported in S2MSP:
 * English
 * German
+* French
+* Italian
 
 ## Open-Source and free
 S2MSP is Open-Source and available under Apache-2.0 licence.

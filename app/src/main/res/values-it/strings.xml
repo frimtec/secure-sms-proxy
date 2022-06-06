@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <string name="title_activity_about">Altro</string>
+  <string name="title_activity_logcat">Logcat</string>
+  <string name="menu_about">Altro</string>
+  <string name="menu_logcat">Logcat</string>
+  <string name="menu_logcat_refresh">Ricaricare</string>
+  <string name="menu_logcat_clear">Chiaro</string>
+  <string name="about_documentation"><![CDATA[<h3> Documentazione </h3> <p> Un manuale per l\'uso di Secure SMS Proxy è disponibile qui: <a href=https://github.com/frimtec/secure-sms-proxy/blob/master/README.md#secure-sms-proxy>Manuale</a>.</p>]]></string>
+  <string name="about_disclaimer"><![CDATA[<h3>Disclaimer<p> L\'autore non si assume alcuna responsabilità, non fornisce alcuna garanzia durante l\'utilizzo dell\'applicazione. </p> <p> L\'applicazione è gratuita. Il codice sorgente è disponibile come open source sotto la <a href=https://opensource.org/licenses/Apache-2.0>licenza Apache 2.0</a>. </p></h3>]]></string>
+  <string name="general_no">No</string>
+  <string name="general_yes">Si</string>
+  <string name="general_are_you_sure">Sei sicuro?</string>
+  <string name="general_entry_deleted">La voce è stata cancellata.</string>
+  <string name="general_no_data">Nessun dato ancora disponibile.</string>
+  <string name="permission_required">Permesso richiesto:</string>
+  <string name="permission_sms_title">Invio/ricezione SMS</string>
+  <string name="permission_sms_text">S2MSP funziona solo con le autorizzazioni per inviare e ricevere SMS.
+S2MSP fornisce la comunicazione SMS ad altre applicazioni per numeri di telefono precedentemente autorizzati.
+Lo scambio di SMS tra S2MSP e le applicazioni autorizzate è sempre crittografato.
+S2MSP non utilizza altre autorizzazioni per garantire la sicurezza e l\'integrità.</string>
+  <string name="send_log_title">Rapporto di arresto anomalo del proxy SMS sicuro</string>
+  <string name="send_log_message">S2MSP è stato arrestato in modo imprevisto. Per migliorare la stabilità di S2MSP, inviare il rapporto di arresto anomalo all\'autore via email.</string>
+  <string name="send_log_button_send">Inviare</string>
+  <string name="action_delete">Elimina</string>
+  <string name="header_application">Applicazione</string>
+  <string name="header_phone_numbers">Numeri di telefono consentiti</string>
+  <string name="register_comment">L\'applicazione indicata richiede le autorizzazioni per inviare e ricevere SMS tramite S2MSP limitate ai seguenti numeri di telefono:</string>
+  <string name="register_reject">Rifiutare</string>
+  <string name="register_allow">Permettere</string>
+  <string name="permission_accepted">L\'autorizzazione è stata accettata.</string>
+  <string name="permission_rejected">L\'autorizzazione è stata rifiutata!</string>
+  <string name="content_description_logo">Logo dell\'applicazione</string>
+  <string name="image_description_permission_requesting_app_logo">Logo dell\'app che richiede autorizzazioni SMS</string>
+  <string name="image_description_s2msp_app_logo">Logo dell\'app S2MSP</string>
+  <string name="image_description_delete_icon">Cestino</string>
+</resources>
