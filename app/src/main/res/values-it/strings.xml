@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
   <string name="title_activity_about">Altro</string>
-  <string name="title_activity_logcat">Logcat</string>
   <string name="menu_about">Altro</string>
-  <string name="menu_logcat">Logcat</string>
   <string name="menu_logcat_refresh">Ricaricare</string>
   <string name="menu_logcat_clear">Chiaro</string>
   <string name="about_documentation"><![CDATA[<h3> Documentazione </h3> <p> Un manuale per l\'uso di Secure SMS Proxy è disponibile qui: <a href=https://github.com/frimtec/secure-sms-proxy/blob/master/README.md#secure-sms-proxy>Manuale</a>.</p>]]></string>
