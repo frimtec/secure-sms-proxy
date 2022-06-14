@@ -8,15 +8,22 @@
 [![Build Status][build-status-shield]][build-status]
 [![Deploy Status][deploy-status-shield]][deploy-status]
 
-![Icon](app/src/main/res/mipmap-hdpi/ic_launcher.png) 
+![Icon](app/src/main/res/mipmap-hdpi/ic_launcher.png)
 <a href='https://apt.izzysoft.de/fdroid/index/apk/com.github.frimtec.android.securesmsproxy'><img alt='Get it on IzzyOnDroid' width='180' src='https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png'/></a>
+---
+
+<a href='https://lokalise.com'><img alt='lokalise logo' width='180' src='images/lokalise_logo.png'/></a>
+
+App language translations maintained with the great localization platform [Lokalise][lokalise].
+
+---
 
 As Google strongly restricts the use of SMS permissions for applications in the Play-Store, S2MSP provides an API for third party applications
 to send and receive SMS to specific phone numbers via a secure SMS proxy.
 
 S2MSP acts like a local firewall for SMS communication.
 
-Each application that wants to send/receive SMS to a phone number can register itself on S2MSP. 
+Each application that wants to send/receive SMS to a phone number can register itself on S2MSP.
 S2MSP asks the user for permission, whether the requesting application is allowed to send/receive SMS from and to the requested phone numbers or not.
 
 ![Permission request dialog](fastlane/metadata/android/en-US/images/phoneScreenshots/S2MSP-01.png)
@@ -29,12 +36,12 @@ With the trash icon, the allowed permission for an application can be revoked ag
 
 All SMS exchanged with third party applications are strongly encrypted.
 
-S2SMP itself requires SMS permissions (SEND_SMS and RECEIVE_SMS) from the Android system and will request these permissions upon startup. 
+S2SMP itself requires SMS permissions (SEND_SMS and RECEIVE_SMS) from the Android system and will request these permissions upon startup.
 S2MSP does not need any other permissions. This ensures the integrity and security of S2MSP.
 
 ## Installation
-S2MSP cannot be offered on Google-Play as Google does only allow applications using SMS permissions in very rare cases 
-(see [Use of SMS or Call Log permission groups][use-sms-call-log-permission-groups]). 
+S2MSP cannot be offered on Google-Play as Google does only allow applications using SMS permissions in very rare cases
+(see [Use of SMS or Call Log permission groups][use-sms-call-log-permission-groups]).
 
 ### Install from IzzyOnDroid
 The easiest way to install S2MSP and keep it up-to-date is to install it from [IzzyOnDroid][izzy-on-droid].  
@@ -48,7 +55,7 @@ To install the APK you need to allow installation from unknown source.
 Build S2MSP on your own and then install the APK via ADB to your android phone.
 
 ## Integrating applications with S2MSP
-S2MSP provides an easy API to integrate applications. The API supports the registration process, sending and receiving SMS, 
+S2MSP provides an easy API to integrate applications. The API supports the registration process, sending and receiving SMS,
 as well as querying if specific phone numbers are already granted for the application.
 
 ### Adding the library to your project
@@ -145,7 +152,7 @@ public class YourSmsListener extends BroadcastReceiver {
   ...
 ```
 
-### Sending an SMS 
+### Sending an SMS
 A SMS can be send with the following code:
 ```
   void sendSms(Context context, String phoneNumber, String smsText) {
@@ -156,20 +163,23 @@ A SMS can be send with the following code:
 
 ```
 
-### Check if you application is allowed to send/receive SMS with specific phone numbers 
+### Check if you application is allowed to send/receive SMS with specific phone numbers
 You can check if you application is allowed to communicate to a given set of phone numbers:
 ```
     SecureSmsProxyFacade s2msp = SecureSmsProxyFacade.instance(context);
     Set<String> phoneNumbers = ...; // phone numbers to check
     boolean allowed = s2msp.isAllowed(phoneNumbers);
 ```
- 
+
 ## Supported languages
 Currently the following languages are supported in S2MSP:
 * English
 * German
 * French
 * Italian
+
+Translation support for any additional language is warmly welcome - just get in contact with me.
+PAssist is using [Lokalise][lokalise] to maintain language translations.
 
 ## Open-Source and free
 S2MSP is Open-Source and available under Apache-2.0 licence.
@@ -188,6 +198,7 @@ Feedback, bug reports or feature requests are very welcome.
 You can send an email to [frimtec@gmx.ch](mailto:frimtec@gmx.ch) or [open an issue on GitHub][issues].
 
 ## Credits
+* [Lokalise][lokalise]: For supporting Open-Source projects.
 * [bakito][github-bakito]: For implementing dual SIM support.
 * [IzzySoft][github-izzysoft]: For offering S2MSP on IzzyOnDroid F-Droid repository.
 
@@ -211,3 +222,4 @@ You can send an email to [frimtec@gmx.ch](mailto:frimtec@gmx.ch) or [open an iss
 [izzy-on-droid]: https://apt.izzysoft.de/fdroid/index/apk/com.github.frimtec.android.securesmsproxy
 [maven-central]: https://maven-badges.herokuapp.com/maven-central/com.github.frimtec/secure-sms-proxy-api
 [use-sms-call-log-permission-groups]: https://support.google.com/googleplay/android-developer/answer/9047303?hl=en
+[lokalise]: https://lokalise.com/
