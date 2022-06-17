@@ -22,7 +22,7 @@ S2MSP n\'utilise aucune autre autorisation pour assurer la sécurité et l\'int�
   <string name="send_log_button_send">Envoyer</string>
   <string name="action_delete">Effacer</string>
   <string name="header_application">Application</string>
-  <string name="header_phone_numbers">Numéros de téléphone autorisés</string>
+  <string name="header_phone_numbers">Numéros autorisés</string>
   <string name="register_comment">L\'application indiquée demande des autorisations pour envoyer et recevoir des SMS via S2MSP limités aux numéros de téléphone suivants:</string>
   <string name="register_reject">Rejeter</string>
   <string name="register_allow">Permettre</string>
@@ -31,5 +31,4 @@ S2MSP n\'utilise aucune autre autorisation pour assurer la sécurité et l\'int�
   <string name="content_description_logo">Logo de l\'application</string>
   <string name="image_description_permission_requesting_app_logo">Logo de l\'application qui demande les autorisations SMS</string>
   <string name="image_description_s2msp_app_logo">Logo de l\'application S2MSP</string>
-  <string name="image_description_delete_icon">Poubelle</string>
 </resources>
