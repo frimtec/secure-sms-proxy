@@ -1,0 +1,5 @@
+- Added translations for fr and it
+- Fix and optimize string resources and references 
+- Bump material from 1.6.0 to 1.6.1
+- Bump mockito-core from 4.6.0 to 4.6.1
+- Bump assertj-core from 3.22.0 to 3.23.1
