@@ -1,0 +1,1 @@
+- #146 Fix NPE on delete rule if no item is selected
