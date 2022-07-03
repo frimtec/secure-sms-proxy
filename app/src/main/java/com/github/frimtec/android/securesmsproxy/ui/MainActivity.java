@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
   public boolean onContextItemSelected(MenuItem item) {
     AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
     ApplicationRule selectedAlert = (ApplicationRule) listView.getItemAtPosition(info.position);
-    if (item.getItemId() == MENU_CONTEXT_DELETE_ID) {
+    if (selectedAlert != null && item.getItemId() == MENU_CONTEXT_DELETE_ID) {
       AlertDialogHelper.areYouSure(this, (dialog, which) -> {
         deleteApplicationRule(selectedAlert);
         refresh();
