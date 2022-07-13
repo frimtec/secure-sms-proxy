@@ -73,15 +73,17 @@ public class MainActivity extends AppCompatActivity {
   @Override
   public boolean onContextItemSelected(MenuItem item) {
     AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-    ApplicationRule selectedAlert = (ApplicationRule) listView.getItemAtPosition(info.position);
-    if (selectedAlert != null && item.getItemId() == MENU_CONTEXT_DELETE_ID) {
-      AlertDialogHelper.areYouSure(this, (dialog, which) -> {
-        deleteApplicationRule(selectedAlert);
-        refresh();
-        Toast.makeText(this, R.string.general_entry_deleted, Toast.LENGTH_SHORT).show();
-      }, (dialog, which) -> {
-      });
-      return true;
+    if (info != null) {
+      ApplicationRule selectedAlert = (ApplicationRule) listView.getItemAtPosition(info.position);
+      if (selectedAlert != null && item.getItemId() == MENU_CONTEXT_DELETE_ID) {
+        AlertDialogHelper.areYouSure(this, (dialog, which) -> {
+          deleteApplicationRule(selectedAlert);
+          refresh();
+          Toast.makeText(this, R.string.general_entry_deleted, Toast.LENGTH_SHORT).show();
+        }, (dialog, which) -> {
+        });
+        return true;
+      }
     }
     return super.onContextItemSelected(item);
   }
