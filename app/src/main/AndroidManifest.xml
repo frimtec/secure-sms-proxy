@@ -18,7 +18,8 @@
         android:label="S2MSP"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:localeConfig="@xml/locales_config">
         <activity
             android:name=".ui.MainActivity"
             android:configChanges="orientation|keyboardHidden"
