@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < languagesValues.length; i++) {
           lookup.put(languagesValues[i], i);
         }
-        Integer selectedItem = lookup.get(currentAppLocales);
+        Integer selectedItem = lookup.get(currentAppLocales.split("-")[0]);
         new AlertDialog.Builder(this)
             .setTitle(R.string.pref_title_app_language)
             .setSingleChoiceItems(
