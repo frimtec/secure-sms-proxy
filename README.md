@@ -63,7 +63,7 @@ The API is provided as an AAR (Android Archive) file and is available on [Maven 
 You can add the following dependency to your application project:
 ```
 dependencies {
-    implementation 'com.github.frimtec:secure-sms-proxy-api:2.4.1'
+    implementation 'com.github.frimtec:secure-sms-proxy-api:2.4.2'
 }
 ```
 
