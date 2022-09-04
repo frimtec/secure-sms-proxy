@@ -1,7 +1,13 @@
 package com.github.frimtec.android.securesmsproxy.ui;
 
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import static com.github.frimtec.android.securesmsproxy.utility.Permission.SMS;
+
+import android.app.AlertDialog;
+import android.app.LocaleManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.LocaleList;
 import android.provider.Settings;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -13,6 +19,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -22,10 +29,9 @@ import com.github.frimtec.android.securesmsproxy.service.ApplicationRuleDao;
 import com.github.frimtec.android.securesmsproxy.utility.AlertDialogHelper;
 import com.github.frimtec.android.securesmsproxy.utility.Permission;
 
+import java.util.HashMap;
 import java.util.List;
-
-import static android.content.pm.PackageManager.PERMISSION_GRANTED;
-import static com.github.frimtec.android.securesmsproxy.utility.Permission.SMS;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -116,18 +122,21 @@ public class MainActivity extends AppCompatActivity {
   }
 
   @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
+  public boolean onCreateOptionsMenu(@NonNull Menu menu) {
     MenuInflater inflater = getMenuInflater();
     inflater.inflate(R.menu.main_menu, menu);
-    if(isDeveloperMode()) {
+    if (isDeveloperMode()) {
       menu.findItem(R.id.logcat).setVisible(true);
+    }
+    if (android.os.Build.VERSION.SDK_INT >= 33) {
+      menu.findItem(R.id.language).setVisible(true);
     }
     return super.onCreateOptionsMenu(menu);
   }
 
   private boolean isDeveloperMode() {
     return Settings.Global.getInt(getApplicationContext().getContentResolver(),
-        Settings.Global.DEVELOPMENT_SETTINGS_ENABLED , 0) != 0;
+        Settings.Global.DEVELOPMENT_SETTINGS_ENABLED, 0) != 0;
   }
 
   @Override
@@ -136,11 +145,37 @@ public class MainActivity extends AppCompatActivity {
     if (itemId == R.id.about) {
       startActivity(new Intent(this, AboutActivity.class));
       return true;
+    } else if (itemId == R.id.language) {
+      if (android.os.Build.VERSION.SDK_INT >= 33) {
+        LocaleManager localeManager = getSystemService(LocaleManager.class);
+        String currentAppLocales = localeManager.getApplicationLocales().toLanguageTags();
+        String[] languagesValues = getResources().getStringArray(R.array.languages_values);
+        Map<String, Integer> lookup = new HashMap<>();
+        for (int i = 0; i < languagesValues.length; i++) {
+          lookup.put(languagesValues[i], i);
+        }
+        Integer selectedItem = lookup.get(currentAppLocales);
+        new AlertDialog.Builder(this)
+            .setTitle(R.string.pref_title_app_language)
+            .setSingleChoiceItems(
+                R.array.languages,
+                selectedItem != null ? selectedItem : 0,
+                (dialogInterface, which) -> updateAppLocales(languagesValues[which])
+            ).create()
+            .show();
+        return true;
+      }
     } else if (itemId == R.id.logcat) {
       startActivity(new Intent(this, LogcatActivity.class));
       return true;
     }
     return super.onOptionsItemSelected(item);
+  }
+
+  @RequiresApi(api = 33)
+  private void updateAppLocales(String locale) {
+    LocaleManager localeManager = getSystemService(LocaleManager.class);
+    localeManager.setApplicationLocales(LocaleList.forLanguageTags(locale));
   }
 
 }
