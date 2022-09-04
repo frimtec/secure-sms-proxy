@@ -31,6 +31,6 @@ S2MSP n\'utilise aucune autre autorisation pour assurer la sécurité et l\'int�
   <string name="content_description_logo">Logo de l\'application</string>
   <string name="image_description_permission_requesting_app_logo">Logo de l\'application qui demande les autorisations SMS</string>
   <string name="image_description_s2msp_app_logo">Logo de l\'application S2MSP</string>
-  <string name="pref_title_app_language">Langue de l\'appli</string>
+  <string name="pref_title_app_language">Langue de l\\'appli</string>
   <string name="system_language">Défaut du système</string>
 </resources>
