@@ -9,6 +9,13 @@
         app:showAsAction="ifRoom|withText"
         android:visible="false" />
     <item
+        android:id="@+id/language"
+        android:icon="@drawable/ic_baseline_language_24"
+        android:title="@string/pref_title_app_language"
+        android:visible="false"
+        app:showAsAction="always|withText"
+        />
+    <item
         android:id="@+id/about"
         android:icon="@drawable/ic_info_white_24dp"
         android:title="@string/menu_about"

@@ -33,4 +33,10 @@ S2MSP uses no other permissions to ensure the security and integrity.</string>
   <string name="content_description_logo">Application logo</string>
   <string name="image_description_permission_requesting_app_logo">Logo of the app that requests SMS permissions</string>
   <string name="image_description_s2msp_app_logo">S2MSP app logo</string>
+  <string name="pref_title_app_language">App language</string>
+  <string name="english" translatable="false">English</string>
+  <string name="german" translatable="false">Deutsch</string>
+  <string name="french" translatable="false">Français</string>
+  <string name="italian" translatable="false">Italiano</string>
+  <string name="system_language">System default</string>
 </resources>
