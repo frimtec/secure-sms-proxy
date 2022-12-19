@@ -23,7 +23,7 @@ jobs:
 
       - name: Get the version
         id: get_version
-        run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
+        run: echo "VERSION=$(echo $GITHUB_REF | cut -d / -f 3)" >> $GITHUB_OUTPUT
 
       - name: Get release
         id: get_release
@@ -37,7 +37,7 @@ jobs:
 
       - name: Get VCODE
         id: get_vcode
-        run: echo ::set-output name=VCODE::$(expr $(date +%s) / 60 - 26797800)
+        run: echo "VCODE=$(expr $(date +%s) / 60 - 26797800)" >> $GITHUB_OUTPUT
 
       - name: Build APK
         run: bash ./gradlew assembleRelease --stacktrace -Dversion.code=${{ steps.get_vcode.outputs.VCODE }}
@@ -80,7 +80,7 @@ jobs:
 
       - name: Get the version
         id: get_version
-        run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
+        run: echo "VERSION=$(echo $GITHUB_REF | cut -d / -f 3)" >> $GITHUB_OUTPUT
 
       - name: Get release
         id: get_release
@@ -133,7 +133,7 @@ jobs:
 
       - name: Get the version
         id: get_version
-        run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
+        run: echo "VERSION=$(echo $GITHUB_REF | cut -d / -f 3)" >> $GITHUB_OUTPUT
 
       - name: Checkout master
         run: |
