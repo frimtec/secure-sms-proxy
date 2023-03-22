@@ -46,9 +46,9 @@ public class SmsListener extends BroadcastReceiver {
   @Override
   public void onReceive(Context context, Intent intent) {
     if ("android.provider.Telephony.SMS_RECEIVED".equals(intent.getAction())) {
-      Log.i(TAG, "SMS received");
       Map<String, List<Sms>> smsByNumber = this.smsDecoder.getSmsFromIntent(intent).stream()
           .collect(Collectors.groupingBy(Sms::getNumber));
+      Log.i(TAG, "SMS received from numbers: " + smsByNumber.keySet());
       Map<String, Set<Application>> applicationsByNumber = this.dao.byPhoneNumbers(smsByNumber.keySet());
       smsByNumber.forEach((key, value) -> {
         Set<Application> applications = applicationsByNumber.get(key);
