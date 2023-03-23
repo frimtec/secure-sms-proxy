@@ -21,37 +21,45 @@ class SmsDecoderTest {
   @Test
   void getSmsFromIntentNullBundleReturnsEmptyList() {
     SmsDecoder smsDecoder = new SmsDecoder();
-    List<Sms> sms = smsDecoder.getSmsFromIntent(createIntent(null));
+    List<Sms> sms = smsDecoder.getSmsFromIntent("CH", createIntent(null));
     assertThat(sms.size()).isEqualTo(0);
   }
 
   @Test
   void getSmsFromIntentWithNullPdusReturnsEmptyList() {
     SmsDecoder smsDecoder = new SmsDecoder();
-    List<Sms> sms = smsDecoder.getSmsFromIntent(createIntent(createBundle(1, null)));
+    List<Sms> sms = smsDecoder.getSmsFromIntent("CH", createIntent(createBundle(1, null)));
     assertThat(sms.size()).isEqualTo(0);
   }
 
   @Test
   void getSmsFromIntentWithInternationalNumber() {
     SmsDecoder smsDecoder = new SmsDecoder((bytes, s) -> createSmsMessage("+4179000000", "text"));
-    List<Sms> smsList = smsDecoder.getSmsFromIntent(createIntent(createBundle(1, new Object[]{"pdu1".getBytes()})));
+    List<Sms> smsList = smsDecoder.getSmsFromIntent("CH", createIntent(createBundle(1, new Object[]{"pdu1".getBytes()})));
     assertThat(smsList.size()).isEqualTo(1);
     assertThat(smsList.get(0).toString()).isEqualTo("Sms{number='+4179000000', text='text', subscriptionId='1'}");
   }
 
   @Test
   void getSmsFromIntentWithInternationalNumberMissingPlus() {
-    SmsDecoder smsDecoder = new SmsDecoder((bytes, s) -> createSmsMessage("4179000000", "text"));
-    List<Sms> smsList = smsDecoder.getSmsFromIntent(createIntent(createBundle(1, new Object[]{"pdu1".getBytes()})));
+    SmsDecoder smsDecoder = new SmsDecoder((bytes, s) -> createSmsMessage("41790000000", "text"));
+    List<Sms> smsList = smsDecoder.getSmsFromIntent("CH", createIntent(createBundle(1, new Object[]{"pdu1".getBytes()})));
     assertThat(smsList.size()).isEqualTo(1);
-    assertThat(smsList.get(0).toString()).isEqualTo("Sms{number='+4179000000', text='text', subscriptionId='1'}");
+    assertThat(smsList.get(0).toString()).isEqualTo("Sms{number='+41790000000', text='text', subscriptionId='1'}");
+  }
+
+  @Test
+  void getSmsFromIntentWithLocalNumber() {
+    SmsDecoder smsDecoder = new SmsDecoder((bytes, s) -> createSmsMessage("0791234567", "text"));
+    List<Sms> smsList = smsDecoder.getSmsFromIntent("CH", createIntent(createBundle(1, new Object[]{"pdu1".getBytes()})));
+    assertThat(smsList.size()).isEqualTo(1);
+    assertThat(smsList.get(0).toString()).isEqualTo("Sms{number='+41791234567', text='text', subscriptionId='1'}");
   }
 
   @Test
   void getSmsFromIntentWithSubscriptionReturnsSmsWithSubscription() {
     SmsDecoder smsDecoder = new SmsDecoder((bytes, s) -> createSmsMessage("number", "text"));
-    List<Sms> smsList = smsDecoder.getSmsFromIntent(createIntent(createBundle(1, new Object[]{"pdu1".getBytes()})));
+    List<Sms> smsList = smsDecoder.getSmsFromIntent("CH", createIntent(createBundle(1, new Object[]{"pdu1".getBytes()})));
     assertThat(smsList.size()).isEqualTo(1);
     assertThat(smsList.get(0).toString()).isEqualTo("Sms{number='number', text='text', subscriptionId='1'}");
   }
@@ -59,7 +67,7 @@ class SmsDecoderTest {
   @Test
   void getSmsFromIntentWithNoSubscriptionReturnsSmsWithDefaultSubscription() {
     SmsDecoder smsDecoder = new SmsDecoder((bytes, s) -> createSmsMessage("number", "text"));
-    List<Sms> smsList = smsDecoder.getSmsFromIntent(createIntent(createBundle(null, new Object[]{"pdu1".getBytes()})));
+    List<Sms> smsList = smsDecoder.getSmsFromIntent("CH", createIntent(createBundle(null, new Object[]{"pdu1".getBytes()})));
     assertThat(smsList.size()).isEqualTo(1);
     assertThat(smsList.get(0).toString()).isEqualTo("Sms{number='number', text='text', subscriptionId='null'}");
   }
@@ -73,7 +81,7 @@ class SmsDecoderTest {
         return createSmsMessage("number2", "text");
       }
     });
-    List<Sms> smsList = smsDecoder.getSmsFromIntent(createIntent(createBundle(1, new Object[]{"pdu1".getBytes(), "pdu2".getBytes(), "pdu3".getBytes()})));
+    List<Sms> smsList = smsDecoder.getSmsFromIntent("CH", createIntent(createBundle(1, new Object[]{"pdu1".getBytes(), "pdu2".getBytes(), "pdu3".getBytes()})));
     assertThat(smsList.size()).isEqualTo(2);
     assertThat(smsList.get(0).toString()).isEqualTo("Sms{number='number1', text='pdu1pdu3', subscriptionId='1'}");
     assertThat(smsList.get(1).toString()).isEqualTo("Sms{number='number2', text='text', subscriptionId='1'}");

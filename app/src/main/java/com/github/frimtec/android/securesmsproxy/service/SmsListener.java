@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import com.github.frimtec.android.securesmsproxy.domain.Application;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class SmsListener extends BroadcastReceiver {
@@ -32,21 +34,36 @@ public class SmsListener extends BroadcastReceiver {
   private final SmsDecoder smsDecoder;
   private final ApplicationRuleDao dao;
   private final BiFunction<Application, String, Intent> smsBroadcastIntentFactory;
+  private final Function<Context, String> networkCountryCodeProvider;
 
   public SmsListener() {
-    this(new SmsDecoder(), new ApplicationRuleDao(), SMS_BROADCAST_INTENT_SUPPLIER);
+    this(
+        new SmsDecoder(),
+        new ApplicationRuleDao(),
+        SMS_BROADCAST_INTENT_SUPPLIER,
+        (context) -> ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getNetworkCountryIso()
+    );
   }
 
-  SmsListener(SmsDecoder smsDecoder, ApplicationRuleDao dao, BiFunction<Application, String, Intent> smsBroadcastIntentFactory) {
+  SmsListener(
+      SmsDecoder smsDecoder,
+      ApplicationRuleDao dao,
+      BiFunction<Application, String, Intent> smsBroadcastIntentFactory,
+      Function<Context, String> networkCountryCodeProvider
+  ) {
     this.smsDecoder = smsDecoder;
     this.dao = dao;
     this.smsBroadcastIntentFactory = smsBroadcastIntentFactory;
+    this.networkCountryCodeProvider = networkCountryCodeProvider;
   }
 
   @Override
   public void onReceive(Context context, Intent intent) {
     if ("android.provider.Telephony.SMS_RECEIVED".equals(intent.getAction())) {
-      Map<String, List<Sms>> smsByNumber = this.smsDecoder.getSmsFromIntent(intent).stream()
+      Map<String, List<Sms>> smsByNumber = this.smsDecoder.getSmsFromIntent(
+              this.networkCountryCodeProvider.apply(context),
+              intent
+          ).stream()
           .collect(Collectors.groupingBy(Sms::getNumber));
       Log.i(TAG, "SMS received from numbers: " + smsByNumber.keySet());
       Map<String, Set<Application>> applicationsByNumber = this.dao.byPhoneNumbers(smsByNumber.keySet());

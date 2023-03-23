@@ -193,6 +193,9 @@ Any warranty claims are excluded.
 S2MSP is developed with [Android-Studio][android-studio] with Java 11.
 The current Android target SDK is 33 (Android 13-Tiramisu) and the minimal SDK is 24 (Android 7.0-Nougat).
 
+## Used libraries
+* [libphonenumber][libphonenumber]
+
 ## Feedback
 Feedback, bug reports or feature requests are very welcome.
 You can send an email to [frimtec@gmx.ch](mailto:frimtec@gmx.ch) or [open an issue on GitHub][issues].
@@ -223,3 +226,4 @@ You can send an email to [frimtec@gmx.ch](mailto:frimtec@gmx.ch) or [open an iss
 [maven-central]: https://maven-badges.herokuapp.com/maven-central/com.github.frimtec/secure-sms-proxy-api
 [use-sms-call-log-permission-groups]: https://support.google.com/googleplay/android-developer/answer/9047303?hl=en
 [lokalise]: https://lokalise.com/
+[libphonenumber]: https://github.com/google/libphonenumber
