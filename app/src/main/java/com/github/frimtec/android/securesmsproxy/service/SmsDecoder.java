@@ -3,8 +3,12 @@ package com.github.frimtec.android.securesmsproxy.service;
 import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
+import android.util.Log;
 
 import com.github.frimtec.android.securesmsproxyapi.Sms;
+import com.google.i18n.phonenumbers.NumberParseException;
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.Phonenumber;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -14,6 +18,8 @@ import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 public class SmsDecoder {
+
+  private static final String TAG = "SmsDecoder";
 
   private final BiFunction<byte[], String, SmsMessage> pduDecoder;
 
@@ -25,7 +31,7 @@ public class SmsDecoder {
     this.pduDecoder = pduDecoder;
   }
 
-  public List<Sms> getSmsFromIntent(Intent intent) {
+  public List<Sms> getSmsFromIntent(String countryCode, Intent intent) {
     Bundle bundle = intent.getExtras();
     if (bundle != null) {
       int subscription = bundle.getInt("subscription", -1);
@@ -35,11 +41,7 @@ public class SmsDecoder {
         Map<String, String> smsTextByNumber = new LinkedHashMap<>();
         for (Object pdu : pdus) {
           SmsMessage message = this.pduDecoder.apply((byte[]) pdu, format);
-          String number = message.getOriginatingAddress();
-          // some carriers do not send the "+"
-          if (number != null && isDigitsOnly(number)) {
-            number = "+" + number;
-          }
+          String number = formatPhoneNumber(countryCode, message.getOriginatingAddress());
           String text = smsTextByNumber.getOrDefault(number, "");
           smsTextByNumber.put(number, text + message.getMessageBody());
         }
@@ -52,14 +54,16 @@ public class SmsDecoder {
     return Collections.emptyList();
   }
 
-  private static boolean isDigitsOnly(CharSequence str) {
-    final int len = str.length();
-    for (int cp, i = 0; i < len; i += Character.charCount(cp)) {
-      cp = Character.codePointAt(str, i);
-      if (!Character.isDigit(cp)) {
-        return false;
-      }
+  private static String formatPhoneNumber(String countryCode, String raw) {
+    PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
+    try {
+      Phonenumber.PhoneNumber phoneNumber = phoneUtil.parse(raw, countryCode.toUpperCase());
+      String formatted = phoneUtil.format(phoneNumber, PhoneNumberUtil.PhoneNumberFormat.E164);
+      Log.i(TAG, String.format("Phone number formatting: country: %s; number >%s< => >%s<", countryCode, raw, formatted));
+      return formatted;
+    } catch (NumberParseException e) {
+      Log.e(TAG, "Cannot parse phone number", e);
+      return raw;
     }
-    return true;
   }
 }
