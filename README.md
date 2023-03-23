@@ -179,7 +179,7 @@ Currently the following languages are supported in S2MSP:
 * Italian
 
 Translation support for any additional language is warmly welcome - just get in contact with me.
-PAssist is using [Lokalise][lokalise] to maintain language translations.
+S2MSP is using [Lokalise][lokalise] to maintain language translations.
 
 ## Open-Source and free
 S2MSP is Open-Source and available under Apache-2.0 licence.
