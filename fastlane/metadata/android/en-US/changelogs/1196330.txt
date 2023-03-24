@@ -1,0 +1,2 @@
+- Using E164 phone number format internally to work well with international and local numbers provided by some carriers
+- Support local numbers provided by carrier
