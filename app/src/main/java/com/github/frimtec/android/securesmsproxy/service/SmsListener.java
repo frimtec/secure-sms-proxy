@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import com.github.frimtec.android.securesmsproxy.domain.Application;
@@ -34,14 +33,14 @@ public class SmsListener extends BroadcastReceiver {
   private final SmsDecoder smsDecoder;
   private final ApplicationRuleDao dao;
   private final BiFunction<Application, String, Intent> smsBroadcastIntentFactory;
-  private final Function<Context, String> networkCountryCodeProvider;
+  private final Function<Context, PhoneNumberFormatter> phoneNumberFormatterProvider;
 
   public SmsListener() {
     this(
         new SmsDecoder(),
         new ApplicationRuleDao(),
         SMS_BROADCAST_INTENT_SUPPLIER,
-        (context) -> ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getNetworkCountryIso()
+        PhoneNumberFormatter::new
     );
   }
 
@@ -49,19 +48,19 @@ public class SmsListener extends BroadcastReceiver {
       SmsDecoder smsDecoder,
       ApplicationRuleDao dao,
       BiFunction<Application, String, Intent> smsBroadcastIntentFactory,
-      Function<Context, String> networkCountryCodeProvider
+      Function<Context, PhoneNumberFormatter> phoneNumberFormatterProvider
   ) {
     this.smsDecoder = smsDecoder;
     this.dao = dao;
     this.smsBroadcastIntentFactory = smsBroadcastIntentFactory;
-    this.networkCountryCodeProvider = networkCountryCodeProvider;
+    this.phoneNumberFormatterProvider = phoneNumberFormatterProvider;
   }
 
   @Override
   public void onReceive(Context context, Intent intent) {
     if ("android.provider.Telephony.SMS_RECEIVED".equals(intent.getAction())) {
       Map<String, List<Sms>> smsByNumber = this.smsDecoder.getSmsFromIntent(
-              this.networkCountryCodeProvider.apply(context),
+              this.phoneNumberFormatterProvider.apply(context),
               intent
           ).stream()
           .collect(Collectors.groupingBy(Sms::getNumber));

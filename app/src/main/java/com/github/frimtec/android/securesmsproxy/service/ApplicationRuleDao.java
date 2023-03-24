@@ -54,10 +54,17 @@ public class ApplicationRuleDao {
     this.dbFactory = dbFactory;
   }
 
-  public String insertOrUpdate(String applicationName, String listener, Set<String> allowedPhoneNumbers) {
+  public String insertOrUpdate(
+      String applicationName,
+      String listener,
+      Set<String> allowedPhoneNumbers,
+      PhoneNumberFormatter phoneNumberFormatter) {
     ApplicationRule applicationRule = byApplicationName(applicationName);
     String secret;
     SQLiteDatabase db = this.dbFactory.getDatabase(WRITABLE);
+    Set<String> allowedPhoneNumbersE164Formatted = allowedPhoneNumbers.stream()
+        .map(phoneNumberFormatter::toE164)
+        .collect(Collectors.toSet());
     if (applicationRule != null) {
       secret = applicationRule.getApplication().getSecret();
       ContentValues applicationValues = new ContentValues();
@@ -66,7 +73,7 @@ public class ApplicationRuleDao {
           new String[]{String.valueOf(applicationRule.getApplication().getId())});
       ContentValues ruleValues = new ContentValues();
       ruleValues.put(TABLE_RULE_COLUMN_APPLICATION_ID, applicationRule.getApplication().getId());
-      allowedPhoneNumbers.stream()
+      allowedPhoneNumbersE164Formatted.stream()
           .filter(phoneNumber -> !applicationRule.getAllowedPhoneNumbers().contains(phoneNumber))
           .forEach(phoneNumber -> {
             ruleValues.put(TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER, phoneNumber);
@@ -81,7 +88,7 @@ public class ApplicationRuleDao {
       long id = db.insert(TABLE_APPLICATION, null, values);
       ContentValues ruleValues = new ContentValues();
       ruleValues.put(TABLE_RULE_COLUMN_APPLICATION_ID, id);
-      allowedPhoneNumbers.forEach(phoneNumber -> {
+      allowedPhoneNumbersE164Formatted.forEach(phoneNumber -> {
         ruleValues.put(TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER, phoneNumber);
         db.insert(TABLE_RULE, null, ruleValues);
       });

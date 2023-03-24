@@ -40,6 +40,8 @@ import static org.mockito.Mockito.when;
 
 class ApplicationRuleDaoTest {
 
+  private final PhoneNumberFormatter phoneNumberFormatter = new PhoneNumberFormatter("ch");
+
   @Test
   void defaultConstructor() {
     ApplicationRuleDao dao = new ApplicationRuleDao();
@@ -59,7 +61,12 @@ class ApplicationRuleDaoTest {
     when(dbFactory.getDatabase(WRITABLE)).thenReturn(dbWrite);
     ApplicationRuleDao dao = new ApplicationRuleDao(dbFactory);
 
-    String secret = dao.insertOrUpdate("app_1", "listener_1", new LinkedHashSet<>(Arrays.asList("789", "000")));
+    String secret = dao.insertOrUpdate(
+        "app_1",
+        "listener_1",
+        new LinkedHashSet<>(Arrays.asList("789", "000")),
+        phoneNumberFormatter
+    );
     assertThat(secret.length()).isEqualTo(SECRET_LENGTH);
     verify(dbWrite).insert(eq(TABLE_APPLICATION), Mockito.isNull(), any());
     verify(dbWrite, times(2)).insert(eq(TABLE_RULE), Mockito.isNull(), any());
@@ -73,8 +80,8 @@ class ApplicationRuleDaoTest {
     SQLiteDatabase dbWrite = mock(SQLiteDatabase.class);
 
     Cursor cursor = createCursor(Arrays.asList(
-        Arrays.asList(1L, "app_1", "listener_1", "secret_1", "123"),
-        Arrays.asList(1L, "app_1", "listener_1", "secret_1", "456")
+        Arrays.asList(1L, "app_1", "listener_1", "secret_1", "+41123"),
+        Arrays.asList(1L, "app_1", "listener_1", "secret_1", "+41456")
     ));
     when(dbRead.query(DbHelper.VIEW_APPLICATION_RULE, ALL_COLUMNS, TABLE_APPLICATION_COLUMN_NAME + "=?", new String[]{"app_1"}, null, null, null))
         .thenReturn(cursor);
@@ -82,7 +89,12 @@ class ApplicationRuleDaoTest {
     when(dbFactory.getDatabase(WRITABLE)).thenReturn(dbWrite);
     ApplicationRuleDao dao = new ApplicationRuleDao(dbFactory);
 
-    String secret = dao.insertOrUpdate("app_1", "listener_1_changed", new LinkedHashSet<>(Arrays.asList("123", "789", "000", "111")));
+    String secret = dao.insertOrUpdate(
+        "app_1",
+        "listener_1_changed",
+        new LinkedHashSet<>(Arrays.asList("123", "789", "000", "111")),
+        phoneNumberFormatter
+    );
     assertThat(secret).isEqualTo("secret_1");
     verify(dbWrite).update(eq(TABLE_APPLICATION), any(), eq(TABLE_APPLICATION_COLUMN_ID + "=?"), eq(new String[]{String.valueOf(1L)}));
     verify(dbWrite, times(3)).insert(eq(TABLE_RULE), Mockito.isNull(), any());
