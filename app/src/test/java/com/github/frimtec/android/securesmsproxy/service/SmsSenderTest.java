@@ -26,8 +26,12 @@ import com.github.frimtec.android.securesmsproxyapi.utility.Aes;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
+import java.util.function.Function;
 
 class SmsSenderTest {
+
+  private final Function<Context, PhoneNumberFormatter> phoneNumberFormatterProvider =
+      (context) -> new PhoneNumberFormatter("ch");
 
   static final String SECRET = "1234567890123456";
 
@@ -41,7 +45,7 @@ class SmsSenderTest {
   void onHandleIntentBadAction() {
     ApplicationRuleDao dao = mock(ApplicationRuleDao.class);
     SmsManagerResolver smsManagerResolver = mock(SmsManagerResolver.class);
-    SmsSender smsSender = new SmsSender(smsManagerResolver, dao);
+    SmsSender smsSender = new SmsSender(smsManagerResolver, dao, this.phoneNumberFormatterProvider);
 
     Intent intent = mock(Intent.class);
     when(intent.getAction()).thenReturn("BAD_ACTION");
@@ -55,7 +59,7 @@ class SmsSenderTest {
   void onHandleIntentNullExtras() {
     ApplicationRuleDao dao = mock(ApplicationRuleDao.class);
     SmsManagerResolver smsManagerResolver = mock(SmsManagerResolver.class);
-    SmsSender smsSender = new SmsSender(smsManagerResolver, dao);
+    SmsSender smsSender = new SmsSender(smsManagerResolver, dao, this.phoneNumberFormatterProvider);
 
     Intent intent = mock(Intent.class);
     when(intent.getAction()).thenReturn(SecureSmsProxyFacade.ACTION_SEND_SMS);
@@ -69,7 +73,7 @@ class SmsSenderTest {
   void onHandleIntentNoExtraText() {
     ApplicationRuleDao dao = mock(ApplicationRuleDao.class);
     SmsManagerResolver smsManagerResolver = mock(SmsManagerResolver.class);
-    SmsSender smsSender = new SmsSender(smsManagerResolver, dao);
+    SmsSender smsSender = new SmsSender(smsManagerResolver, dao, this.phoneNumberFormatterProvider);
 
     Intent intent = mock(Intent.class);
     when(intent.getAction()).thenReturn(SecureSmsProxyFacade.ACTION_SEND_SMS);
@@ -85,7 +89,7 @@ class SmsSenderTest {
   void onHandleIntentNoApplicationName() {
     ApplicationRuleDao dao = mock(ApplicationRuleDao.class);
     SmsManagerResolver smsManagerResolver = mock(SmsManagerResolver.class);
-    SmsSender smsSender = new SmsSender(smsManagerResolver, dao);
+    SmsSender smsSender = new SmsSender(smsManagerResolver, dao, this.phoneNumberFormatterProvider);
 
     Intent intent = mock(Intent.class);
     when(intent.getAction()).thenReturn(SecureSmsProxyFacade.ACTION_SEND_SMS);
@@ -102,7 +106,7 @@ class SmsSenderTest {
   void onHandleIntentApplicationNameNotFound() {
     ApplicationRuleDao dao = mock(ApplicationRuleDao.class);
     SmsManagerResolver smsManagerResolver = mock(SmsManagerResolver.class);
-    SmsSender smsSender = new SmsSender(smsManagerResolver, dao);
+    SmsSender smsSender = new SmsSender(smsManagerResolver, dao, this.phoneNumberFormatterProvider);
 
     Intent intent = mock(Intent.class);
     when(intent.getAction()).thenReturn(SecureSmsProxyFacade.ACTION_SEND_SMS);
@@ -120,7 +124,7 @@ class SmsSenderTest {
   void onHandleIntentBadEncryption() {
     ApplicationRuleDao dao = mock(ApplicationRuleDao.class);
     SmsManagerResolver smsManagerResolver = mock(SmsManagerResolver.class);
-    SmsSender smsSender = new SmsSender(smsManagerResolver, dao);
+    SmsSender smsSender = new SmsSender(smsManagerResolver, dao, this.phoneNumberFormatterProvider);
 
     Intent intent = mock(Intent.class);
     when(intent.getAction()).thenReturn(SecureSmsProxyFacade.ACTION_SEND_SMS);
@@ -139,7 +143,7 @@ class SmsSenderTest {
   void onHandleIntentOk() {
     ApplicationRuleDao dao = mock(ApplicationRuleDao.class);
     SmsManager smsManager = mock(SmsManager.class);
-    SmsSender smsSender = new SmsSender((context, subscriptionId) -> smsManager, dao);
+    SmsSender smsSender = new SmsSender((context, subscriptionId) -> smsManager, dao, this.phoneNumberFormatterProvider);
 
     Intent intent = mock(Intent.class);
     when(intent.getAction()).thenReturn(SecureSmsProxyFacade.ACTION_SEND_SMS);
@@ -160,7 +164,7 @@ class SmsSenderTest {
   void onHandleIntentLoopback() {
     ApplicationRuleDao dao = mock(ApplicationRuleDao.class);
     SmsManagerResolver smsManagerResolver = mock(SmsManagerResolver.class);
-    SmsSender smsSender = new SmsSender(smsManagerResolver, dao);
+    SmsSender smsSender = new SmsSender(smsManagerResolver, dao, this.phoneNumberFormatterProvider);
 
     Intent intent = mock(Intent.class);
     when(intent.getAction()).thenReturn(SecureSmsProxyFacade.ACTION_SEND_SMS);
@@ -180,7 +184,7 @@ class SmsSenderTest {
   void onHandleIntentNotAllowedNumber() {
     ApplicationRuleDao dao = mock(ApplicationRuleDao.class);
     SmsManagerResolver smsManagerResolver = mock(SmsManagerResolver.class);
-    SmsSender smsSender = new SmsSender(smsManagerResolver, dao);
+    SmsSender smsSender = new SmsSender(smsManagerResolver, dao, this.phoneNumberFormatterProvider);
 
     Intent intent = mock(Intent.class);
     when(intent.getAction()).thenReturn(SecureSmsProxyFacade.ACTION_SEND_SMS);
@@ -200,11 +204,11 @@ class SmsSenderTest {
   void sendWithSubscriptionId() {
     SmsManager defaultSmsManager = mock(SmsManager.class);
     SmsManager subscriptionManager = mock(SmsManager.class);
-    SmsSender smsSender = new SmsSender(resolverForAndroidFromS(), null);
+    SmsSender smsSender = new SmsSender(resolverForAndroidFromS(), null, this.phoneNumberFormatterProvider);
     Context context = mock(Context.class);
     when(context.getSystemService(eq(SmsManager.class))).thenReturn(defaultSmsManager);
     when(defaultSmsManager.createForSubscriptionId(1)).thenReturn(subscriptionManager);
-    smsSender.send(context, new Sms("number", "text", 1));
+    smsSender.send(context, 1, "number", "text");
     verify(defaultSmsManager).createForSubscriptionId(1);
     verifyNoMoreInteractions(defaultSmsManager);
     verify(subscriptionManager).sendTextMessage("number", null, "text", null, null);
@@ -214,11 +218,11 @@ class SmsSenderTest {
   void sendWithNoSubscriptionId() {
     SmsManager defaultSmsManager = mock(SmsManager.class);
     SmsManager subscriptionManager = mock(SmsManager.class);
-    SmsSender smsSender = new SmsSender(resolverForAndroidFromS(), null);
+    SmsSender smsSender = new SmsSender(resolverForAndroidFromS(), null, this.phoneNumberFormatterProvider);
     Context context = mock(Context.class);
     when(context.getSystemService(eq(SmsManager.class))).thenReturn(defaultSmsManager);
     when(defaultSmsManager.createForSubscriptionId(1)).thenReturn(subscriptionManager);
-    smsSender.send(context, new Sms("number", "text"));
+    smsSender.send(context, null, "number", "text");
     verify(defaultSmsManager).sendTextMessage("number", null, "text", null, null);
     verifyNoInteractions(subscriptionManager);
   }

@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.frimtec.android.securesmsproxy.R;
 import com.github.frimtec.android.securesmsproxy.service.ApplicationRuleDao;
+import com.github.frimtec.android.securesmsproxy.service.PhoneNumberFormatter;
 import com.github.frimtec.android.securesmsproxy.utility.PackageInfoAccessor;
 
 import java.util.Collections;
@@ -66,8 +67,14 @@ public class RegisterActivity extends AppCompatActivity {
     List<String> phoneNumbers = extras.getStringArrayList(EXTRA_PHONE_NUMBERS);
     String packageName = referrer.getHost();
 
+    PhoneNumberFormatter phoneNumberFormatter = new PhoneNumberFormatter(this);
     if(phoneNumbers == null || phoneNumbers.size() == 0) {
-      String randomSecret = new ApplicationRuleDao().insertOrUpdate(packageName, listener, Collections.emptySet());
+      String randomSecret = new ApplicationRuleDao().insertOrUpdate(
+          packageName,
+          listener,
+          Collections.emptySet(),
+          phoneNumberFormatter
+      );
       resultIntent.putExtra(EXTRA_SECRET, randomSecret);
       setResult(RESULT_OK, resultIntent);
       finish();
@@ -87,7 +94,12 @@ public class RegisterActivity extends AppCompatActivity {
             .collect(Collectors.joining("\n")));
     Button allow = findViewById(R.id.button_allow);
     allow.setOnClickListener(v -> {
-      String randomSecret = new ApplicationRuleDao().insertOrUpdate(packageName, listener, new HashSet<>(phoneNumbers));
+      String randomSecret = new ApplicationRuleDao().insertOrUpdate(
+          packageName,
+          listener,
+          new HashSet<>(phoneNumbers),
+          phoneNumberFormatter
+      );
       resultIntent.putExtra(EXTRA_SECRET, randomSecret);
       setResult(RESULT_OK, resultIntent);
       finish();

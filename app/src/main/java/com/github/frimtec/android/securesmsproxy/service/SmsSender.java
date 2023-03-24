@@ -16,6 +16,7 @@ import com.github.frimtec.android.securesmsproxyapi.Sms;
 import com.github.frimtec.android.securesmsproxyapi.utility.Aes;
 
 import java.util.Collections;
+import java.util.function.Function;
 
 public class SmsSender extends BroadcastReceiver {
 
@@ -23,15 +24,26 @@ public class SmsSender extends BroadcastReceiver {
 
   private final SmsManagerResolver smsManagerResolver;
   private final ApplicationRuleDao dao;
+  private final Function<Context, PhoneNumberFormatter> phoneNumberFormatterProvider;
+
 
   public SmsSender() {
-    this(SmsManagerResolver.create(), new ApplicationRuleDao());
+    this(
+        SmsManagerResolver.create(),
+        new ApplicationRuleDao(),
+        PhoneNumberFormatter::new
+    );
   }
 
-  SmsSender(SmsManagerResolver smsManagerResolver, ApplicationRuleDao dao) {
+  SmsSender(
+      SmsManagerResolver smsManagerResolver,
+      ApplicationRuleDao dao,
+      Function<Context, PhoneNumberFormatter> phoneNumberFormatterProvider
+  ) {
     super();
     this.smsManagerResolver = smsManagerResolver;
     this.dao = dao;
+    this.phoneNumberFormatterProvider = phoneNumberFormatterProvider;
   }
 
   @Override
@@ -62,11 +74,13 @@ public class SmsSender extends BroadcastReceiver {
           if (PHONE_NUMBER_LOOPBACK.equals(sms.getNumber())) {
             SmsListener.broadcastReceivedSms(context, applicationRule.getApplication(), Collections.singletonList(sms));
           } else {
-            if (applicationRule.getAllowedPhoneNumbers().contains(sms.getNumber())) {
-              send(context, sms);
+            PhoneNumberFormatter phoneNumberFormatter = this.phoneNumberFormatterProvider.apply(context);
+            String number = phoneNumberFormatter.toE164(sms.getNumber());
+            if (applicationRule.getAllowedPhoneNumbers().contains(number)) {
+              send(context, sms.getSubscriptionId(), number, sms.getText());
             } else {
               Log.w(TAG, String.format("SMS sending blocked because of not allowed phone number %s of application %s.",
-                  sms.getNumber(), applicationRule.getApplication().getName()));
+                  number, applicationRule.getApplication().getName()));
             }
           }
         } catch (Exception e) {
@@ -76,9 +90,9 @@ public class SmsSender extends BroadcastReceiver {
     }
   }
 
-  void send(Context context, Sms sms) {
-    smsManagerResolver.resolve(context, sms.getSubscriptionId())
-        .sendTextMessage(sms.getNumber(), null, sms.getText(), null, null);
+  void send(Context context, Integer subscriptionId, String number, String text) {
+    smsManagerResolver.resolve(context, subscriptionId)
+        .sendTextMessage(number, null, text, null, null);
   }
 
 }
