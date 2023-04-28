@@ -1,0 +1,3 @@
+- Migrate to android studio flamingo
+- Define telephony feature as required and other inspection cleanups 
+- Bump com.googlecode.libphonenumber:libphonenumber from 8.13.8 to 8.13.10
