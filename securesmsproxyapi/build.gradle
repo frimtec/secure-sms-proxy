@@ -1,16 +1,8 @@
 apply plugin: 'com.android.library'
 apply plugin: "de.mannodermaus.android-junit5"
+apply plugin: 'jacoco'
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
-apply plugin: "com.hiya.jacoco-android"
-
-jacoco {
-    toolVersion = "0.8.4"
-    tasks.withType(Test) {
-        jacoco.includeNoLocationClasses = true
-        jacoco.excludes = ['jdk.internal.*']
-    }
-}
 
 System.setProperty("line.separator", "\n")
 Properties versionProps = new Properties()
@@ -33,14 +25,8 @@ ext["signing.secretKeyRingFile"] = System.getenv('SIGNING_RINGFILE')
 ext["ossUsername"] = System.getenv('OSS_USERNAME')
 ext["ossPassword"] = System.getenv('OSS_PASSWORD')
 
-jacocoAndroidUnitTestReport {
-    csv.enabled false
-    html.enabled false
-    xml.enabled true
-}
-
-tasks.withType(Test) {
-    jacoco.includeNoLocationClasses = true
+jacoco {
+    toolVersion = "0.8.7"
 }
 
 android {
@@ -49,8 +35,6 @@ android {
     defaultConfig {
         minSdkVersion 24
         targetSdkVersion 33
-        versionCode vcode
-        versionName vname
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
@@ -77,7 +61,6 @@ android {
 
 task sourceJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
-    classifier "sources"
 }
 
 publishing {
