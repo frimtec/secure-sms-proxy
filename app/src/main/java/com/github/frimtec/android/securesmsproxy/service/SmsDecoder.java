@@ -3,12 +3,8 @@ package com.github.frimtec.android.securesmsproxy.service;
 import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
-import android.util.Log;
 
 import com.github.frimtec.android.securesmsproxyapi.Sms;
-import com.google.i18n.phonenumbers.NumberParseException;
-import com.google.i18n.phonenumbers.PhoneNumberUtil;
-import com.google.i18n.phonenumbers.Phonenumber;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;

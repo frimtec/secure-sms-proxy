@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="true" />
 
     <queries>
         <intent>
@@ -13,13 +18,13 @@
     <application
         android:name=".SecureSmsProxyApplication"
         android:allowBackup="true"
-        android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
         android:label="S2MSP"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:localeConfig="@xml/locales_config">
+        android:localeConfig="@xml/locales_config"
+        tools:targetApi="tiramisu">
         <activity
             android:name=".ui.MainActivity"
             android:configChanges="orientation|keyboardHidden"
@@ -79,7 +84,8 @@
 
         <receiver
             android:name=".service.SmsSender"
-            android:exported="true">
+            android:exported="true"
+            tools:ignore="ExportedReceiver">
             <intent-filter>
                 <action android:name="com.github.frimtec.android.securesmsproxy.SEND_SMS" />
             </intent-filter>
@@ -89,7 +95,8 @@
             android:name=".service.IsAllowedPhoneNumberContentProvider"
             android:authorities="com.github.frimtec.android.securesmsproxy.provider"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="true"
+            tools:ignore="ExportedContentProvider" />
     </application>
 
 </manifest>

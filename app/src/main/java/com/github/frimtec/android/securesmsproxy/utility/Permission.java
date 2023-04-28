@@ -19,9 +19,15 @@ import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static com.github.frimtec.android.securesmsproxy.utility.Permission.RequestCodes.PERMISSION_CHANGED_REQUEST_CODE;
 
 public enum Permission {
-  SMS(activity -> allPermissionsGranted(activity, PermissionSets.SMS.getPermissions()), (activity) -> {
-    requestPermissionsWithExplanation(activity, PermissionSets.SMS.getPermissions(), R.string.permission_sms_title, R.string.permission_sms_text);
-  });
+  SMS(
+      activity -> allPermissionsGranted(activity, PermissionSets.SMS.getPermissions()),
+      (activity) -> requestPermissionsWithExplanation(
+          activity,
+          PermissionSets.SMS.getPermissions(),
+          R.string.permission_sms_title,
+          R.string.permission_sms_text
+      )
+  );
 
   private final Function<Context, Boolean> allowed;
   private final Consumer<Activity> request;
@@ -54,6 +60,7 @@ public enum Permission {
   }
 
   public static final class RequestCodes {
+
     public static final int PERMISSION_CHANGED_REQUEST_CODE = 1;
   }
 
