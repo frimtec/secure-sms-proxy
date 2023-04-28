@@ -1,14 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: "de.mannodermaus.android-junit5"
-apply plugin: "com.hiya.jacoco-android"
-
-jacoco {
-    toolVersion = "0.8.4"
-    tasks.withType(Test) {
-        jacoco.includeNoLocationClasses = true
-        jacoco.excludes = ['jdk.internal.*']
-    }
-}
+apply plugin: 'jacoco'
 
 System.setProperty("line.separator", "\n")
 Properties versionProps = new Properties()
@@ -20,14 +12,8 @@ if (versionPropsFile.exists()) {
 int vcode = Integer.parseInt(System.getProperty("version.code", String.valueOf((int) ((System.currentTimeMillis() / 1000 / 60) - 26_797_800))))
 String vname = (versionProps['VERSION_NAME'] == null || versionProps['VERSION_NAME'].startsWith('$')) ? '0.0.0' : versionProps['VERSION_NAME']
 
-jacocoAndroidUnitTestReport {
-    csv.enabled false
-    html.enabled false
-    xml.enabled true
-}
-
-tasks.withType(Test) {
-    jacoco.includeNoLocationClasses = true
+jacoco {
+    toolVersion = "0.8.7"
 }
 
 android {
