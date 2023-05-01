@@ -15,6 +15,8 @@ import android.util.Log;
 
 import com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.Installation.AppCompatibility;
 import com.github.frimtec.android.securesmsproxyapi.utility.Aes;
+import com.github.frimtec.android.securesmsproxyapi.utility.Aes2;
+import com.github.frimtec.android.securesmsproxyapi.utility.AesOperations;
 import com.vdurmont.semver4j.Semver;
 
 import java.util.ArrayList;
@@ -49,8 +51,8 @@ final class SecureSmsProxyFacadeImpl implements SecureSmsProxyFacade {
       S2MSP_PACKAGE_NAME + ".service.SmsSender"
   );
   private static final String DEV_VERSION = "$version";
-  private static final Semver MIN_SUPPORTED_VERSION = new Semver("1.0.0");
-  private static final Semver NOT_YET_SUPPORTED_VERSION = new Semver("3.0.0");
+  private static final Semver MIN_SUPPORTED_VERSION = new Semver("2.0.0");
+  private static final Semver NOT_YET_SUPPORTED_VERSION = new Semver("4.0.0");
 
   private final Context context;
   private final PackageManager packageManager;
@@ -116,22 +118,21 @@ final class SecureSmsProxyFacadeImpl implements SecureSmsProxyFacade {
   @Override
   public void sendSms(Sms sms, String secret) {
     Intent sendSmsIntent = this.actionIntentFactory.apply(ACTION_SEND_SMS);
-    Aes aes = new Aes(secret);
+    AesOperations aes = getAes(secret);
     sendSmsIntent.putExtra(Intent.EXTRA_PACKAGE_NAME, this.context.getApplicationContext().getPackageName());
     sendSmsIntent.putExtra(EXTRA_TEXT, aes.encrypt(sms.toJson()));
     sendSmsIntent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
     sendSmsIntent.setComponent(SECURE_SMS_PROXY_COMPONENT);
-    if (isLegacyAppVersion()) {
-      // use legacy intent service
-      Log.i(TAG, "Legacy app version, use old intent service.");
-      context.startService(sendSmsIntent);
-      return;
-    }
     context.sendBroadcast(sendSmsIntent, null);
   }
 
-  private Boolean isLegacyAppVersion() {
-    return getInstallation().getAppVersion().map(version -> version.startsWith("1")).orElse(false);
+  @NonNull
+  private AesOperations getAes(String secret) {
+    return isAes2Supported() ? new Aes2(secret) : new Aes(secret);
+  }
+
+  private Boolean isAes2Supported() {
+    return getInstallation().getAppVersion().map(version -> new Semver(version).getMajor() >= 3).orElse(true);
   }
 
   @Override
@@ -140,7 +141,7 @@ final class SecureSmsProxyFacadeImpl implements SecureSmsProxyFacade {
       return Collections.emptyList();
     }
     Bundle bundle = smsReceivedIntent.getExtras();
-    Aes aes = new Aes(secret);
+    AesOperations aes = getAes(secret);
     try {
       String encryptedMessages = bundle != null ? bundle.getString(EXTRA_TEXT) : null;
       return encryptedMessages != null ? Sms.fromJsonArray(aes.decrypt(encryptedMessages)) : Collections.emptyList();

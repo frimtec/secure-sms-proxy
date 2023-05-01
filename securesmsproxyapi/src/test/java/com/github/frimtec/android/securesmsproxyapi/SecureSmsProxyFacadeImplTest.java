@@ -12,7 +12,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 
 import com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.Installation.AppCompatibility;
-import com.github.frimtec.android.securesmsproxyapi.utility.Aes;
+import com.github.frimtec.android.securesmsproxyapi.utility.Aes2;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -159,13 +159,13 @@ class SecureSmsProxyFacadeImplTest {
 
   @Test
   void detectCompatibilityNoMoreSupported() {
-    AppCompatibility appCompatibility = SecureSmsProxyFacadeImpl.detectCompatibility("2.0.1", "0.9.9");
+    AppCompatibility appCompatibility = SecureSmsProxyFacadeImpl.detectCompatibility("2.0.1", "1.9.9");
     assertThat(appCompatibility).isEqualTo(NO_MORE_SUPPORTED);
   }
 
   @Test
   void detectCompatibilityNotYetSupported() {
-    AppCompatibility appCompatibility = SecureSmsProxyFacadeImpl.detectCompatibility("2.0.1", "3.0.0");
+    AppCompatibility appCompatibility = SecureSmsProxyFacadeImpl.detectCompatibility("2.0.1", "4.0.0");
     assertThat(appCompatibility).isEqualTo(NOT_YET_SUPPORTED);
   }
 
@@ -351,7 +351,7 @@ class SecureSmsProxyFacadeImplTest {
     verify(actionIntent).putExtra(Intent.EXTRA_PACKAGE_NAME, "application");
     verify(actionIntent).addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
     verify(actionIntent).setComponent(any(ComponentName.class));
-    assertThat(new Aes(SECRET).decrypt(smsTextCaptor.getValue())).isEqualTo(sms.toJson());
+    assertThat(new Aes2(SECRET).decrypt(smsTextCaptor.getValue())).isEqualTo(sms.toJson());
   }
 
   @Test
@@ -362,35 +362,41 @@ class SecureSmsProxyFacadeImplTest {
     SecureSmsProxyFacade facade = new SecureSmsProxyFacadeImpl(context);
     List<Sms> smsList = Arrays.asList(new Sms("number1", "text1"), new Sms("number2", "text2"));
     Bundle bundle = mock(Bundle.class);
-    when(bundle.getString(EXTRA_TEXT)).thenReturn(new Aes(SECRET).encrypt(Sms.toJsonArray(smsList)));
+    when(bundle.getString(EXTRA_TEXT)).thenReturn(new Aes2(SECRET).encrypt(Sms.toJsonArray(smsList)));
     when(receivedIntent.getExtras()).thenReturn(bundle);
     List<Sms> receivedSms = facade.extractReceivedSms(receivedIntent, SECRET);
     assertThat(receivedSms.size()).isEqualTo(0);
   }
 
   @Test
-  void extractReceivedSmsWrongEncrypten() {
+  void extractReceivedSmsWrongEncryption() throws PackageManager.NameNotFoundException {
     Intent receivedIntent = mock(Intent.class);
     when(receivedIntent.getAction()).thenReturn(ACTION_BROADCAST_SMS_RECEIVED);
-    Context context = mock(Context.class);
+    Context context = context(new PackageInfo());
+    Context applicationContext = mock(Context.class);
+    when(context.getApplicationContext()).thenReturn(applicationContext);
+    when(applicationContext.getPackageName()).thenReturn("application");
     SecureSmsProxyFacade facade = new SecureSmsProxyFacadeImpl(context);
     List<Sms> smsList = Arrays.asList(new Sms("number1", "text1"), new Sms("number2", "text2"));
     Bundle bundle = mock(Bundle.class);
-    when(bundle.getString(EXTRA_TEXT)).thenReturn(new Aes(SECRET.substring(1) + "A").encrypt(Sms.toJsonArray(smsList)));
+    when(bundle.getString(EXTRA_TEXT)).thenReturn(new Aes2(SECRET.substring(1) + "A").encrypt(Sms.toJsonArray(smsList)));
     when(receivedIntent.getExtras()).thenReturn(bundle);
     List<Sms> receivedSms = facade.extractReceivedSms(receivedIntent, SECRET);
     assertThat(receivedSms.size()).isEqualTo(0);
   }
 
   @Test
-  void extractReceivedSms() {
+  void extractReceivedSms() throws PackageManager.NameNotFoundException {
     Intent receivedIntent = mock(Intent.class);
     when(receivedIntent.getAction()).thenReturn(ACTION_BROADCAST_SMS_RECEIVED);
-    Context context = mock(Context.class);
+    Context context = context(new PackageInfo());
+    Context applicationContext = mock(Context.class);
+    when(context.getApplicationContext()).thenReturn(applicationContext);
+    when(applicationContext.getPackageName()).thenReturn("application");
     SecureSmsProxyFacade facade = new SecureSmsProxyFacadeImpl(context);
     List<Sms> smsList = Arrays.asList(new Sms("number1", "text1"), new Sms("number2", "text2"));
     Bundle bundle = mock(Bundle.class);
-    when(bundle.getString(EXTRA_TEXT)).thenReturn(new Aes(SECRET).encrypt(Sms.toJsonArray(smsList)));
+    when(bundle.getString(EXTRA_TEXT)).thenReturn(new Aes2(SECRET).encrypt(Sms.toJsonArray(smsList)));
     when(receivedIntent.getExtras()).thenReturn(bundle);
     List<Sms> receivedSms = facade.extractReceivedSms(receivedIntent, SECRET);
     assertThat(Sms.toJsonArray(receivedSms)).isEqualTo(Sms.toJsonArray(smsList));

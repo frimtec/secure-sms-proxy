@@ -21,7 +21,7 @@ import com.github.frimtec.android.securesmsproxy.domain.Application;
 import com.github.frimtec.android.securesmsproxy.domain.ApplicationRule;
 import com.github.frimtec.android.securesmsproxy.state.DbFactory;
 import com.github.frimtec.android.securesmsproxy.state.DbHelper;
-import com.github.frimtec.android.securesmsproxyapi.utility.RandomString;
+import com.github.frimtec.android.securesmsproxyapi.utility.Random;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -80,7 +80,7 @@ public class ApplicationRuleDao {
             db.insert(TABLE_RULE, null, ruleValues);
           });
     } else {
-      secret = RandomString.nextString(SECRET_LENGTH);
+      secret = Random.nextString(SECRET_LENGTH);
       ContentValues values = new ContentValues();
       values.put(TABLE_APPLICATION_COLUMN_NAME, applicationName);
       values.put(TABLE_APPLICATION_COLUMN_LISTENER, listener);

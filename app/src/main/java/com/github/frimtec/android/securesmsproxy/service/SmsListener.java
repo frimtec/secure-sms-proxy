@@ -9,7 +9,8 @@ import android.util.Log;
 import com.github.frimtec.android.securesmsproxy.domain.Application;
 import com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade;
 import com.github.frimtec.android.securesmsproxyapi.Sms;
-import com.github.frimtec.android.securesmsproxyapi.utility.Aes;
+import com.github.frimtec.android.securesmsproxyapi.utility.Aes2;
+import com.github.frimtec.android.securesmsproxyapi.utility.AesOperations;
 
 import java.util.List;
 import java.util.Map;
@@ -83,7 +84,7 @@ public class SmsListener extends BroadcastReceiver {
 
   private static void broadcastReceivedSms(Context context, Application application, List<Sms> smsList, BiFunction<Application, String, Intent> smsBroadcastIntentFactory) {
     Log.i(TAG, "broadcastReceivedSms,  count: " + smsList.size() + "; to application: " + application.getName());
-    Aes aes = new Aes(application.getSecret());
+    AesOperations aes = new Aes2(application.getSecret());
     String serializedEncryptedSmsList = aes.encrypt(Sms.toJsonArray(smsList));
     context.sendOrderedBroadcast(smsBroadcastIntentFactory.apply(application, serializedEncryptedSmsList), null);
   }

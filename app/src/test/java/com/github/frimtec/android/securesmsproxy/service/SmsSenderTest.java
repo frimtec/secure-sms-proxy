@@ -22,6 +22,7 @@ import com.github.frimtec.android.securesmsproxy.domain.ApplicationRule;
 import com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade;
 import com.github.frimtec.android.securesmsproxyapi.Sms;
 import com.github.frimtec.android.securesmsproxyapi.utility.Aes;
+import com.github.frimtec.android.securesmsproxyapi.utility.Aes2;
 
 import org.junit.jupiter.api.Test;
 
@@ -149,7 +150,7 @@ class SmsSenderTest {
     when(intent.getAction()).thenReturn(SecureSmsProxyFacade.ACTION_SEND_SMS);
     Bundle bundle = mock(Bundle.class);
     Sms sms = new Sms("number", "text");
-    when(bundle.getString(EXTRA_TEXT)).thenReturn(new Aes(SECRET).encrypt(sms.toJson()));
+    when(bundle.getString(EXTRA_TEXT)).thenReturn(new Aes2(SECRET).encrypt(sms.toJson()));
     when(bundle.getString(Intent.EXTRA_PACKAGE_NAME)).thenReturn("application");
     when(intent.getExtras()).thenReturn(bundle);
     when(dao.byApplicationName("application")).thenReturn(new ApplicationRule(new Application(1L, "application", "listener", SECRET), Collections.singleton("number")));

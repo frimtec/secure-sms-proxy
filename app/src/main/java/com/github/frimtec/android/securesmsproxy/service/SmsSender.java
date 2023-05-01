@@ -13,7 +13,8 @@ import android.util.Log;
 import com.github.frimtec.android.securesmsproxy.domain.ApplicationRule;
 import com.github.frimtec.android.securesmsproxy.utility.Permission;
 import com.github.frimtec.android.securesmsproxyapi.Sms;
-import com.github.frimtec.android.securesmsproxyapi.utility.Aes;
+import com.github.frimtec.android.securesmsproxyapi.utility.Aes2;
+import com.github.frimtec.android.securesmsproxyapi.utility.AesOperations;
 
 import java.util.Collections;
 import java.util.function.Function;
@@ -68,7 +69,7 @@ public class SmsSender extends BroadcastReceiver {
           Log.w(TAG, String.format("SMS sending blocked because of unregistered sender application: %s.", applicationName));
           return;
         }
-        Aes aes = new Aes(applicationRule.getApplication().getSecret());
+        AesOperations aes = new Aes2(applicationRule.getApplication().getSecret());
         try {
           Sms sms = Sms.fromJson(aes.decrypt(text));
           if (PHONE_NUMBER_LOOPBACK.equals(sms.getNumber())) {

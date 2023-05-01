@@ -9,18 +9,24 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-public final class Aes implements AesOperations {
+/**
+ * New and stronger encryption based on AES/GCM.
+ * @since 3.0.0
+ */
+public final class Aes2 implements AesOperations {
 
+  public static final int GCM_TAG_LENGTH = 16;
+  public static final int GCM_IV_LENGTH = 12;
   public static final String SEPARATOR = ";";
-  private static final String ALGORITHM_AES = "AES/CBC/PKCS5Padding";
+  private static final String ALGORITHM_AES = "AES/GCM/NoPadding";
   private static final String HEX = "0123456789ABCDEF";
 
   private final SecretKeySpec secretKey;
 
-  public Aes(String secret24Bytes) {
+  public Aes2(String secret24Bytes) {
     try {
       byte[] bytes = secret24Bytes.getBytes(StandardCharsets.UTF_8);
       this.secretKey = new SecretKeySpec(bytes, "AES");
@@ -30,9 +36,12 @@ public final class Aes implements AesOperations {
   }
 
   public String encrypt(String cleartext) {
-    byte[] initVector = Random.nextString(16).getBytes(StandardCharsets.UTF_8);
-    IvParameterSpec spec = new IvParameterSpec(initVector);
-    return toHex(encrypt(spec, cleartext.getBytes())) + SEPARATOR + toHex(initVector);
+    byte[] initVector = Random.nextBytes(GCM_IV_LENGTH);
+    return toHex(
+        encrypt(
+            new GCMParameterSpec(GCM_TAG_LENGTH * Byte.SIZE, initVector),
+            cleartext.getBytes())
+    ) + SEPARATOR + toHex(initVector);
   }
 
   public String decrypt(String encrypted) {
@@ -40,25 +49,28 @@ public final class Aes implements AesOperations {
     if (split.length != 2) {
       throw new RuntimeException("Encrypted value in wrong format");
     }
-    return new String(decrypt(new IvParameterSpec(toByte(split[1])), toByte(split[0])));
+    GCMParameterSpec spec = new GCMParameterSpec(GCM_TAG_LENGTH * Byte.SIZE, toByte(split[1]));
+    return new String(decrypt(spec, toByte(split[0])));
   }
 
-  private byte[] encrypt(IvParameterSpec spec, byte[] clear) {
+  private byte[] encrypt(GCMParameterSpec spec, byte[] clear) {
     try {
       Cipher cipher = Cipher.getInstance(ALGORITHM_AES);
       cipher.init(Cipher.ENCRYPT_MODE, secretKey, spec);
       return cipher.doFinal(clear);
-    } catch (BadPaddingException | IllegalBlockSizeException | NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException e) {
+    } catch (BadPaddingException | IllegalBlockSizeException | NoSuchAlgorithmException |
+             NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException e) {
       throw new RuntimeException("Cannot create encrypt", e);
     }
   }
 
-  private byte[] decrypt(IvParameterSpec spec, byte[] encrypted) {
+  private byte[] decrypt(GCMParameterSpec spec, byte[] encrypted) {
     try {
       Cipher cipher = Cipher.getInstance(ALGORITHM_AES);
       cipher.init(Cipher.DECRYPT_MODE, secretKey, spec);
       return cipher.doFinal(encrypted);
-    } catch (BadPaddingException | IllegalBlockSizeException | NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException e) {
+    } catch (BadPaddingException | IllegalBlockSizeException | NoSuchAlgorithmException |
+             NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException e) {
       throw new RuntimeException("Cannot decrypt", e);
     }
   }
