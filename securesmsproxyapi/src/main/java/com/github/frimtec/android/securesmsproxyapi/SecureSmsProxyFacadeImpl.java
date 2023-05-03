@@ -13,7 +13,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.Installation.AppCompatibility;
 import com.github.frimtec.android.securesmsproxyapi.utility.Aes;
+import com.vdurmont.semver4j.Semver;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,6 +38,8 @@ import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.
 import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.RegistrationResult.ReturnCode.REJECTED;
 import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.RegistrationResult.ReturnCode.UNKNOWN;
 
+import androidx.annotation.NonNull;
+
 final class SecureSmsProxyFacadeImpl implements SecureSmsProxyFacade {
 
   private static final String TAG = "SecureSmsProxyFacadeImpl";
@@ -44,6 +48,9 @@ final class SecureSmsProxyFacadeImpl implements SecureSmsProxyFacade {
       S2MSP_PACKAGE_NAME,
       S2MSP_PACKAGE_NAME + ".service.SmsSender"
   );
+  private static final String DEV_VERSION = "$version";
+  private static final Semver MIN_SUPPORTED_VERSION = new Semver("1.0.0");
+  private static final Semver NOT_YET_SUPPORTED_VERSION = new Semver("3.0.0");
 
   private final Context context;
   private final PackageManager packageManager;
@@ -153,7 +160,26 @@ final class SecureSmsProxyFacadeImpl implements SecureSmsProxyFacade {
       appVersion = null;
     }
     String apiVersion = BuildConfig.VERSION_NAME;
-    return new Installation(apiVersion, appVersion, Uri.parse("https://github.com/frimtec/secure-sms-proxy/releases/download/" + apiVersion + "/app-release.apk"));
+    return new Installation(
+        apiVersion,
+        appVersion,
+        appVersion == null ? AppCompatibility.NOT_INSTALLED : detectCompatibility(apiVersion, appVersion),
+        Uri.parse("https://github.com/frimtec/secure-sms-proxy/releases/download/" + apiVersion + "/app-release.apk")
+    );
+  }
+
+  static AppCompatibility detectCompatibility(@NonNull String apiVersion, @NonNull String appVersion) {
+    if (apiVersion.equals(DEV_VERSION) || appVersion.equals(DEV_VERSION)) {
+      return AppCompatibility.SUPPORTED;
+    }
+    Semver appSemVersion = new Semver(appVersion);
+    if (appSemVersion.isLowerThanOrEqualTo(MIN_SUPPORTED_VERSION)) {
+      return AppCompatibility.NO_MORE_SUPPORTED;
+    } else if (appSemVersion.isGreaterThanOrEqualTo(NOT_YET_SUPPORTED_VERSION)) {
+      return AppCompatibility.NOT_YET_SUPPORTED;
+    } else {
+      return new Semver(apiVersion).isGreaterThan(appSemVersion) ? AppCompatibility.UPDATE_RECOMMENDED : AppCompatibility.SUPPORTED;
+    }
   }
 
   @Override

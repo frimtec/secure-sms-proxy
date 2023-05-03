@@ -172,13 +172,40 @@ public interface SecureSmsProxyFacade {
   @SuppressWarnings("unused")
   class Installation {
 
+    enum AppCompatibility {
+      NOT_YET_SUPPORTED(false),
+      UPDATE_RECOMMENDED(true),
+      SUPPORTED(true),
+      NO_MORE_SUPPORTED(false),
+      NOT_INSTALLED(false);
+
+      private final boolean supported;
+
+      AppCompatibility(boolean supported) {
+        this.supported = supported;
+      }
+
+      public boolean isSupported() {
+        return supported;
+      }
+    }
+
     private final String apiVersion;
     private final String appVersion;
+
+    private final AppCompatibility appCompatibility;
+
     private final Uri downloadLink;
 
-    public Installation(String apiVersion, String appVersion, Uri downloadLink) {
+    public Installation(
+        String apiVersion,
+        String appVersion,
+        AppCompatibility appCompatibility,
+        Uri downloadLink
+    ) {
       this.apiVersion = apiVersion;
       this.appVersion = appVersion;
+      this.appCompatibility = appCompatibility;
       this.downloadLink = downloadLink;
     }
 
@@ -201,7 +228,16 @@ public interface SecureSmsProxyFacade {
     }
 
     /**
-     * Returns download link of the S2MSP application that fits best your to the current API version.
+     * Returns the compatibility between the API and the app.
+     * @return compatibility
+     * @since 2.8.0
+     */
+    public AppCompatibility getAppCompatibility() {
+      return appCompatibility;
+    }
+
+    /**
+     * Returns download link of the S2MSP application that fits best to the current API version.
      *
      * @return download link for the S2MSP app
      */
