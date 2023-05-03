@@ -195,6 +195,7 @@ The current Android target SDK is 33 (Android 13-Tiramisu) and the minimal SDK i
 
 ## Used libraries
 * [libphonenumber][libphonenumber]
+* [semver4j][semver4j]
 
 ## Feedback
 Feedback, bug reports or feature requests are very welcome.
@@ -227,3 +228,4 @@ You can send an email to [frimtec@gmx.ch](mailto:frimtec@gmx.ch) or [open an iss
 [use-sms-call-log-permission-groups]: https://support.google.com/googleplay/android-developer/answer/9047303?hl=en
 [lokalise]: https://lokalise.com/
 [libphonenumber]: https://github.com/google/libphonenumber
+[semver4j]: https://github.com/vdurmont/semver4j

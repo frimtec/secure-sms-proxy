@@ -2,9 +2,9 @@ name: Build
 
 on:
   push:
-    branches: [ master ]
+    branches: [ release/passist ]
   pull_request:
-    branches: [ master ]
+    branches: [ release/passist ]
 
 jobs:
   build:
