@@ -1,0 +1,2 @@
+- Ask to disable battery optimization on startup (to work reliable on more devices)
+- Bump com.googlecode.libphonenumber:libphonenumber from 8.13.10 to 8.13.11
