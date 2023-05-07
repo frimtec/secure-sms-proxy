@@ -33,4 +33,6 @@ S2MSP non utilizza altre autorizzazioni per garantire la sicurezza e l\'integrit
   <string name="image_description_s2msp_app_logo">Logo dell\'app S2MSP</string>
   <string name="pref_title_app_language">Lingua delle app</string>
   <string name="system_language">Predefinita di sistema</string>
+  <string name="notification_battery_optimization_title">L\'ottimizzazione della batteria è attiva!</string>
+  <string name="notification_battery_optimization_text">Per funzionare in modo affidabile, S2MSP deve funzionare con l\'ottimizzazione della batteria disattivata.</string>
 </resources>

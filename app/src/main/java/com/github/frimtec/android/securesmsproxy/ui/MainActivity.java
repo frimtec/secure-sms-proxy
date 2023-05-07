@@ -3,11 +3,15 @@ package com.github.frimtec.android.securesmsproxy.ui;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static com.github.frimtec.android.securesmsproxy.utility.Permission.SMS;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.LocaleManager;
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.LocaleList;
+import android.os.PowerManager;
 import android.provider.Settings;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -47,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
 
     if (SMS.isForbidden(this)) {
       SMS.request(this);
+    } else {
+      requestDisabledBatteryOptimization();
     }
 
     this.dao = new ApplicationRuleDao();
@@ -118,6 +124,24 @@ public class MainActivity extends AppCompatActivity {
     if (Permission.RequestCodes.PERMISSION_CHANGED_REQUEST_CODE == requestCode) {
       String text = grantResults[0] == PERMISSION_GRANTED ? getString(R.string.permission_accepted) : getString(R.string.permission_rejected);
       Toast.makeText(this, text, Toast.LENGTH_LONG).show();
+      requestDisabledBatteryOptimization();
+    }
+  }
+
+  private void requestDisabledBatteryOptimization() {
+    PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+    if (!powerManager.isIgnoringBatteryOptimizations(getPackageName())) {
+      AlertDialogHelper.requireFeature(
+          this,
+          R.string.notification_battery_optimization_title,
+          R.string.notification_battery_optimization_text,
+          (dialogInterface, integer) -> {
+            @SuppressLint("BatteryLife")
+            Intent batteryIntent = new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+            batteryIntent.setData(Uri.parse("package:" + getPackageName()));
+            startActivity(batteryIntent);
+          }
+      );
     }
   }
 
