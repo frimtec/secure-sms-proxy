@@ -34,5 +34,5 @@ S2MSP verwendet keine weiteren Rechte, um die Sicherheit und Integrit채t zu gew�
   <string name="pref_title_app_language">App-Sprache</string>
   <string name="system_language">Systemstandard</string>
   <string name="notification_battery_optimization_title">Die Akku-Optimierung ist aktiv!</string>
-  <string name="notification_battery_optimization_text">Damit S2MSP auf allen Ger채ten zuverl채ssig arbeitet kann, sollte die Akku-Optimierung deaktiviert werden.</string>
+  <string name="notification_battery_optimization_text">Um auf allen Ger채ten zuverl채ssig zu funktionieren, sollte S2MSP mit ausgeschalteter Batterieoptimierung laufen.</string>
 </resources>
