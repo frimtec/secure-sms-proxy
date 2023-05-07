@@ -172,7 +172,7 @@ public interface SecureSmsProxyFacade {
   @SuppressWarnings("unused")
   class Installation {
 
-    enum AppCompatibility {
+    public enum AppCompatibility {
       NOT_YET_SUPPORTED(false),
       UPDATE_RECOMMENDED(true),
       SUPPORTED(true),
