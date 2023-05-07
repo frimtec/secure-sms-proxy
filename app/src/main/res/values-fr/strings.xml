@@ -34,5 +34,5 @@ S2MSP n\'utilise aucune autre autorisation pour assurer la sécurité et l\'int�
   <string name="pref_title_app_language">Langue de l\'appli</string>
   <string name="system_language">Défaut du système</string>
   <string name="notification_battery_optimization_title">L\'optimisation de la batterie est activée!</string>
-  <string name="notification_battery_optimization_text">Pour fonctionner de manière fiable, S2MSP doit fonctionner avec l\'optimisation de la batterie désactivée.</string>
+  <string name="notification_battery_optimization_text">Pour fonctionner de manière fiable sur tous les appareils, S2MSP doit fonctionner avec l\'optimisation de la batterie désactivée.</string>
 </resources>
