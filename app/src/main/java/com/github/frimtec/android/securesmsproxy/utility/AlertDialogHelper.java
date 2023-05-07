@@ -12,8 +12,16 @@ import java.util.function.BiConsumer;
 public class AlertDialogHelper {
 
   public static void requirePermissions(Context context, int titleResourceId, int textResourceId, BiConsumer<DialogInterface, Integer> action) {
+    requireFeature(context, context.getString(R.string.permission_required) + " " + context.getString(titleResourceId), textResourceId, action);
+  }
+
+  public static void requireFeature(Context context, int titleResourceId, int textResourceId, BiConsumer<DialogInterface, Integer> action) {
+    requireFeature(context, context.getString(titleResourceId), textResourceId, action);
+  }
+
+  private static void requireFeature(Context context, String title, int textResourceId, BiConsumer<DialogInterface, Integer> action) {
     AlertDialog alertDialog = new AlertDialog.Builder(context)
-        .setTitle(context.getString(R.string.permission_required) + " " + context.getString(titleResourceId))
+        .setTitle(title)
         .setMessage(textResourceId)
         .setCancelable(true)
         .setPositiveButton("OK", action::accept)

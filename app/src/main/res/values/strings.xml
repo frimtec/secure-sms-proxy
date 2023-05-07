@@ -39,4 +39,6 @@ S2MSP uses no other permissions to ensure the security and integrity.</string>
   <string name="french" translatable="false">Français</string>
   <string name="italian" translatable="false">Italiano</string>
   <string name="system_language">System default</string>
+  <string name="notification_battery_optimization_title">Battery optimization is on!</string>
+  <string name="notification_battery_optimization_text">To work reliable on all devices, S2MSP should run with battery optimization turned off.</string>
 </resources>
