@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 
+import com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.Installation.AppCompatibility;
 import com.github.frimtec.android.securesmsproxyapi.utility.Aes;
 
 import org.junit.jupiter.api.Test;
@@ -39,6 +40,10 @@ import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.
 import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.EXTRA_LISTENER_CLASS;
 import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.EXTRA_PHONE_NUMBERS;
 import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.EXTRA_SECRET;
+import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.Installation.AppCompatibility.NOT_YET_SUPPORTED;
+import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.Installation.AppCompatibility.NO_MORE_SUPPORTED;
+import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.Installation.AppCompatibility.SUPPORTED;
+import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.Installation.AppCompatibility.UPDATE_RECOMMENDED;
 import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.REGISTRATION_RESULT_CODE_MISSING_SMS_PERMISSION;
 import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.REGISTRATION_RESULT_CODE_NO_EXTRAS;
 import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.REGISTRATION_RESULT_CODE_NO_REFERRER;
@@ -117,6 +122,7 @@ class SecureSmsProxyFacadeImplTest {
     SecureSmsProxyFacade.Installation installation = facade.getInstallation();
     assertThat(installation.getApiVersion()).isEqualTo(BuildConfig.VERSION_NAME);
     assertThat(installation.getAppVersion()).isEqualTo(Optional.of("1.0.1"));
+    assertThat(installation.getAppCompatibility()).isEqualTo(SUPPORTED);
   }
 
   @Test
@@ -125,6 +131,60 @@ class SecureSmsProxyFacadeImplTest {
     SecureSmsProxyFacade.Installation installation = facade.getInstallation();
     assertThat(installation.getApiVersion()).isEqualTo(BuildConfig.VERSION_NAME);
     assertThat(installation.getAppVersion()).isEqualTo(Optional.empty());
+    assertThat(installation.getAppCompatibility()).isEqualTo(AppCompatibility.NOT_INSTALLED);
+  }
+
+  @Test
+  void detectCompatibilitySameVersionReturnsSupported() {
+    AppCompatibility appCompatibility = SecureSmsProxyFacadeImpl.detectCompatibility("2.0.1", "2.0.1");
+    assertThat(appCompatibility).isEqualTo(SUPPORTED);
+  }
+
+  @Test
+  void detectCompatibilityDevVersionReturnsSupported1() {
+    AppCompatibility appCompatibility = SecureSmsProxyFacadeImpl.detectCompatibility("$version", "$version");
+    assertThat(appCompatibility).isEqualTo(SUPPORTED);
+  }
+  @Test
+  void detectCompatibilityDevVersionReturnsSupported2() {
+    AppCompatibility appCompatibility = SecureSmsProxyFacadeImpl.detectCompatibility("$version", "1.0.1");
+    assertThat(appCompatibility).isEqualTo(SUPPORTED);
+  }
+
+  @Test
+  void detectCompatibilityDevVersionReturnsSupported3() {
+    AppCompatibility appCompatibility = SecureSmsProxyFacadeImpl.detectCompatibility("1.0.1", "$version");
+    assertThat(appCompatibility).isEqualTo(SUPPORTED);
+  }
+
+  @Test
+  void detectCompatibilityNoMoreSupported() {
+    AppCompatibility appCompatibility = SecureSmsProxyFacadeImpl.detectCompatibility("2.0.1", "0.9.9");
+    assertThat(appCompatibility).isEqualTo(NO_MORE_SUPPORTED);
+  }
+
+  @Test
+  void detectCompatibilityNotYetSupported() {
+    AppCompatibility appCompatibility = SecureSmsProxyFacadeImpl.detectCompatibility("2.0.1", "3.0.0");
+    assertThat(appCompatibility).isEqualTo(NOT_YET_SUPPORTED);
+  }
+
+  @Test
+  void detectCompatibilityUpdateRecommended() {
+    AppCompatibility appCompatibility = SecureSmsProxyFacadeImpl.detectCompatibility("2.0.1", "2.0.0");
+    assertThat(appCompatibility).isEqualTo(UPDATE_RECOMMENDED);
+  }
+
+  @Test
+  void detectCompatibilitySupportedForNewerVersion1() {
+    AppCompatibility appCompatibility = SecureSmsProxyFacadeImpl.detectCompatibility("2.0.1", "2.0.2");
+    assertThat(appCompatibility).isEqualTo(SUPPORTED);
+  }
+
+  @Test
+  void detectCompatibilitySupportedForNewerVersion2() {
+    AppCompatibility appCompatibility = SecureSmsProxyFacadeImpl.detectCompatibility("2.0.11", "2.0.2");
+    assertThat(appCompatibility).isEqualTo(UPDATE_RECOMMENDED);
   }
 
   @Test
