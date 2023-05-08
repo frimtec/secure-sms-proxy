@@ -173,7 +173,7 @@ final class SecureSmsProxyFacadeImpl implements SecureSmsProxyFacade {
       return AppCompatibility.SUPPORTED;
     }
     Semver appSemVersion = new Semver(appVersion);
-    if (appSemVersion.isLowerThanOrEqualTo(MIN_SUPPORTED_VERSION)) {
+    if (appSemVersion.isLowerThan(MIN_SUPPORTED_VERSION)) {
       return AppCompatibility.NO_MORE_SUPPORTED;
     } else if (appSemVersion.isGreaterThanOrEqualTo(NOT_YET_SUPPORTED_VERSION)) {
       return AppCompatibility.NOT_YET_SUPPORTED;
