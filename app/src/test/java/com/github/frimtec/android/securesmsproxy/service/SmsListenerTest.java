@@ -15,7 +15,7 @@ import android.content.Intent;
 
 import com.github.frimtec.android.securesmsproxy.domain.Application;
 import com.github.frimtec.android.securesmsproxyapi.Sms;
-import com.github.frimtec.android.securesmsproxyapi.utility.Aes;
+import com.github.frimtec.android.securesmsproxyapi.utility.Aes2;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -87,7 +87,7 @@ class SmsListenerTest {
 
     String encryptedSms = encryptedSmsCaptor.getValue();
     verify(smsBroadcastIntentFactory).apply(application, encryptedSms);
-    assertThat(new Aes(SECRET).decrypt(encryptedSms)).isEqualTo(Sms.toJsonArray(smsList));
+    assertThat(new Aes2(SECRET).decrypt(encryptedSms)).isEqualTo(Sms.toJsonArray(smsList));
   }
 
   @Test
@@ -128,8 +128,8 @@ class SmsListenerTest {
     List<String> encryptedSmsList = encryptedSmsCaptor.getAllValues();
     verify(smsBroadcastIntentFactory).apply(application1, encryptedSmsList.get(0));
     verify(smsBroadcastIntentFactory).apply(application2, encryptedSmsList.get(1));
-    assertThat(new Aes(SECRET).decrypt(encryptedSmsList.get(0))).isEqualTo(Sms.toJsonArray(smsList));
-    assertThat(new Aes(SECRET.replaceAll("1", "A")).decrypt(encryptedSmsList.get(1))).isEqualTo(Sms.toJsonArray(smsList));
+    assertThat(new Aes2(SECRET).decrypt(encryptedSmsList.get(0))).isEqualTo(Sms.toJsonArray(smsList));
+    assertThat(new Aes2(SECRET.replaceAll("1", "A")).decrypt(encryptedSmsList.get(1))).isEqualTo(Sms.toJsonArray(smsList));
   }
 
   @Test
@@ -161,8 +161,8 @@ class SmsListenerTest {
     List<String> encryptedSmsList = encryptedSmsCaptor.getAllValues();
     verify(smsBroadcastIntentFactory).apply(application1, encryptedSmsList.get(0));
     verify(smsBroadcastIntentFactory).apply(application2, encryptedSmsList.get(1));
-    assertThat(new Aes(SECRET).decrypt(encryptedSmsList.get(0))).isEqualTo(Sms.toJsonArray(Arrays.asList(sms1, sms3)));
-    assertThat(new Aes(SECRET.replaceAll("1", "A")).decrypt(encryptedSmsList.get(1))).isEqualTo(Sms.toJsonArray(Collections.singletonList(sms2)));
+    assertThat(new Aes2(SECRET).decrypt(encryptedSmsList.get(0))).isEqualTo(Sms.toJsonArray(Arrays.asList(sms1, sms3)));
+    assertThat(new Aes2(SECRET.replaceAll("1", "A")).decrypt(encryptedSmsList.get(1))).isEqualTo(Sms.toJsonArray(Collections.singletonList(sms2)));
   }
 
   private Intent createIntent() {

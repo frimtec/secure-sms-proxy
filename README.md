@@ -64,6 +64,7 @@ You can add the following dependency to your application project:
 ```
 dependencies {
     implementation 'com.github.frimtec:secure-sms-proxy-api:2.7.2'
+    implementation 'com.vdurmont:semver4j:3.1.0'
 }
 ```
 
