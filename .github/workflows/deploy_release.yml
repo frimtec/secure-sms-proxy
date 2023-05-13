@@ -141,7 +141,7 @@ jobs:
 
       - name: Update README.md
         run: |
-          sed -i "s/'com.github.frimtec:secure-sms-proxy-api:.*'/'com.github.frimtec:secure-sms-proxy-api:${{ steps.get_version.outputs.VERSION }}'/g" README.md
+          sed -i "s/'com.github.frimtec:secure-sms-proxy-api:.*'/'com.github.frimtec:secure-sms-proxy-api:${{ steps.get_version.outputs.VERSION }}@aar'/g" README.md
 
       - name: Get release
         id: get_release
