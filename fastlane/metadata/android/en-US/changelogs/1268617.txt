@@ -1,0 +1,4 @@
+- Use stronger encryption cipher
+- Add API for compatibility check between API version and APP version
+- Bump com.android.tools.build:gradle from 8.0.0 to 8.0.1
+- Bump com.google.android.material:material from 1.8.0 to 1.9.0
