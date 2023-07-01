@@ -1,0 +1,3 @@
+- Bump com.googlecode.libphonenumber:libphonenumber from 8.13.11 to 8.13.15
+- Bump org.json:json from 20230227 to 20230618
+- Bump com.android.tools.build:gradle from 8.0.1 to 8.0.2
