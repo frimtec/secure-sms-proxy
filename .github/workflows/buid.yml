@@ -25,6 +25,29 @@ jobs:
 
       - uses: codecov/codecov-action@v3.1.4
 
+  # Run Qodana inspections and provide report
+  inspectCode:
+    name: Inspect code
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      checks: write
+      pull-requests: write
+    steps:
+
+      # Check out current repository
+      - name: Fetch Sources
+        uses: actions/checkout@v3
+
+      # Run Qodana inspections
+      - name: Qodana - Code Inspection
+        uses: JetBrains/qodana-action@v2023.1.5
+        with:
+          cache-default-branch-only: true
+        env:
+          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
+
   apk:
     name: Generate APK
     runs-on: ubuntu-22.04
@@ -45,3 +68,4 @@ jobs:
         with:
           name: secure-sms-proxy
           path: ./app/build/outputs/apk/debug/app-debug.apk
+
