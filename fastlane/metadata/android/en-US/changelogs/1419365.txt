@@ -1,0 +1,1 @@
+- Bump com.googlecode.libphonenumber:libphonenumber from 8.13.15 to 8.13.19
