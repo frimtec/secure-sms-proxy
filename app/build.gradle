@@ -17,7 +17,7 @@ jacoco {
 }
 
 android {
-    compileSdkVersion 33
+    compileSdk 33
     defaultConfig {
         applicationId "com.github.frimtec.android.securesmsproxy"
         minSdkVersion 24
