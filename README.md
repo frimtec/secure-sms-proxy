@@ -191,8 +191,8 @@ The use of S2MSP is at your own risk. The author assumes no liability for malfun
 Any warranty claims are excluded.
 
 ## Development
-S2MSP is developed with [Android-Studio][android-studio] with Java 11.
-The current Android target SDK is 33 (Android 13-Tiramisu) and the minimal SDK is 24 (Android 7.0-Nougat).
+S2MSP is developed with [Android-Studio][android-studio] with Java 17.
+The current Android target SDK is 34 (Android 14-UpsideDownCake) and the minimal SDK is 24 (Android 7.0-Nougat).
 
 ## Used libraries
 * [libphonenumber][libphonenumber]
