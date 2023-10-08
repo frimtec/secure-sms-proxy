@@ -17,7 +17,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static com.github.frimtec.android.securesmsproxy.service.ApplicationRuleDao.ALL_COLUMNS;
 import static com.github.frimtec.android.securesmsproxy.service.ApplicationRuleDao.SECRET_LENGTH;
@@ -146,7 +145,7 @@ class ApplicationRuleDaoTest {
 
     ApplicationRule applicationRules = dao.byApplicationName("app_1");
     assertThat(applicationRules.toString()).isEqualTo(
-        "ApplicationRule{application=Application{id=1, name='app_1', listener='listener_1', secret='secret_1'}, allowedPhoneNumbers=[123, 456]}");
+        "ApplicationRule[application=Application[id=1, name=app_1, listener=listener_1, secret=secret_1], allowedPhoneNumbers=[123, 456]]");
   }
 
   @Test
@@ -195,8 +194,8 @@ class ApplicationRuleDaoTest {
 
     List<ApplicationRule> applicationRules = dao.all();
     assertThat(applicationRules.toString()).isEqualTo(
-        "[ApplicationRule{application=Application{id=1, name='app_1', listener='listener_1', secret='secret_1'}, allowedPhoneNumbers=[123, 456]}, " +
-            "ApplicationRule{application=Application{id=2, name='app_2', listener='listener_2', secret='secret_2'}, allowedPhoneNumbers=[123]}]");
+        "[ApplicationRule[application=Application[id=1, name=app_1, listener=listener_1, secret=secret_1], allowedPhoneNumbers=[123, 456]], " +
+            "ApplicationRule[application=Application[id=2, name=app_2, listener=listener_2, secret=secret_2], allowedPhoneNumbers=[123]]]");
   }
 
   @Test
@@ -246,8 +245,8 @@ class ApplicationRuleDaoTest {
 
     Map<String, Set<Application>> applicationsByNumber = dao.byPhoneNumbers(new LinkedHashSet<>(Arrays.asList("123", "456")));
     assertThat(applicationsByNumber.toString()).isEqualTo(
-        "{123=[Application{id=1, name='app_1', listener='listener_1', secret='secret_1'}, Application{id=2, name='app_2', listener='listener_2', secret='secret_2'}], " +
-            "456=[Application{id=1, name='app_1', listener='listener_1', secret='secret_1'}]}");
+        "{123=[Application[id=1, name=app_1, listener=listener_1, secret=secret_1], Application[id=2, name=app_2, listener=listener_2, secret=secret_2]], " +
+            "456=[Application[id=1, name=app_1, listener=listener_1, secret=secret_1]]}");
   }
 
   private Cursor createCursor(List<List<Object>> expectedApplicationRuleValues) {
@@ -259,19 +258,19 @@ class ApplicationRuleDaoTest {
       values[values.length - 1] = false;
       when(cursor.moveToNext()).thenReturn(expectedApplicationRuleValues.size() > 1, values);
 
-      List<Long> ids = expectedApplicationRuleValues.stream().map(row -> (Long) row.get(0)).collect(Collectors.toList());
+      List<Long> ids = expectedApplicationRuleValues.stream().map(row -> (Long) row.get(0)).toList();
       when(cursor.getLong(0)).thenReturn(ids.get(0), ids.subList(1, ids.size()).toArray(new Long[0]));
 
-      List<String> names = expectedApplicationRuleValues.stream().map(row -> (String) row.get(1)).collect(Collectors.toList());
+      List<String> names = expectedApplicationRuleValues.stream().map(row -> (String) row.get(1)).toList();
       when(cursor.getString(1)).thenReturn(names.get(0), names.subList(1, names.size()).toArray(new String[0]));
 
-      List<String> listeners = expectedApplicationRuleValues.stream().map(row -> (String) row.get(2)).collect(Collectors.toList());
+      List<String> listeners = expectedApplicationRuleValues.stream().map(row -> (String) row.get(2)).toList();
       when(cursor.getString(2)).thenReturn(listeners.get(0), listeners.subList(1, listeners.size()).toArray(new String[0]));
 
-      List<String> secrets = expectedApplicationRuleValues.stream().map(row -> (String) row.get(3)).collect(Collectors.toList());
+      List<String> secrets = expectedApplicationRuleValues.stream().map(row -> (String) row.get(3)).toList();
       when(cursor.getString(3)).thenReturn(secrets.get(0), secrets.subList(1, secrets.size()).toArray(new String[0]));
 
-      List<String> numbers = expectedApplicationRuleValues.stream().map(row -> (String) row.get(4)).collect(Collectors.toList());
+      List<String> numbers = expectedApplicationRuleValues.stream().map(row -> (String) row.get(4)).toList();
       when(cursor.getString(4)).thenReturn(numbers.get(0), numbers.subList(1, numbers.size()).toArray(new String[0]));
     }
     return cursor;

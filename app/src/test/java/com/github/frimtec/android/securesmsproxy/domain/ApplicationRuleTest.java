@@ -15,8 +15,8 @@ class ApplicationRuleTest {
     Application application = new Application(12L, "name", "listener", "secret");
     Set<String> allowedPhoneNumbers = Collections.singleton("number");
     ApplicationRule applicationRule = new ApplicationRule(application, allowedPhoneNumbers);
-    assertThat(applicationRule.getApplication()).isEqualTo(application);
-    assertThat(applicationRule.getAllowedPhoneNumbers()).isEqualTo(allowedPhoneNumbers);
+    assertThat(applicationRule.application()).isEqualTo(application);
+    assertThat(applicationRule.allowedPhoneNumbers()).isEqualTo(allowedPhoneNumbers);
   }
 
   @Test
@@ -58,7 +58,7 @@ class ApplicationRuleTest {
     Set<String> allowedPhoneNumbers = Collections.singleton("number");
     Application application1 = new Application(12L, "name", "listener", "secret");
     ApplicationRule applicationRule1 = new ApplicationRule(application1, allowedPhoneNumbers);
-    assertThat(applicationRule1.toString()).isEqualTo("ApplicationRule{application=Application{id=12, name='name', listener='listener', secret='secret'}, allowedPhoneNumbers=[number]}");
+    assertThat(applicationRule1.toString()).isEqualTo("ApplicationRule[application=Application[id=12, name=name, listener=listener, secret=secret], allowedPhoneNumbers=[number]]");
   }
 
 }

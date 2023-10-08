@@ -3,7 +3,6 @@ package com.github.frimtec.android.securesmsproxy.ui;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
-import android.view.MenuItem;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,15 +19,6 @@ public class AboutActivity extends AppCompatActivity {
     setupAppInfo();
     setupDocumentation();
     setupDisclaimer();
-  }
-
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-    if (item.getItemId() == android.R.id.home) {
-      onBackPressed();
-      return true;
-    }
-    return super.onOptionsItemSelected(item);
   }
 
   private void setupAppInfo() {

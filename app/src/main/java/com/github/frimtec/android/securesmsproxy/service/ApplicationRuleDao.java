@@ -66,15 +66,15 @@ public class ApplicationRuleDao {
         .map(phoneNumberFormatter::toE164)
         .collect(Collectors.toSet());
     if (applicationRule != null) {
-      secret = applicationRule.getApplication().getSecret();
+      secret = applicationRule.application().secret();
       ContentValues applicationValues = new ContentValues();
       applicationValues.put(TABLE_APPLICATION_COLUMN_LISTENER, listener);
       db.update(TABLE_APPLICATION, applicationValues, TABLE_APPLICATION_COLUMN_ID + "=?",
-          new String[]{String.valueOf(applicationRule.getApplication().getId())});
+          new String[]{String.valueOf(applicationRule.application().id())});
       ContentValues ruleValues = new ContentValues();
-      ruleValues.put(TABLE_RULE_COLUMN_APPLICATION_ID, applicationRule.getApplication().getId());
+      ruleValues.put(TABLE_RULE_COLUMN_APPLICATION_ID, applicationRule.application().id());
       allowedPhoneNumbersE164Formatted.stream()
-          .filter(phoneNumber -> !applicationRule.getAllowedPhoneNumbers().contains(phoneNumber))
+          .filter(phoneNumber -> !applicationRule.allowedPhoneNumbers().contains(phoneNumber))
           .forEach(phoneNumber -> {
             ruleValues.put(TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER, phoneNumber);
             db.insert(TABLE_RULE, null, ruleValues);
@@ -128,7 +128,7 @@ public class ApplicationRuleDao {
           Application application = Objects.requireNonNull(
               applications.getOrDefault(id, new Application(id, cursor.getString(1), cursor.getString(2), cursor.getString(3)))
           );
-          applications.put(application.getId(), application);
+          applications.put(application.id(), application);
           String phoneNumber = cursor.getString(4);
           Set<Application> set = Objects.requireNonNull(
               applicationsByPhoneNumber.getOrDefault(phoneNumber, new HashSet<>())
@@ -150,7 +150,7 @@ public class ApplicationRuleDao {
         Application application = Objects.requireNonNull(
             applications.getOrDefault(id, new Application(id, cursor.getString(1), cursor.getString(2), cursor.getString(3)))
         );
-        applications.put(application.getId(), application);
+        applications.put(application.id(), application);
         Set<String> phoneNumbers = Objects.requireNonNull(
             applicationPhoneNumbers.getOrDefault(application, new HashSet<>())
         );
@@ -167,6 +167,6 @@ public class ApplicationRuleDao {
 
   public void delete(Application application) {
     SQLiteDatabase db = this.dbFactory.getDatabase(WRITABLE);
-    db.delete(TABLE_APPLICATION, TABLE_APPLICATION_COLUMN_ID + "=?", new String[]{String.valueOf(application.getId())});
+    db.delete(TABLE_APPLICATION, TABLE_APPLICATION_COLUMN_ID + "=?", new String[]{String.valueOf(application.id())});
   }
 }

@@ -45,18 +45,18 @@ class ApplicationRuleArrayAdapter extends ArrayAdapter<ApplicationRule> {
     }
     ApplicationRule applicationRule = getItem(position);
     if (applicationRule != null) {
-      Application application = applicationRule.getApplication();
+      Application application = applicationRule.application();
       ImageView logo = convertView.findViewById(R.id.application_logo);
-      packageInfoAccessor.getIcon(application.getName()).ifPresent(logo::setImageDrawable);
+      packageInfoAccessor.getIcon(application.name()).ifPresent(logo::setImageDrawable);
       TextView label = convertView.findViewById(R.id.application_label);
 
-      CharSequence labelText = this.packageInfoAccessor.getLabel(application.getName());
-      if (!packageInfoAccessor.isInstalled(application.getName())) {
+      CharSequence labelText = this.packageInfoAccessor.getLabel(application.name());
+      if (!packageInfoAccessor.isInstalled(application.name())) {
         labelText = labelText + "\n(not installed)";
       }
       label.setText(labelText);
       TextView phoneNumbers = convertView.findViewById(R.id.application_allowed_phone_numbers);
-      phoneNumbers.setText(applicationRule.getAllowedPhoneNumbers()
+      phoneNumbers.setText(applicationRule.allowedPhoneNumbers()
           .stream()
           .map(phoneNumber -> PhoneNumberUtils.formatNumber(phoneNumber, Locale.getDefault().getCountry()))
           .collect(Collectors.joining("\n"))

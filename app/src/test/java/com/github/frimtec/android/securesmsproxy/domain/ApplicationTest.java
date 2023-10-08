@@ -10,10 +10,10 @@ class ApplicationTest {
   @Test
   void testProperties() {
     Application application = new Application(12L, "name", "listener", "secret");
-    assertThat(application.getId()).isEqualTo(12L);
-    assertThat(application.getName()).isEqualTo("name");
-    assertThat(application.getListener()).isEqualTo("listener");
-    assertThat(application.getSecret()).isEqualTo("secret");
+    assertThat(application.id()).isEqualTo(12L);
+    assertThat(application.name()).isEqualTo("name");
+    assertThat(application.listener()).isEqualTo("listener");
+    assertThat(application.secret()).isEqualTo("secret");
   }
 
   @Test
@@ -46,7 +46,7 @@ class ApplicationTest {
   @Test
   void testToString() {
     Application application = new Application(12L, "name", "listener", "secret");
-    assertThat(application.toString()).isEqualTo("Application{id=12, name='name', listener='listener', secret='secret'}");
+    assertThat(application.toString()).isEqualTo("Application[id=12, name=name, listener=listener, secret=secret]");
   }
 
 }
