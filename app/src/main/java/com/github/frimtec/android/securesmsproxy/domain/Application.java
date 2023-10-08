@@ -1,38 +1,8 @@
 package com.github.frimtec.android.securesmsproxy.domain;
 
-import androidx.annotation.NonNull;
-
 import java.util.Objects;
 
-public final class Application {
-
-  private final long id;
-  private final String name;
-  private final String listener;
-  private final String secret;
-
-  public Application(long id, String name, String listener, String secret) {
-    this.id = id;
-    this.name = name;
-    this.listener = listener;
-    this.secret = secret;
-  }
-
-  public long getId() {
-    return id;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public String getListener() {
-    return listener;
-  }
-
-  public String getSecret() {
-    return secret;
-  }
+public record Application(long id, String name, String listener, String secret) {
 
   @Override
   public boolean equals(Object o) {
@@ -49,16 +19,5 @@ public final class Application {
   @Override
   public int hashCode() {
     return Objects.hash(id);
-  }
-
-  @Override
-  @NonNull
-  public String toString() {
-    return "Application{" +
-        "id=" + id +
-        ", name='" + name + '\'' +
-        ", listener='" + listener + '\'' +
-        ", secret='" + secret + '\'' +
-        '}';
   }
 }

@@ -69,19 +69,19 @@ public class SmsSender extends BroadcastReceiver {
           Log.w(TAG, String.format("SMS sending blocked because of unregistered sender application: %s.", applicationName));
           return;
         }
-        AesOperations aes = new Aes2(applicationRule.getApplication().getSecret());
+        AesOperations aes = new Aes2(applicationRule.application().secret());
         try {
           Sms sms = Sms.fromJson(aes.decrypt(text));
           if (PHONE_NUMBER_LOOPBACK.equals(sms.getNumber())) {
-            SmsListener.broadcastReceivedSms(context, applicationRule.getApplication(), Collections.singletonList(sms));
+            SmsListener.broadcastReceivedSms(context, applicationRule.application(), Collections.singletonList(sms));
           } else {
             PhoneNumberFormatter phoneNumberFormatter = this.phoneNumberFormatterProvider.apply(context);
             String number = phoneNumberFormatter.toE164(sms.getNumber());
-            if (applicationRule.getAllowedPhoneNumbers().contains(number)) {
+            if (applicationRule.allowedPhoneNumbers().contains(number)) {
               send(context, sms.getSubscriptionId(), number, sms.getText());
             } else {
               Log.w(TAG, String.format("SMS sending blocked because of not allowed phone number %s of application %s.",
-                  number, applicationRule.getApplication().getName()));
+                  number, applicationRule.application().name()));
             }
           }
         } catch (Exception e) {

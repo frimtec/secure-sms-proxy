@@ -27,7 +27,7 @@ public class SmsListener extends BroadcastReceiver {
     Intent intent = new Intent(SecureSmsProxyFacade.ACTION_BROADCAST_SMS_RECEIVED);
     intent.putExtra(Intent.EXTRA_TEXT, serializedSmsList);
     intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-    intent.setComponent(new ComponentName(application.getName(), application.getListener()));
+    intent.setComponent(new ComponentName(application.name(), application.listener()));
     return intent;
   };
 
@@ -83,8 +83,8 @@ public class SmsListener extends BroadcastReceiver {
   }
 
   private static void broadcastReceivedSms(Context context, Application application, List<Sms> smsList, BiFunction<Application, String, Intent> smsBroadcastIntentFactory) {
-    Log.i(TAG, "broadcastReceivedSms,  count: " + smsList.size() + "; to application: " + application.getName());
-    AesOperations aes = new Aes2(application.getSecret());
+    Log.i(TAG, "broadcastReceivedSms,  count: " + smsList.size() + "; to application: " + application.name());
+    AesOperations aes = new Aes2(application.secret());
     String serializedEncryptedSmsList = aes.encrypt(Sms.toJsonArray(smsList));
     context.sendOrderedBroadcast(smsBroadcastIntentFactory.apply(application, serializedEncryptedSmsList), null);
   }

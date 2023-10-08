@@ -101,14 +101,14 @@ public class MainActivity extends AppCompatActivity {
   }
 
   private void deleteApplicationRule(ApplicationRule applicationRule) {
-    dao.delete(applicationRule.getApplication());
+    dao.delete(applicationRule.application());
   }
 
   private void refresh() {
     List<ApplicationRule> all = dao.all();
     listView.setAdapter(new ApplicationRuleArrayAdapter(this, all,
         (adapter, applicationRule) -> view -> AlertDialogHelper.areYouSure(adapter.getContext(), (dialog, which) -> {
-          dao.delete(applicationRule.getApplication());
+          dao.delete(applicationRule.application());
           adapter.remove(applicationRule);
           adapter.notifyDataSetChanged();
           Toast.makeText(adapter.getContext(), R.string.general_entry_deleted, Toast.LENGTH_SHORT).show();

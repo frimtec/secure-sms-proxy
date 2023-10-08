@@ -18,20 +18,22 @@ class DbHelperTest {
 
   @Test
   void onCreate() {
-    DbHelper dbHelper = new DbHelper(mock(Context.class));
-    SQLiteDatabase db = mock(SQLiteDatabase.class);
-    dbHelper.onCreate(db);
-    verify(db).execSQL(Mockito.startsWith("CREATE TABLE " + TABLE_APPLICATION));
-    verify(db).execSQL(Mockito.startsWith("CREATE TABLE " + TABLE_RULE));
-    verify(db).execSQL(Mockito.startsWith("CREATE VIEW " + VIEW_APPLICATION_RULE));
-    verifyNoMoreInteractions(db);
+    try (DbHelper dbHelper = new DbHelper(mock(Context.class))) {
+      SQLiteDatabase db = mock(SQLiteDatabase.class);
+      dbHelper.onCreate(db);
+      verify(db).execSQL(Mockito.startsWith("CREATE TABLE " + TABLE_APPLICATION));
+      verify(db).execSQL(Mockito.startsWith("CREATE TABLE " + TABLE_RULE));
+      verify(db).execSQL(Mockito.startsWith("CREATE VIEW " + VIEW_APPLICATION_RULE));
+      verifyNoMoreInteractions(db);
+    }
   }
 
   @Test
   void onUpgradeV1ToV1() {
-    DbHelper dbHelper = new DbHelper(mock(Context.class));
-    SQLiteDatabase db = mock(SQLiteDatabase.class);
-    dbHelper.onUpgrade(db, 1, 1);
-    verifyNoInteractions(db);
+    try (DbHelper dbHelper = new DbHelper(mock(Context.class))) {
+      SQLiteDatabase db = mock(SQLiteDatabase.class);
+      dbHelper.onUpgrade(db, 1, 1);
+      verifyNoInteractions(db);
+    }
   }
 }

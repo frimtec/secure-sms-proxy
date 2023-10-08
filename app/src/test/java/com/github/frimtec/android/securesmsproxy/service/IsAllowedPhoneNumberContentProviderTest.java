@@ -31,6 +31,7 @@ class IsAllowedPhoneNumberContentProviderTest {
   @Test
   void queryNotMatchingUri() {
     IsAllowedPhoneNumberContentProvider provider = new IsAllowedPhoneNumberContentProvider(null, (uri) -> false);
+    //noinspection resource
     assertThrows(IllegalArgumentException.class, () -> provider.query(mock(Uri.class), new String[0], null, null, null));
   }
 
