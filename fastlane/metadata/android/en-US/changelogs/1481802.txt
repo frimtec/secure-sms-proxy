@@ -1,0 +1,4 @@
+- Migrate to android target sdk 34 (Android 14-UpsideDownCake)
+- Code cleanups for java 17
+- Bump com.googlecode.libphonenumber:libphonenumber from 8.13.19 to 8.13.22
+- Bump com.android.tools.build:gradle from 8.1.0 to 8.1.2
