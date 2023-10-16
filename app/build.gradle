@@ -54,7 +54,7 @@ dependencies {
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.10.0"
     testImplementation "org.assertj:assertj-core:3.24.2"
     testImplementation "org.mockito:mockito-core:5.6.0"
-    testImplementation 'org.json:json:20230618'
+    testImplementation 'org.json:json:20231013'
     androidTestImplementation 'androidx.test:runner:1.5.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 }
