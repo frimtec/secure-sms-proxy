@@ -47,7 +47,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'com.google.android.material:material:1.10.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.13.23'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.13.24'
     implementation project(path: ':securesmsproxyapi')
     testImplementation "org.junit.jupiter:junit-jupiter-api:5.10.0"
     testImplementation "org.junit.jupiter:junit-jupiter-params:5.10.0"
