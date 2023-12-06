@@ -74,6 +74,9 @@ public class SmsSender extends BroadcastReceiver {
           Sms sms = Sms.fromJson(aes.decrypt(text));
           if (PHONE_NUMBER_LOOPBACK.equals(sms.getNumber())) {
             SmsListener.broadcastReceivedSms(context, applicationRule.application(), Collections.singletonList(sms));
+          } else if (PhoneNumberFormatter.isAlphanumericShortCode(sms.getNumber())) {
+            Log.w(TAG, String.format("SMS sending blocked because of alphanumeric short code SMS number %s of application %s.",
+                sms.getNumber(), applicationRule.application().name()));
           } else {
             PhoneNumberFormatter phoneNumberFormatter = this.phoneNumberFormatterProvider.apply(context);
             String number = phoneNumberFormatter.toE164(sms.getNumber());
