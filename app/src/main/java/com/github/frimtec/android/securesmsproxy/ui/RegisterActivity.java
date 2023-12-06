@@ -3,7 +3,6 @@ package com.github.frimtec.android.securesmsproxy.ui;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.telephony.PhoneNumberUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,7 +18,6 @@ import com.github.frimtec.android.securesmsproxy.utility.PackageInfoAccessor;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 import static com.github.frimtec.android.securesmsproxy.utility.Permission.SMS;
@@ -90,7 +88,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     TextView phoneNumbersToAllow = findViewById(R.id.register_phone_numbers);
     phoneNumbersToAllow.setText(phoneNumbers.stream()
-            .map(phoneNumber -> PhoneNumberUtils.formatNumber(phoneNumber, Locale.getDefault().getCountry()))
+            .map(PhoneNumberFormatter::getFormatNumber)
             .collect(Collectors.joining("\n")));
     Button allow = findViewById(R.id.button_allow);
     allow.setOnClickListener(v -> {

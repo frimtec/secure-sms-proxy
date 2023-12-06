@@ -1,7 +1,6 @@
 package com.github.frimtec.android.securesmsproxy.ui;
 
 import android.content.Context;
-import android.telephony.PhoneNumberUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +15,10 @@ import androidx.annotation.Nullable;
 import com.github.frimtec.android.securesmsproxy.R;
 import com.github.frimtec.android.securesmsproxy.domain.Application;
 import com.github.frimtec.android.securesmsproxy.domain.ApplicationRule;
+import com.github.frimtec.android.securesmsproxy.service.PhoneNumberFormatter;
 import com.github.frimtec.android.securesmsproxy.utility.PackageInfoAccessor;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
@@ -58,7 +57,7 @@ class ApplicationRuleArrayAdapter extends ArrayAdapter<ApplicationRule> {
       TextView phoneNumbers = convertView.findViewById(R.id.application_allowed_phone_numbers);
       phoneNumbers.setText(applicationRule.allowedPhoneNumbers()
           .stream()
-          .map(phoneNumber -> PhoneNumberUtils.formatNumber(phoneNumber, Locale.getDefault().getCountry()))
+          .map(PhoneNumberFormatter::getFormatNumber)
           .collect(Collectors.joining("\n"))
       );
 

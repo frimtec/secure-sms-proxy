@@ -5,7 +5,6 @@ import static com.github.frimtec.android.securesmsproxy.service.SmsManagerResolv
 import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.PHONE_NUMBER_LOOPBACK;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -158,7 +157,7 @@ class SmsSenderTest {
     when(context.getSystemService(eq(SmsManager.class))).thenReturn(smsManager);
     smsSender.onReceive(context, intent);
 
-    verify(smsManager).sendTextMessage(eq(sms.getNumber()), isNull(), eq(sms.getText()), isNull(), isNull());
+    verifyNoInteractions(smsManager);
   }
 
   @Test
@@ -171,6 +170,26 @@ class SmsSenderTest {
     when(intent.getAction()).thenReturn(SecureSmsProxyFacade.ACTION_SEND_SMS);
     Bundle bundle = mock(Bundle.class);
     Sms sms = new Sms(PHONE_NUMBER_LOOPBACK, "text");
+    when(bundle.getString(EXTRA_TEXT)).thenReturn(new Aes(SECRET).encrypt(sms.toJson()));
+    when(bundle.getString(Intent.EXTRA_PACKAGE_NAME)).thenReturn("application");
+    when(intent.getExtras()).thenReturn(bundle);
+    when(dao.byApplicationName("application")).thenReturn(new ApplicationRule(new Application(1L, "application", "listener", SECRET), Collections.singleton(PHONE_NUMBER_LOOPBACK)));
+    Context context = mock(Context.class);
+    smsSender.onReceive(context, intent);
+
+    verifyNoInteractions(smsManagerResolver);
+  }
+
+  @Test
+  void onHandleIntentAlphanumericShortCode() {
+    ApplicationRuleDao dao = mock(ApplicationRuleDao.class);
+    SmsManagerResolver smsManagerResolver = mock(SmsManagerResolver.class);
+    SmsSender smsSender = new SmsSender(smsManagerResolver, dao, this.phoneNumberFormatterProvider);
+
+    Intent intent = mock(Intent.class);
+    when(intent.getAction()).thenReturn(SecureSmsProxyFacade.ACTION_SEND_SMS);
+    Bundle bundle = mock(Bundle.class);
+    Sms sms = new Sms("MSG123", "text");
     when(bundle.getString(EXTRA_TEXT)).thenReturn(new Aes(SECRET).encrypt(sms.toJson()));
     when(bundle.getString(Intent.EXTRA_PACKAGE_NAME)).thenReturn("application");
     when(intent.getExtras()).thenReturn(bundle);

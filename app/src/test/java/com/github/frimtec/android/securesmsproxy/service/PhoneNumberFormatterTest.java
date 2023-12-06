@@ -74,4 +74,31 @@ class PhoneNumberFormatterTest {
     // assert
     assertThat(e164).isEqualTo("+10791231212");
   }
+
+  @Test
+  void getFormatNumberForAlphanumericShortCodeUppercase() {
+    // act
+    String formatNumber = PhoneNumberFormatter.getFormatNumber("1MSG2");
+
+    // assert
+    assertThat(formatNumber).isEqualTo("1MSG2");
+  }
+
+  @Test
+  void getFormatNumberForAlphanumericShortCodeLowercase() {
+    // act
+    String formatNumber = PhoneNumberFormatter.getFormatNumber("1msg2");
+
+    // assert
+    assertThat(formatNumber).isEqualTo("1msg2");
+  }
+
+  @Test
+  void getFormatNumberForNull() {
+    // act
+    String formatNumber = PhoneNumberFormatter.getFormatNumber(null);
+
+    // assert
+    assertThat(formatNumber).isNull();
+  }
 }
