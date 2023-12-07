@@ -1,0 +1,1 @@
+- Prevent logging errors while receiving SMS from alphanumeric short code
