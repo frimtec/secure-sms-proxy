@@ -67,12 +67,23 @@ class PhoneNumberFormatterTest {
     // arrange
     PhoneNumberFormatter phoneNumberFormatter = new PhoneNumberFormatter("us");
 
-
     // act
     String e164 = phoneNumberFormatter.toE164("0791231212");
 
     // assert
     assertThat(e164).isEqualTo("+10791231212");
+  }
+
+  @Test
+  void toE164ForAlphanumericShortCode() {
+    // arrange
+    PhoneNumberFormatter phoneNumberFormatter = this.phoneNumberFormatter;
+
+    // act
+    String e164 = phoneNumberFormatter.toE164("123On");
+
+    // assert
+    assertThat(e164).isEqualTo("123On");
   }
 
   @Test
@@ -96,9 +107,11 @@ class PhoneNumberFormatterTest {
   @Test
   void getFormatNumberForNull() {
     // act
+    //noinspection ConstantValue
     String formatNumber = PhoneNumberFormatter.getFormatNumber(null);
 
     // assert
+    //noinspection ConstantValue
     assertThat(formatNumber).isNull();
   }
 }

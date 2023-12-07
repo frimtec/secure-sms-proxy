@@ -28,6 +28,9 @@ public class PhoneNumberFormatter {
   }
 
   public String toE164(String rawNumber) {
+    if (isAlphanumericShortCode(rawNumber)) {
+      return rawNumber;
+    }
     PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
     try {
       Phonenumber.PhoneNumber phoneNumber = phoneUtil.parse(rawNumber, this.networkCountryCode);
