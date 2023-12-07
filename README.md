@@ -39,6 +39,14 @@ All SMS exchanged with third party applications are strongly encrypted.
 S2SMP itself requires SMS permissions (SEND_SMS and RECEIVE_SMS) from the Android system and will request these permissions upon startup.
 S2MSP does not need any other permissions. This ensures the integrity and security of S2MSP.
 
+S2MSP supports the exchange of SMS for the following type of phone numbers:
+
+| Type                    | Supported operation |
+|-------------------------|---------------------|
+| Numeric national        | SEND, RECEIVE       |
+| Numeric international   | SEND, RECEIVE       |
+| Alphanumeric short code | RECEIVE only        |
+
 ## Installation
 S2MSP cannot be offered on Google-Play as Google does only allow applications using SMS permissions in very rare cases
 (see [Use of SMS or Call Log permission groups][use-sms-call-log-permission-groups]).
