@@ -13,6 +13,7 @@ import android.os.Process;
 import android.util.Log;
 
 import com.github.frimtec.android.securesmsproxy.state.DbHelper;
+import com.github.frimtec.android.securesmsproxy.ui.SendLogActivity;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -43,11 +44,11 @@ public class SecureSmsProxyApplication extends Application {
 
   private void handleUncaughtException(Thread thread, Throwable e) {
     Log.e(TAG, "Unhandled exception occurred", e);
-    Intent intent = new Intent();
-    intent.setAction(ACTION_SEND_LOG);
-    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    Application application = (Application) this.getApplicationContext();
+    Intent intent = new Intent(application, SendLogActivity.class);
+    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     intent.putExtra(EXTRA_BUG_REPORT, createReport(thread, e));
-    startActivity(intent);
+    application.startActivity(intent);
     Process.killProcess(Process.myPid());
   }
 
