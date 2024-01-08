@@ -7,13 +7,13 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.1.4'
+        classpath 'com.android.tools.build:gradle:8.2.1'
         classpath "de.mannodermaus.gradle.plugins:android-junit5:1.10.0.0"
     }
 }
 
 allprojects {
-    tasks.withType(JavaCompile) {
+    tasks.withType(JavaCompile).configureEach {
         options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
     }
     repositories {
@@ -22,7 +22,7 @@ allprojects {
     }
 }
 
-task clean(type: Delete) {
+tasks.register('clean', Delete) {
     delete rootProject.buildDir
 }
 
