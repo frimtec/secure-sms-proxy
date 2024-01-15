@@ -1,0 +1,3 @@
+- Extend support for 2024
+- Bump com.android.tools.build:gradle from 8.1.4 to 8.2.1
+- Bump com.googlecode.libphonenumber:libphonenumber from 8.13.27 to 8.13.28
