@@ -27,7 +27,7 @@ jobs:
       - name: Build and Test coverage Report
         run: bash ./gradlew test jacocoTestReport --stacktrace
 
-      - uses: codecov/codecov-action@v3.1.5
+      - uses: codecov/codecov-action@v4.0.1
 
   # Run Qodana inspections and provide report
   inspectCode:
