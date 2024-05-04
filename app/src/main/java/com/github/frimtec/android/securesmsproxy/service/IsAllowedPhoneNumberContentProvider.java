@@ -1,5 +1,9 @@
 package com.github.frimtec.android.securesmsproxy.service;
 
+import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_APPLICATION_COLUMN_NAME;
+import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER;
+import static com.github.frimtec.android.securesmsproxyapi.IsAllowedPhoneNumberContract.ALLOWED_PHONE_NUMBERS_PATH;
+
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.Context;
@@ -16,10 +20,6 @@ import com.github.frimtec.android.securesmsproxyapi.IsAllowedPhoneNumberContract
 
 import java.util.function.Function;
 
-import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_APPLICATION_COLUMN_NAME;
-import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER;
-import static com.github.frimtec.android.securesmsproxyapi.IsAllowedPhoneNumberContract.ALLOWED_PHONE_NUMBERS_PATH;
-
 public class IsAllowedPhoneNumberContentProvider extends ContentProvider {
 
   private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
@@ -35,7 +35,11 @@ public class IsAllowedPhoneNumberContentProvider extends ContentProvider {
 
 
   public IsAllowedPhoneNumberContentProvider() {
-    this((context) -> new DbHelper(context).getReadableDatabase(), (uri) -> URI_MATCHER.match(uri) == 1);
+    this((context) -> {
+      try (DbHelper dbHelper = new DbHelper(context)) {
+        return dbHelper.getReadableDatabase();
+      }
+    }, (uri) -> URI_MATCHER.match(uri) == 1);
   }
 
   IsAllowedPhoneNumberContentProvider(Function<Context, SQLiteDatabase> databaseFactory, Function<Uri, Boolean> uriMatcher) {

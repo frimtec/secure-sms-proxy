@@ -66,7 +66,7 @@ public class RegisterActivity extends AppCompatActivity {
     String packageName = referrer.getHost();
 
     PhoneNumberFormatter phoneNumberFormatter = new PhoneNumberFormatter(this);
-    if(phoneNumbers == null || phoneNumbers.size() == 0) {
+    if(phoneNumbers == null || phoneNumbers.isEmpty()) {
       String randomSecret = new ApplicationRuleDao().insertOrUpdate(
           packageName,
           listener,

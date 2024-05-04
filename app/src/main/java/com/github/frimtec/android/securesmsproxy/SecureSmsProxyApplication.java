@@ -1,7 +1,6 @@
 package com.github.frimtec.android.securesmsproxy;
 
 import static android.content.Intent.EXTRA_BUG_REPORT;
-import static com.github.frimtec.android.securesmsproxy.ui.SendLogActivity.ACTION_SEND_LOG;
 
 import android.app.Application;
 import android.content.Intent;
