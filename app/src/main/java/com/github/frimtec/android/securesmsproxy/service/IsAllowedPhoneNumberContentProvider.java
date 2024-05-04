@@ -35,11 +35,8 @@ public class IsAllowedPhoneNumberContentProvider extends ContentProvider {
 
 
   public IsAllowedPhoneNumberContentProvider() {
-    this((context) -> {
-      try (DbHelper dbHelper = new DbHelper(context)) {
-        return dbHelper.getReadableDatabase();
-      }
-    }, (uri) -> URI_MATCHER.match(uri) == 1);
+    //noinspection resource
+    this((context) -> new DbHelper(context).getReadableDatabase(), (uri) -> URI_MATCHER.match(uri) == 1);
   }
 
   IsAllowedPhoneNumberContentProvider(Function<Context, SQLiteDatabase> databaseFactory, Function<Uri, Boolean> uriMatcher) {
