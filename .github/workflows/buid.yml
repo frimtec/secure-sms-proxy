@@ -12,10 +12,6 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-      - uses: gitboard-io/gitboard-action@main
-        with:
-          username: frimtec
-          key: ${{ secrets.GITBOARD_IO_KEY }}
       - uses: actions/checkout@v4
 
       - name: set up JDK 17
