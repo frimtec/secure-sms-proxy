@@ -1,0 +1,4 @@
+- Cleanup inspection warnings
+- Bump com.googlecode.libphonenumber:libphonenumber from 8.13.32 to 8.13.35
+- Bump com.android.tools.build:gradle from 8.3.1 to 8.3.2
+- Bump com.google.android.material:material from 1.11.0 to 1.12.0
