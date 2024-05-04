@@ -59,7 +59,7 @@ android {
     namespace 'com.github.frimtec.android.securesmsproxyapi'
 }
 
-task sourceJar(type: Jar) {
+tasks.register('sourceJar', Jar) {
     from android.sourceSets.main.java.srcDirs
 }
 

@@ -50,8 +50,6 @@
             android:name=".ui.SendLogActivity"
             android:exported="false">
             <intent-filter>
-                <action android:name="com.github.frimtec.android.securesmsproxy.SEND_LOG" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

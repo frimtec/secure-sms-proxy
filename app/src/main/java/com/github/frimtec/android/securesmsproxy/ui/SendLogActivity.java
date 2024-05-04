@@ -14,8 +14,6 @@ import com.github.frimtec.android.securesmsproxy.R;
 
 public class SendLogActivity extends AppCompatActivity {
 
-  public static final String ACTION_SEND_LOG = "com.github.frimtec.android.securesmsproxy.SEND_LOG";
-
   private ActivityResultLauncher<Intent> someActivityResultLauncher;
 
   @Override
