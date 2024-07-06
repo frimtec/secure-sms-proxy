@@ -1,0 +1,2 @@
+- Bump com.googlecode.libphonenumber:libphonenumber from8.13.35 to 8.13.39
+- Bump androidx.appcompat:appcompat from 1.6.1 to 1.7.0
