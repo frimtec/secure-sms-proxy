@@ -117,11 +117,11 @@ class SecureSmsProxyFacadeImplTest {
   void getInstallationForExistingProxyApp() throws PackageManager.NameNotFoundException {
     PackageInfo packageInfo = new PackageInfo();
     packageInfo.packageName = S2MSP_PACKAGE_NAME;
-    packageInfo.versionName = "1.0.1";
+    packageInfo.versionName = "3.0.1";
     SecureSmsProxyFacade facade = new SecureSmsProxyFacadeImpl(context(packageInfo));
     SecureSmsProxyFacade.Installation installation = facade.getInstallation();
     assertThat(installation.getApiVersion()).isEqualTo(BuildConfig.VERSION_NAME);
-    assertThat(installation.getAppVersion()).isEqualTo(Optional.of("1.0.1"));
+    assertThat(installation.getAppVersion()).isEqualTo(Optional.of("3.0.1"));
     assertThat(installation.getAppCompatibility()).isEqualTo(SUPPORTED);
   }
 
