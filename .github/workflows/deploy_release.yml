@@ -9,23 +9,8 @@ jobs:
 
     runs-on: ubuntu-22.04
 
-    outputs:
-      VERSION_NAME: ${{ steps.read_version_properties.outputs.VERSION_NAME }}
-      VERSION_CODE: ${{ steps.read_version_properties.outputs.VERSION_CODE }}
-
     steps:
       - uses: actions/checkout@v4
-
-      - name: Read version.properties
-        id: read_version_properties
-        run: |
-          while IFS='=' read -r key value; do
-            if [ "$key" ]; then
-              echo "$key=$value"
-              # Set as environment variable
-              echo "$key=$value" >> $GITHUB_OUTPUT
-            fi
-          done < app/version.properties
 
       - name: set up JDK 17
         uses: actions/setup-java@v4
@@ -125,6 +110,22 @@ jobs:
     needs: deploy-apk
 
     steps:
+
+      - uses: actions/checkout@v4
+        with:
+          ref: "release/next"
+
+      - name: Read version.properties
+        id: read_version_properties
+        run: |
+          while IFS='=' read -r key value; do
+            if [ "$key" ]; then
+              echo "$key=$value"
+              # Set as environment variable
+              echo "$key=$value" >> $GITHUB_OUTPUT
+            fi
+          done < src/main/resources/version.properties
+
       - uses: actions/checkout@v4
         with:
           persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
