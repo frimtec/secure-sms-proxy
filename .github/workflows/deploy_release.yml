@@ -129,7 +129,7 @@ jobs:
               # Set as environment variable
               echo "$key=$value" >> $GITHUB_OUTPUT
             fi
-          done < src/main/resources/version.properties
+          done < app/version.properties
 
       - name: Checkout master
         run: |
