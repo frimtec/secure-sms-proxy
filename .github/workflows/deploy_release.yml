@@ -9,8 +9,23 @@ jobs:
 
     runs-on: ubuntu-22.04
 
+    outputs:
+      VNAME: ${{ steps.read_version_properties.outputs.VERSION_NAME }}
+      VCODE: ${{ steps.read_version_properties.outputs.VERSION_CODE }}
+
     steps:
       - uses: actions/checkout@v4
+
+      - name: Read version.properties
+        id: read_version_properties
+        run: |
+          while IFS='=' read -r key value; do
+            if [ "$key" ]; then
+              echo "$key=$value"
+              # Set as environment variable
+              echo "$key=$value" >> $GITHUB_OUTPUT
+            fi
+          done < app/version.properties
 
       - name: set up JDK 17
         uses: actions/setup-java@v4
@@ -118,17 +133,6 @@ jobs:
       - name: Checkout master
         run: |
           git checkout master
-
-      - name: Read version.properties
-        id: read_version_properties
-        run: |
-          while IFS='=' read -r key value; do
-            if [ "$key" ]; then
-              echo "$key=$value"
-              # Set as environment variable
-              echo "$key=$value" >> $GITHUB_OUTPUT
-            fi
-          done < app/version.properties
 
       - name: Update README.md
         run: |
