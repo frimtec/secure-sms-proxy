@@ -116,7 +116,7 @@ jobs:
           persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
           fetch-depth: 0 # otherwise, you will failed to push refs to dest repo
 
-      - name: Checkout master
+      - name: Checkout release/next branch
         run: |
           git checkout release/next
 
@@ -131,7 +131,7 @@ jobs:
             fi
           done < app/version.properties
 
-      - name: Checkout master
+      - name: Checkout master branch
         run: |
           git checkout master
 
