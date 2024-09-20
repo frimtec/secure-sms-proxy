@@ -57,7 +57,7 @@ class ApplicationRuleArrayAdapter extends ArrayAdapter<ApplicationRule> {
       TextView phoneNumbers = convertView.findViewById(R.id.application_allowed_phone_numbers);
       phoneNumbers.setText(applicationRule.allowedPhoneNumbers()
           .stream()
-          .map(PhoneNumberFormatter::getFormatNumber)
+          .map(PhoneNumberFormatter::getFormattedNumber)
           .collect(Collectors.joining("\n"))
       );
 

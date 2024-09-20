@@ -15,6 +15,7 @@ import com.github.frimtec.android.securesmsproxy.utility.Permission;
 import com.github.frimtec.android.securesmsproxyapi.Sms;
 import com.github.frimtec.android.securesmsproxyapi.utility.Aes2;
 import com.github.frimtec.android.securesmsproxyapi.utility.AesOperations;
+import com.github.frimtec.android.securesmsproxyapi.utility.PhoneNumberType;
 
 import java.util.Collections;
 import java.util.function.Function;
@@ -74,8 +75,8 @@ public class SmsSender extends BroadcastReceiver {
           Sms sms = Sms.fromJson(aes.decrypt(text));
           if (PHONE_NUMBER_LOOPBACK.equals(sms.getNumber())) {
             SmsListener.broadcastReceivedSms(context, applicationRule.application(), Collections.singletonList(sms));
-          } else if (PhoneNumberFormatter.isAlphanumericShortCode(sms.getNumber())) {
-            Log.w(TAG, String.format("SMS sending blocked because of alphanumeric short code SMS number %s of application %s.",
+          } else if (!PhoneNumberType.fromNumber(sms.getNumber(), context).isSendSupport()) {
+            Log.w(TAG, String.format("SMS sending blocked because SMS number %s of application %s does not support sending.",
                 sms.getNumber(), applicationRule.application().name()));
           } else {
             PhoneNumberFormatter phoneNumberFormatter = this.phoneNumberFormatterProvider.apply(context);

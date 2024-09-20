@@ -79,8 +79,8 @@ class ApplicationRuleDaoTest {
     SQLiteDatabase dbWrite = mock(SQLiteDatabase.class);
 
     Cursor cursor = createCursor(Arrays.asList(
-        Arrays.asList(1L, "app_1", "listener_1", "secret_1", "+41123"),
-        Arrays.asList(1L, "app_1", "listener_1", "secret_1", "+41456")
+        Arrays.asList(1L, "app_1", "listener_1", "secret_1", "123"),
+        Arrays.asList(1L, "app_1", "listener_1", "secret_1", "456")
     ));
     when(dbRead.query(DbHelper.VIEW_APPLICATION_RULE, ALL_COLUMNS, TABLE_APPLICATION_COLUMN_NAME + "=?", new String[]{"app_1"}, null, null, null))
         .thenReturn(cursor);
