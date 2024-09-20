@@ -1,12 +1,13 @@
 package com.github.frimtec.android.securesmsproxy.service;
 
+import static com.github.frimtec.android.securesmsproxyapi.utility.PhoneNumberType.STANDARD;
 import static com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberFormat.E164;
 
 import android.content.Context;
 import android.telephony.PhoneNumberUtils;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 
+import com.github.frimtec.android.securesmsproxyapi.utility.PhoneNumberType;
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
@@ -20,7 +21,7 @@ public class PhoneNumberFormatter {
   private final String networkCountryCode;
 
   public PhoneNumberFormatter(Context context) {
-    this(((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getNetworkCountryIso());
+    this(PhoneNumberType.networkCountryIso(context));
   }
 
   PhoneNumberFormatter(String networkCountryCode) {
@@ -28,7 +29,8 @@ public class PhoneNumberFormatter {
   }
 
   public String toE164(String rawNumber) {
-    if (isAlphanumericShortCode(rawNumber)) {
+    PhoneNumberType phoneNumberType = PhoneNumberType.fromNumber(rawNumber, this.networkCountryCode);
+    if (phoneNumberType != STANDARD) {
       return rawNumber;
     }
     PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
@@ -48,18 +50,12 @@ public class PhoneNumberFormatter {
     }
   }
 
-  public static String getFormatNumber(String phoneNumber) {
-    return phoneNumber == null || isAlphanumericShortCode(phoneNumber) ?
-        phoneNumber : PhoneNumberUtils.formatNumber(phoneNumber, Locale.getDefault().getCountry());
-  }
-
-  public static boolean isAlphanumericShortCode(String phoneNumber) {
-    for (int i = 0; i < phoneNumber.length(); i++) {
-      char ch = phoneNumber.charAt(i);
-      if (Character.isLetter(ch)) {
-        return true;
-      }
-    }
-    return false;
+  public static String getFormattedNumber(String phoneNumber) {
+    String defaultCountryIso = Locale.getDefault().getCountry();
+    return switch (PhoneNumberType.fromNumber(phoneNumber, defaultCountryIso)) {
+      case EMPTY -> phoneNumber;
+      case STANDARD -> PhoneNumberUtils.formatNumber(phoneNumber, defaultCountryIso);
+      case NUMERIC_SHORT_CODE, ALPHANUMERIC_SHORT_CODE -> phoneNumber.trim();
+    };
   }
 }

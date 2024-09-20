@@ -41,7 +41,7 @@ class PhoneNumberFormatterTest {
     String e164 = phoneNumberFormatter.toE164("117");
 
     // assert
-    assertThat(e164).isEqualTo("+41117");
+    assertThat(e164).isEqualTo("117");
   }
 
   @Test
@@ -87,31 +87,29 @@ class PhoneNumberFormatterTest {
   }
 
   @Test
-  void getFormatNumberForAlphanumericShortCodeUppercase() {
+  void getFormattedNumberForAlphanumericShortCodeUppercase() {
     // act
-    String formatNumber = PhoneNumberFormatter.getFormatNumber("1MSG2");
+    String formatNumber = PhoneNumberFormatter.getFormattedNumber("1MSG2");
 
     // assert
     assertThat(formatNumber).isEqualTo("1MSG2");
   }
 
   @Test
-  void getFormatNumberForAlphanumericShortCodeLowercase() {
+  void getFormattedNumberForAlphanumericShortCodeLowercase() {
     // act
-    String formatNumber = PhoneNumberFormatter.getFormatNumber("1msg2");
+    String formatNumber = PhoneNumberFormatter.getFormattedNumber("1msg2");
 
     // assert
     assertThat(formatNumber).isEqualTo("1msg2");
   }
 
   @Test
-  void getFormatNumberForNull() {
+  void getFormattedNumberForNull() {
     // act
-    //noinspection ConstantValue
-    String formatNumber = PhoneNumberFormatter.getFormatNumber(null);
+    String formatNumber = PhoneNumberFormatter.getFormattedNumber(null);
 
     // assert
-    //noinspection ConstantValue
     assertThat(formatNumber).isNull();
   }
 }

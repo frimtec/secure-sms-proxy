@@ -88,7 +88,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     TextView phoneNumbersToAllow = findViewById(R.id.register_phone_numbers);
     phoneNumbersToAllow.setText(phoneNumbers.stream()
-            .map(PhoneNumberFormatter::getFormatNumber)
+            .map(PhoneNumberFormatter::getFormattedNumber)
             .collect(Collectors.joining("\n")));
     Button allow = findViewById(R.id.button_allow);
     allow.setOnClickListener(v -> {

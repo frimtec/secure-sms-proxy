@@ -41,11 +41,18 @@ S2MSP does not need any other permissions. This ensures the integrity and securi
 
 S2MSP supports the exchange of SMS for the following type of phone numbers:
 
-| Type                    | Supported operation |
-|-------------------------|---------------------|
-| Numeric national        | SEND, RECEIVE       |
-| Numeric international   | SEND, RECEIVE       |
-| Alphanumeric short code | RECEIVE only        |
+| Type                     | Supported operation |
+|--------------------------|---------------------|
+| Numeric national         | SEND, RECEIVE       |
+| Numeric international    | SEND, RECEIVE       |
+| Numeric short codes      | SEND, RECEIVE       |
+| Alphanumeric short codes | RECEIVE only        |
+
+Numeric short codes are currently only supported for the following countries:
+* Switzerland
+* Germany
+* France
+* USA
 
 ## Installation
 S2MSP cannot be offered on Google-Play as Google does only allow applications using SMS permissions in very rare cases
