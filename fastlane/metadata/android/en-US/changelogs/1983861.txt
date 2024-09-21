@@ -1,0 +1,2 @@
+- Support numeric short codes (only for countries ch, de, fr and us)
+- Bump com.googlecode.libphonenumber:libphonenumber from 8.13.44 to 8.13.45
