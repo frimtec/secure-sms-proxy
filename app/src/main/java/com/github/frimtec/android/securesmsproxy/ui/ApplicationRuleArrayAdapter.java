@@ -17,6 +17,7 @@ import com.github.frimtec.android.securesmsproxy.domain.Application;
 import com.github.frimtec.android.securesmsproxy.domain.ApplicationRule;
 import com.github.frimtec.android.securesmsproxy.service.PhoneNumberFormatter;
 import com.github.frimtec.android.securesmsproxy.utility.PackageInfoAccessor;
+import com.github.frimtec.android.securesmsproxyapi.utility.PhoneNumberType;
 
 import java.util.List;
 import java.util.function.BiFunction;
@@ -55,9 +56,10 @@ class ApplicationRuleArrayAdapter extends ArrayAdapter<ApplicationRule> {
       }
       label.setText(labelText);
       TextView phoneNumbers = convertView.findViewById(R.id.application_allowed_phone_numbers);
+      String networkCountryIso = PhoneNumberType.networkCountryIso(getContext());
       phoneNumbers.setText(applicationRule.allowedPhoneNumbers()
           .stream()
-          .map(PhoneNumberFormatter::getFormattedNumber)
+          .map(number -> PhoneNumberFormatter.getFormattedNumber(number, networkCountryIso))
           .collect(Collectors.joining("\n"))
       );
 

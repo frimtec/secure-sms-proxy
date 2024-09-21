@@ -89,7 +89,7 @@ class PhoneNumberFormatterTest {
   @Test
   void getFormattedNumberForAlphanumericShortCodeUppercase() {
     // act
-    String formatNumber = PhoneNumberFormatter.getFormattedNumber("1MSG2");
+    String formatNumber = PhoneNumberFormatter.getFormattedNumber("1MSG2", "ch");
 
     // assert
     assertThat(formatNumber).isEqualTo("1MSG2");
@@ -98,7 +98,7 @@ class PhoneNumberFormatterTest {
   @Test
   void getFormattedNumberForAlphanumericShortCodeLowercase() {
     // act
-    String formatNumber = PhoneNumberFormatter.getFormattedNumber("1msg2");
+    String formatNumber = PhoneNumberFormatter.getFormattedNumber("1msg2", "ch");
 
     // assert
     assertThat(formatNumber).isEqualTo("1msg2");
@@ -107,7 +107,7 @@ class PhoneNumberFormatterTest {
   @Test
   void getFormattedNumberForNull() {
     // act
-    String formatNumber = PhoneNumberFormatter.getFormattedNumber(null);
+    String formatNumber = PhoneNumberFormatter.getFormattedNumber(null, null);
 
     // assert
     assertThat(formatNumber).isNull();

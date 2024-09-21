@@ -1,5 +1,14 @@
 package com.github.frimtec.android.securesmsproxy.ui;
 
+import static com.github.frimtec.android.securesmsproxy.utility.Permission.SMS;
+import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.ACTION_REGISTER;
+import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.EXTRA_LISTENER_CLASS;
+import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.EXTRA_PHONE_NUMBERS;
+import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.EXTRA_SECRET;
+import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.REGISTRATION_RESULT_CODE_MISSING_SMS_PERMISSION;
+import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.REGISTRATION_RESULT_CODE_NO_EXTRAS;
+import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.REGISTRATION_RESULT_CODE_NO_REFERRER;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,20 +23,12 @@ import com.github.frimtec.android.securesmsproxy.R;
 import com.github.frimtec.android.securesmsproxy.service.ApplicationRuleDao;
 import com.github.frimtec.android.securesmsproxy.service.PhoneNumberFormatter;
 import com.github.frimtec.android.securesmsproxy.utility.PackageInfoAccessor;
+import com.github.frimtec.android.securesmsproxyapi.utility.PhoneNumberType;
 
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static com.github.frimtec.android.securesmsproxy.utility.Permission.SMS;
-import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.ACTION_REGISTER;
-import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.EXTRA_LISTENER_CLASS;
-import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.EXTRA_PHONE_NUMBERS;
-import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.EXTRA_SECRET;
-import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.REGISTRATION_RESULT_CODE_MISSING_SMS_PERMISSION;
-import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.REGISTRATION_RESULT_CODE_NO_EXTRAS;
-import static com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade.REGISTRATION_RESULT_CODE_NO_REFERRER;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -66,7 +67,7 @@ public class RegisterActivity extends AppCompatActivity {
     String packageName = referrer.getHost();
 
     PhoneNumberFormatter phoneNumberFormatter = new PhoneNumberFormatter(this);
-    if(phoneNumbers == null || phoneNumbers.isEmpty()) {
+    if (phoneNumbers == null || phoneNumbers.isEmpty()) {
       String randomSecret = new ApplicationRuleDao().insertOrUpdate(
           packageName,
           listener,
@@ -87,9 +88,10 @@ public class RegisterActivity extends AppCompatActivity {
     applicationLabel.setText(packageInfoAccessor.getLabel(packageName));
 
     TextView phoneNumbersToAllow = findViewById(R.id.register_phone_numbers);
+    String networkCountryIso = PhoneNumberType.networkCountryIso(this);
     phoneNumbersToAllow.setText(phoneNumbers.stream()
-            .map(PhoneNumberFormatter::getFormattedNumber)
-            .collect(Collectors.joining("\n")));
+        .map(number -> PhoneNumberFormatter.getFormattedNumber(number, networkCountryIso))
+        .collect(Collectors.joining("\n")));
     Button allow = findViewById(R.id.button_allow);
     allow.setOnClickListener(v -> {
       String randomSecret = new ApplicationRuleDao().insertOrUpdate(

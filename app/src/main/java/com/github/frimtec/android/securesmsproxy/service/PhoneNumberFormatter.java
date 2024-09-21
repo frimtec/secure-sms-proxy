@@ -50,11 +50,10 @@ public class PhoneNumberFormatter {
     }
   }
 
-  public static String getFormattedNumber(String phoneNumber) {
-    String defaultCountryIso = Locale.getDefault().getCountry();
-    return switch (PhoneNumberType.fromNumber(phoneNumber, defaultCountryIso)) {
+  public static String getFormattedNumber(String phoneNumber, String networkCountryCode) {
+    return switch (PhoneNumberType.fromNumber(phoneNumber, networkCountryCode)) {
       case EMPTY -> phoneNumber;
-      case STANDARD -> PhoneNumberUtils.formatNumber(phoneNumber, defaultCountryIso);
+      case STANDARD -> PhoneNumberUtils.formatNumber(phoneNumber, networkCountryCode);
       case NUMERIC_SHORT_CODE, ALPHANUMERIC_SHORT_CODE -> phoneNumber.trim();
     };
   }
