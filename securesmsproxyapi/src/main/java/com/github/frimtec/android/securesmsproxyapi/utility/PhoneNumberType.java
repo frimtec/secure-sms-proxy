@@ -94,9 +94,14 @@ public enum PhoneNumberType {
 
   private static boolean isNumericShortCode(String phoneNumber, String countryCode) {
     return switch (countryCode) {
-      case "CH" -> inLengthRange(phoneNumber, 3, 5);
-      case "FR" -> inLengthRange(phoneNumber, 5, 5);
-      case "DE" -> inLengthRange(phoneNumber, 4, 5);
+      case "BW" -> inLengthRange(phoneNumber, 3, 3);
+      case "CL", "DK", "NP", "NZ" -> inLengthRange(phoneNumber, 3, 4);
+      case "CH", "IT" -> inLengthRange(phoneNumber, 3, 5);
+      case "BE", "ID", "ES", "MA", "NL", "PA", "TR" -> inLengthRange(phoneNumber, 4, 4);
+      case "DE", "DO", "HU", "NG", "NO" -> inLengthRange(phoneNumber, 4, 5);
+      case "BR", "FR", "GB", "GR", "SG", "SE" -> inLengthRange(phoneNumber, 5, 5);
+      case "CA", "FI" -> inLengthRange(phoneNumber, 5, 6);
+      case "IE", "IN" -> phoneNumber.charAt(0) == '5' && inLengthRange(phoneNumber, 5, 5);
       case "US" -> phoneNumber.charAt(0) != '1' && inLengthRange(phoneNumber, 5, 6);
       default -> false;
     };
