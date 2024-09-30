@@ -49,10 +49,36 @@ S2MSP supports the exchange of SMS for the following type of phone numbers:
 | Alphanumeric short codes | RECEIVE only        |
 
 Numeric short codes are currently only supported for the following countries:
-* Switzerland
-* Germany
-* France
-* USA
+* Belgium (BE)
+* Botswana (BW)
+* Brazil (BR)
+* Canada (CA)
+* Chile (CL)
+* Denmark (DK)
+* Dominican Republic (DO)
+* Finland (FI)
+* France (FR)
+* Germany (DE)
+* Greece (GR)
+* Hungary (HU)
+* India (IN)
+* Indonesia (ID)
+* Ireland (IE)
+* Italy (IT)
+* Morocco (MA)
+* Nepal (NP)
+* Netherlands (NL)
+* New Zealand (NZ)
+* Nigeria (NG)
+* Norway (NO)
+* Panama (PA)
+* Singapore (SG)
+* Spain (ES)
+* Sweden (SE)
+* Switzerland (CH)
+* Turkey (TR)
+* USA (US)
+* United Kingdom (GB)
 
 ## Installation
 S2MSP cannot be offered on Google-Play as Google does only allow applications using SMS permissions in very rare cases
