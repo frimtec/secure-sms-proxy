@@ -1,6 +1,3 @@
 - Disable edge-to-edge on android 15 to fix corrupted screen layout
 - Bump com.android.tools.build:gradle from 8.6.1 to 8.7.0
 - Bump com.googlecode.libphonenumber:libphonenumber from 8.13.46 to 8.13.47
-- Disable edge-to-edge on android 15 to fix corrupted screen layout
-- Bump com.android.tools.build:gradle from 8.6.1 to 8.7.0
-- Bump com.googlecode.libphonenumber:libphonenumber from 8.13.46 to 8.13.47
