@@ -1,0 +1,2 @@
+- Migrate to material3 and edge-to-edge
+- Add note for new sideloading restrictions
