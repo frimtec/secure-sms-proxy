@@ -8,8 +8,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.github.frimtec.android.securesmsproxy.R;
 
 import java.io.BufferedReader;
@@ -18,13 +16,12 @@ import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.List;
 
-public class LogcatActivity extends AppCompatActivity {
+public class LogcatActivity extends BaseActivity {
 
   private static final String TAG = "LogcatActivity";
 
   @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
+  protected void doOnCreate(Bundle savedInstanceState) {
     setContentView(R.layout.activity_logcat);
     readLogcat();
   }

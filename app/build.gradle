@@ -10,7 +10,7 @@ if (versionPropsFile.exists()) {
 }
 
 int vcode = Integer.parseInt((versionProps['VERSION_CODE'] == null || versionProps['VERSION_CODE'].startsWith('$')) ? String.valueOf((int) ((System.currentTimeMillis() / 1000 / 60) - 26_797_800)) : versionProps['VERSION_CODE'])
-String vname = (versionProps['VERSION_NAME'] == null || versionProps['VERSION_NAME'].startsWith('$')) ? '3.4.0-dev' : versionProps['VERSION_NAME']
+String vname = (versionProps['VERSION_NAME'] == null || versionProps['VERSION_NAME'].startsWith('$')) ? '3.5.0-dev' : versionProps['VERSION_NAME']
 
 jacoco {
     toolVersion = "0.8.7"
@@ -45,6 +45,7 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.activity:activity:1.9.3'
     implementation 'com.google.android.material:material:1.12.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.13.47'

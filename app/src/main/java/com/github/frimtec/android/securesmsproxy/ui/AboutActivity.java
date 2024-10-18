@@ -5,16 +5,13 @@ import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.github.frimtec.android.securesmsproxy.BuildConfig;
 import com.github.frimtec.android.securesmsproxy.R;
 
-public class AboutActivity extends AppCompatActivity {
+public class AboutActivity extends BaseActivity {
 
   @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
+  protected void doOnCreate(Bundle savedInstanceState) {
     setContentView(R.layout.activity_about);
     setupAppInfo();
     setupDocumentation();
