@@ -16,7 +16,8 @@
   <string name="permission_sms_text">Damit S2MSP funktioniert, ist die Berechtigung zum Senden und Empfangen von SMS notwendig.
 S2MSP ermöglicht es anderen Applikationen mit SMS zu kommunizieren. Dies nur für vorher berechtigte Telefonnummern.
 Der SMS Austausch zwischen S2MSP und berechtigten Applikationen, erfolgt ausschließlich verschlüsselt.
-S2MSP verwendet keine weiteren Rechte, um die Sicherheit und Integrität zu gewährleisten.</string>
+S2MSP verwendet keine weiteren Rechte, um die Sicherheit und Integrität zu gewährleisten.
+Aufgrund neuer Sideloading-Einschränkungen auf Android 15 und höher muss \\"Eingeschränkte Einstellungen zulassen\\" im S2MSP-Dialogfeld \\"App-Info\\" aktiviert sein, bevor die Berechtigungen erteilt werden können!</string>
   <string name="send_log_title">Secure SMS Proxy Crash-Report</string>
   <string name="send_log_message">S2MSP wurde unerwarteterweise beendet. Bitte sende den Crash-Report via E-Mail an den Autor, um die Stabilität von S2MSP zu erhöhen.</string>
   <string name="send_log_button_send">Senden</string>
