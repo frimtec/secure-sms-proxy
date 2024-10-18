@@ -24,7 +24,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.github.frimtec.android.securesmsproxy.R;
@@ -37,7 +36,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
   private static final int MENU_CONTEXT_DELETE_ID = 1;
   private ListView listView;
@@ -45,10 +44,8 @@ public class MainActivity extends AppCompatActivity {
   private ApplicationRuleDao dao;
 
   @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
+  protected void doOnCreate(Bundle savedInstanceState) {
     setContentView(R.layout.activity_main);
-
     if (SMS.isForbidden(this)) {
       SMS.request(this);
     } else {

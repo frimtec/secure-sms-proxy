@@ -17,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.frimtec.android.securesmsproxy.R;
 import com.github.frimtec.android.securesmsproxy.service.ApplicationRuleDao;
@@ -30,11 +29,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends BaseActivity {
 
   @Override
-  protected void onCreate(@Nullable Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
+  protected void doOnCreate(@Nullable Bundle savedInstanceState) {
     PackageInfoAccessor packageInfoAccessor = new PackageInfoAccessor(this);
 
     if (!ACTION_REGISTER.equals(getIntent().getAction())) {

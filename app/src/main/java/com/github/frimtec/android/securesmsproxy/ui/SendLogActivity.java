@@ -8,16 +8,15 @@ import android.widget.Button;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.frimtec.android.securesmsproxy.R;
 
-public class SendLogActivity extends AppCompatActivity {
+public class SendLogActivity extends BaseActivity {
 
   private ActivityResultLauncher<Intent> someActivityResultLauncher;
 
   @Override
-  protected void onCreate(Bundle savedInstanceState) {
+  protected void doOnCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_send_log);
 
