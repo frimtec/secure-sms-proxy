@@ -39,6 +39,9 @@ All SMS exchanged with third party applications are strongly encrypted.
 S2SMP itself requires SMS permissions (SEND_SMS and RECEIVE_SMS) from the Android system and will request these permissions upon startup.
 S2MSP does not need any other permissions. This ensures the integrity and security of S2MSP.
 
+Due to new sideloading restrictions on Android 15 and above, "Allow restricted settings" must be enabled in the S2MSP "App info" dialog before the SMS permission can be granted!
+![Main view](images/restricted-settings.png)
+
 S2MSP supports the exchange of SMS for the following type of phone numbers:
 
 | Type                     | Supported operation |
