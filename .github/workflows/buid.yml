@@ -23,7 +23,7 @@ jobs:
       - name: Build and Test coverage Report
         run: bash ./gradlew test jacocoTestReport --stacktrace
 
-      - uses: codecov/codecov-action@v5.0.2
+      - uses: codecov/codecov-action@v5.0.7
 
   apk:
     name: Generate APK
