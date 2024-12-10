@@ -7,6 +7,8 @@ on:
 jobs:
   deploy-apk:
 
+    permissions:
+      contents: write
     runs-on: ubuntu-22.04
 
     steps:
@@ -45,6 +47,14 @@ jobs:
           keyPassword: ${{ secrets.KEY_PASSWORD }}
         env:
           BUILD_TOOLS_VERSION: ${{ env.BUILD_TOOL_VERSION }}
+
+      - name: Create a new release branch
+        run: git checkout -b release/${{ steps.get_release.outputs.tag_name }}
+      - name: Push release branch
+        uses: ad-m/github-push-action@v0.8.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: 'release/${{ steps.get_release.outputs.tag_name }}'
 
       - name: Upload APK Release Asset
         id: upload-release-asset-apk
