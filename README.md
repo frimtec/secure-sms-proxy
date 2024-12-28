@@ -254,7 +254,7 @@ You can send an email to [frimtec@gmx.ch](mailto:frimtec@gmx.ch) or [open an iss
 
 [maven-central-shield]: https://maven-badges.herokuapp.com/maven-central/com.github.frimtec/secure-sms-proxy-api/badge.svg
 [maven-central]: https://maven-badges.herokuapp.com/maven-central/com.github.frimtec/secure-sms-proxy-api
-[maintenance-shield]: https://img.shields.io/maintenance/yes/2024.svg
+[maintenance-shield]: https://img.shields.io/maintenance/yes/2025.svg
 [license-shield]: https://img.shields.io/github/license/frimtec/secure-sms-proxy.svg
 [license]: https://opensource.org/licenses/Apache-2.0
 [codecov-shield]: https://codecov.io/gh/frimtec/secure-sms-proxy/branch/master/graph/badge.svg?token=3GBTDIFRC7
