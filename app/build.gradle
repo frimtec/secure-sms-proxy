@@ -13,7 +13,19 @@ int vcode = Integer.parseInt((versionProps['VERSION_CODE'] == null || versionPro
 String vname = (versionProps['VERSION_NAME'] == null || versionProps['VERSION_NAME'].startsWith('$')) ? '3.5.0-dev' : versionProps['VERSION_NAME']
 
 jacoco {
-    toolVersion = "0.8.7"
+    toolVersion = "0.8.12"
+}
+
+tasks.register("unitTestCoverageReport", JacocoReport) {
+    group = "Coverage"
+    dependsOn tasks.testDebugUnitTest
+    reports {
+        html.required = true
+        xml.required = true
+    }
+    executionData.from = layout.buildDirectory.dir("outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec")
+    classDirectories.from = layout.buildDirectory.dir("intermediates/javac/debug/compileDebugJavaWithJavac/classes")
+    sourceDirectories.from = layout.projectDirectory.dir("src/main/java")
 }
 
 android {
@@ -27,6 +39,9 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
+        debug {
+            enableUnitTestCoverage true
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
