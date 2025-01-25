@@ -1,0 +1,6 @@
+- Bump com.android.tools.build:gradle from 8.7.3 to 8.8.0
+- Bump com.googlecode.libphonenumber:libphonenumber from 8.13.51 to 8.13.52
+- Bump org.json:json from 20240303 to 20241224
+- Bump org.json:json from 20241224 to 20250107
+- Bump com.googlecode.libphonenumber:libphonenumber from 8.13.52 to 8.13.53
+- Bump androidx.activity:activity from 1.9.3 to 1.10.0
