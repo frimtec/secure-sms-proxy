@@ -10,7 +10,6 @@
   <string name="general_yes">Si</string>
   <string name="general_are_you_sure">Sei sicuro?</string>
   <string name="general_entry_deleted">La voce è stata cancellata.</string>
-  <string name="general_no_data">Nessun dato ancora disponibile.</string>
   <string name="permission_required">Permesso richiesto:</string>
   <string name="permission_sms_title">Invio/ricezione SMS</string>
   <string name="permission_sms_text">S2MSP funziona solo con le autorizzazioni per inviare e ricevere SMS.
