@@ -1,0 +1,4 @@
+- Remove disturbing no-data toast
+- Bump com.googlecode.libphonenumber:libphonenumber from 8.13.53 to 8.13.54
+- Bump com.android.tools.build:gradle from 8.8.0 to 8.8.1
+- Bump com.googlecode.libphonenumber:libphonenumber from 8.13.54 to 8.13.55
