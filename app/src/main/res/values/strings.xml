@@ -12,7 +12,6 @@
   <string name="general_yes">Yes</string>
   <string name="general_are_you_sure">Are you sure?</string>
   <string name="general_entry_deleted">Entry has been deleted.</string>
-  <string name="general_no_data">No data available yet.</string>
   <string name="permission_required">Required permission:</string>
   <string name="permission_sms_title">SMS send/receive</string>
   <string name="permission_sms_text">S2MSP only works with the permissions to send and receive SMS.

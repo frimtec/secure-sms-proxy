@@ -111,9 +111,6 @@ public class MainActivity extends BaseActivity {
           Toast.makeText(adapter.getContext(), R.string.general_entry_deleted, Toast.LENGTH_SHORT).show();
         }, (dialog, which) -> {
         })));
-    if (all.isEmpty()) {
-      Toast.makeText(this, getString(R.string.general_no_data), Toast.LENGTH_LONG).show();
-    }
   }
 
   public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

@@ -10,7 +10,6 @@
   <string name="general_yes">Ja</string>
   <string name="general_are_you_sure">Bist Du sicher?</string>
   <string name="general_entry_deleted">Eintrag wurde gelöscht.</string>
-  <string name="general_no_data">Noch keine Daten vorhanden.</string>
   <string name="permission_required">Benötigte Berechtigung:</string>
   <string name="permission_sms_title">SMS Senden/Empfangen</string>
   <string name="permission_sms_text">Damit S2MSP funktioniert, ist die Berechtigung zum Senden und Empfangen von SMS notwendig.
