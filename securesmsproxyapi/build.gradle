@@ -1,8 +1,11 @@
+import com.vanniktech.maven.publish.SonatypeHost
+
+plugins {
+    id "com.vanniktech.maven.publish" version "0.31.0"
+}
 apply plugin: 'com.android.library'
 apply plugin: "de.mannodermaus.android-junit5"
 apply plugin: 'jacoco'
-apply plugin: 'maven-publish'
-apply plugin: 'signing'
 
 System.setProperty("line.separator", "\n")
 Properties versionProps = new Properties()
@@ -12,18 +15,6 @@ if (versionPropsFile.exists()) {
 }
 int vcode = Integer.parseInt((versionProps['VERSION_CODE'] == null || versionProps['VERSION_CODE'].startsWith('$')) ? String.valueOf((int) ((System.currentTimeMillis() / 1000 / 60) - 26_797_800)) : versionProps['VERSION_CODE'])
 String vname = (versionProps['VERSION_NAME'] == null || versionProps['VERSION_NAME'].startsWith('$')) ? '3.0.0-dev' : versionProps['VERSION_NAME']
-
-ext["signing.keyId"] = ''
-ext["signing.password"] = ''
-ext["signing.secretKeyRingFile"] = ''
-ext["ossrhUsername"] = ''
-ext["ossrhPassword"] = ''
-
-ext["signing.keyId"] = System.getenv('SIGNING_KEYID')
-ext["signing.password"] = System.getenv('SIGNING_PASSWORD')
-ext["signing.secretKeyRingFile"] = System.getenv('SIGNING_RINGFILE')
-ext["ossUsername"] = System.getenv('OSS_USERNAME')
-ext["ossPassword"] = System.getenv('OSS_PASSWORD')
 
 jacoco {
     toolVersion = "0.8.12"
@@ -78,58 +69,38 @@ tasks.register('sourceJar', Jar) {
     from android.sourceSets.main.java.srcDirs
 }
 
-publishing {
-    publications {
-        release(MavenPublication) {
-            groupId 'com.github.frimtec'
-            artifactId 'secure-sms-proxy-api'
-            version vname
-            artifact(sourceJar)
-            artifact("$buildDir/outputs/aar/securesmsproxyapi-release.aar")
-            pom {
-                name = 'Secure SMS Proxy API'
-                description = 'API to integrate S2MSP (Secure SMS Proxy) into an android application.'
-                url = 'https://github.com/frimtec/secure-sms-proxy'
-                licenses {
-                    license {
-                        name = 'The Apache License, Version 2.0'
-                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-                developers {
-                    developer {
-                        id = 'frimtec'
-                        name = 'Markus Friedli'
-                        email = 'frimtec@gmx.ch'
-                        url = 'https://github.com/frimtec'
-                    }
-                }
-                scm {
-                    connection = 'scm:git:git@github.com:frimtec/secure-sms-proxy'
-                    developerConnection = 'scm:git:git@github.com:frimtec/secure-sms-proxy'
-                    url = 'https://github.com/frimtec/secure-sms-proxy'
-                }
-                issueManagement {
-                    system = 'github'
-                    url = 'https://github.com/frimtec/secure-sms-proxy/issues'
-                }
+mavenPublishing {
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+    signAllPublications()
+    coordinates("com.github.frimtec", "secure-sms-proxy-api", vname)
+    pom {
+        name = 'Secure SMS Proxy API'
+        description = 'API to integrate S2MSP (Secure SMS Proxy) into an android application.'
+        url = 'https://github.com/frimtec/secure-sms-proxy'
+        licenses {
+            license {
+                name = 'The Apache License, Version 2.0'
+                url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
             }
         }
-    }
-    repositories {
-        maven {
-            name = "sonatype"
-            url = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-            credentials {
-                username ossUsername
-                password ossPassword
+        developers {
+            developer {
+                id = 'frimtec'
+                name = 'Markus Friedli'
+                email = 'frimtec@gmx.ch'
+                url = 'https://github.com/frimtec'
             }
         }
+        scm {
+            connection = 'scm:git:git@github.com:frimtec/secure-sms-proxy'
+            developerConnection = 'scm:git:git@github.com:frimtec/secure-sms-proxy'
+            url = 'https://github.com/frimtec/secure-sms-proxy'
+        }
+        issueManagement {
+            system = 'github'
+            url = 'https://github.com/frimtec/secure-sms-proxy/issues'
+        }
     }
-}
-
-signing {
-    sign publishing.publications
 }
 
 dependencies {

@@ -100,19 +100,14 @@ jobs:
           asset_name: securesmsproxyapi-release.aar
           asset_content_type: application/zip
 
-      - name: Prepare Ringfile
-        if: steps.get_release.outputs.prerelease == 'false'
-        run: echo "${{ secrets.gpg_ringfile }}" | base64 --decode > ringfile
-
       - name: Publish AAR
         if: steps.get_release.outputs.prerelease == 'false'
-        run: bash ./gradlew :securesmsproxyapi:publish --stacktrace
+        run: bash ./gradlew publishToMavenCentral --no-configuration-cache --stacktrace
         env:
-          SIGNING_KEYID: ${{ secrets.gpg_key_id }}
-          SIGNING_PASSWORD: ${{ secrets.gpg_passphrase }}
-          SIGNING_RINGFILE: ../ringfile
-          OSS_USERNAME: ${{ secrets.nexus_username }}
-          OSS_PASSWORD: ${{ secrets.nexus_password }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.gpg_passphrase }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.gpg_private_key }}
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.nexus_username }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.nexus_password }}
 
   update-repo:
 
