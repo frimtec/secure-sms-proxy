@@ -1,0 +1,2 @@
+- Migrate from OSSRH to Central Portal
+- Bump compileSdk of securesmsproxyapi from 34 to 35
