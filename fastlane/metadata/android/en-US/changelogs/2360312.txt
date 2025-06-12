@@ -1,0 +1,8 @@
+- Bump com.googlecode.libphonenumber:libphonenumber from 9.0.4 to 9.0.5
+- Bump com.android.tools.build:gradle from 8.9.2 to 8.10.0
+- Bump org.json:json from 20250107 to 20250517
+- Bump com.vanniktech.maven.publish from 0.31.0 to 0.32.0
+- Bump com.googlecode.libphonenumber:libphonenumber from 9.0.5 to 9.0.6
+- Bump com.android.tools.build:gradle from 8.10.0 to 8.10.1
+- Bump com.googlecode.libphonenumber:libphonenumber from 9.0.6 to 9.0.7
+- Bump androidx.appcompat:appcompat from 1.7.0 to 1.7.1
