@@ -2,6 +2,8 @@
 [![Maven Central][maven-central-shield]][maven-central]
 [![License][license-shield]][license]
 
+[![Reproducible Build][reproducible-shield]][izzy-on-droid]
+
 ![Project Maintenance][maintenance-shield]
 [![Code Coverage][codecov-shield]][codecov]
 
@@ -274,3 +276,4 @@ You can send an email to [frimtec@gmx.ch](mailto:frimtec@gmx.ch) or [open an iss
 [lokalise]: https://lokalise.com/
 [libphonenumber]: https://github.com/google/libphonenumber
 [semver4j]: https://github.com/vdurmont/semver4j
+[reproducible-shield]: https://shields.rbtlog.dev/simple/com.github.frimtec.android.securesmsproxy
