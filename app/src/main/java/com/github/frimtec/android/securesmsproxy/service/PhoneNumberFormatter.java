@@ -12,8 +12,6 @@ import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 
-import java.util.Locale;
-
 public class PhoneNumberFormatter {
 
   private static final String TAG = "PhoneNumberFormatter";
