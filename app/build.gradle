@@ -29,11 +29,11 @@ tasks.register("unitTestCoverageReport", JacocoReport) {
 }
 
 android {
-    compileSdk 35
+    compileSdk 36
     defaultConfig {
         applicationId "com.github.frimtec.android.securesmsproxy"
         minSdkVersion 24
-        targetSdkVersion 35
+        targetSdkVersion 36
         versionCode vcode
         versionName vname
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
