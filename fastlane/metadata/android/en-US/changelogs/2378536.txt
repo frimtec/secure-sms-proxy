@@ -1,0 +1,1 @@
+- Migrate to target SDK 36 (Android 16)
