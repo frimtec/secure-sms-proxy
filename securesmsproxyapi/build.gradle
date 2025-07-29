@@ -1,7 +1,5 @@
-import com.vanniktech.maven.publish.SonatypeHost
-
 plugins {
-    id "com.vanniktech.maven.publish" version "0.33.0"
+    id "com.vanniktech.maven.publish" version "0.34.0"
 }
 apply plugin: 'com.android.library'
 apply plugin: "de.mannodermaus.android-junit5"
@@ -70,7 +68,7 @@ tasks.register('sourceJar', Jar) {
 }
 
 mavenPublishing {
-    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+    publishToMavenCentral(true)
     signAllPublications()
     coordinates("com.github.frimtec", "secure-sms-proxy-api", vname)
     pom {
