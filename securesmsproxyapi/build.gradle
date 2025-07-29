@@ -5,6 +5,8 @@ apply plugin: 'com.android.library'
 apply plugin: "de.mannodermaus.android-junit5"
 apply plugin: 'jacoco'
 
+def junit_version = '5.13.4'
+
 System.setProperty("line.separator", "\n")
 Properties versionProps = new Properties()
 def versionPropsFile = file('../app/version.properties')
@@ -106,9 +108,9 @@ dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.7.1'
     implementation 'com.vdurmont:semver4j:3.1.0'
-    testImplementation "org.junit.jupiter:junit-jupiter-api:5.13.4"
-    testImplementation "org.junit.jupiter:junit-jupiter-params:5.13.4"
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.13.4"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_version"
+    testImplementation "org.junit.jupiter:junit-jupiter-params:$junit_version"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_version"
     testImplementation "org.assertj:assertj-core:3.27.3"
     testImplementation 'org.json:json:20250517'
     testImplementation "org.mockito:mockito-core:5.18.0"
