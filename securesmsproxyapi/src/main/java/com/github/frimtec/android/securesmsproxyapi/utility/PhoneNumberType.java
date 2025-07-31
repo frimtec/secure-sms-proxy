@@ -94,17 +94,27 @@ public enum PhoneNumberType {
 
   private static boolean isNumericShortCode(String phoneNumber, String countryCode) {
     return switch (countryCode) {
-      case "BW" -> inLengthRange(phoneNumber, 3, 3);
+      case "BW" -> length(phoneNumber, 3);
       case "CL", "DK", "NP", "NZ" -> inLengthRange(phoneNumber, 3, 4);
       case "CH", "IT" -> inLengthRange(phoneNumber, 3, 5);
-      case "BE", "ID", "ES", "MA", "NL", "PA", "TR" -> inLengthRange(phoneNumber, 4, 4);
+      case "BE", "ID", "ES", "MA", "NL", "PA", "TR" -> length(phoneNumber, 4);
       case "DE", "DO", "HU", "NG", "NO" -> inLengthRange(phoneNumber, 4, 5);
-      case "BR", "FR", "GB", "GR", "SG", "SE" -> inLengthRange(phoneNumber, 5, 5);
+      case "BR", "FR", "GB", "GR", "SG", "SE" -> length(phoneNumber, 5);
       case "CA", "FI" -> inLengthRange(phoneNumber, 5, 6);
-      case "IE", "IN" -> phoneNumber.charAt(0) == '5' && inLengthRange(phoneNumber, 5, 5);
+      case "IE", "IN" -> phoneNumber.charAt(0) == '5' && length(phoneNumber, 5);
       case "US" -> phoneNumber.charAt(0) != '1' && inLengthRange(phoneNumber, 5, 6);
+      case "AU" -> phoneNumber.startsWith("19") && length(phoneNumber, 6, 8);
       default -> false;
     };
+  }
+
+  private static boolean length(String phoneNumber, int ... lengths) {
+    for (int length : lengths) {
+      if (phoneNumber.length() == length) {
+        return true;
+      }
+    }
+    return false;
   }
 
   private static boolean inLengthRange(String phoneNumber, int min, int max) {

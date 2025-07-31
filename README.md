@@ -54,6 +54,7 @@ S2MSP supports the exchange of SMS for the following type of phone numbers:
 | Alphanumeric short codes | RECEIVE only        |
 
 Numeric short codes are currently only supported for the following countries:
+* Australia (AU) - as of release 3.5.2
 * Belgium (BE)
 * Botswana (BW)
 * Brazil (BR)
