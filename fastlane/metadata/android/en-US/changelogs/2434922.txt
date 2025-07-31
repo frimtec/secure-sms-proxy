@@ -1,0 +1,3 @@
+- Add support for numeric short codes for Australia
+- Bump androidx.test:runner from 1.6.2 to 1.7.0
+- Bump androidx.test.espresso:espresso-core from 1.6.2 to 1.7.0
