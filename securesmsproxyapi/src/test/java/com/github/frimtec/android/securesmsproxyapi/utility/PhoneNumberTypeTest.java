@@ -160,6 +160,12 @@ class PhoneNumberTypeTest {
       "12345,IN,STANDARD",
       "52345,IN,NUMERIC_SHORT_CODE",
       "523456,IN,STANDARD",
+      "191234,AU,NUMERIC_SHORT_CODE",
+      "19123456,AU,NUMERIC_SHORT_CODE",
+      "1912345,AU,STANDARD",
+      "191234567,AU,STANDARD",
+      "19123,AU,STANDARD",
+      "18123456,AU,STANDARD",
   })
   void fromNumberForNumericShortCodesNumbers(String number, String country, String expected) {
     assertEquals(PhoneNumberType.valueOf(expected), PhoneNumberType.fromNumber(number, country));
