@@ -23,7 +23,7 @@ jobs:
       - name: Build and Test coverage Report
         run: bash ./gradlew test unitTestCoverageReport --stacktrace
 
-      - uses: codecov/codecov-action@v5.5.0
+      - uses: codecov/codecov-action@v5.5.1
         with:
           files: ./app/build/reports/jacoco/unitTestCoverageReport/unitTestCoverageReport.xml,./securesmsproxyapi/build/reports/jacoco/unitTestCoverageReport/unitTestCoverageReport.xml
           token: ${{ secrets.CODECOV_TOKEN }}
