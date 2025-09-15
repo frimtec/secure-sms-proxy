@@ -51,7 +51,7 @@ jobs:
       - name: Create a new release branch
         run: git checkout -b release/${{ steps.get_release.outputs.tag_name }}
       - name: Push release branch
-        uses: ad-m/github-push-action@v0.8.0
+        uses: ad-m/github-push-action@v1.0.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: 'release/${{ steps.get_release.outputs.tag_name }}'
@@ -165,7 +165,7 @@ jobs:
           git commit -m "Update release version/changelog for ${{ steps.read_version_properties.outputs.VERSION_NAME }}"
 
       - name: Push changes
-        uses: ad-m/github-push-action@v0.8.0
+        uses: ad-m/github-push-action@v1.0.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: 'master'
