@@ -49,7 +49,7 @@ jobs:
           name: secure-sms-proxy
           path: ./app/build/outputs/apk/debug/app-debug.apk
 
-      - name: VirusTotal Scan
+      - name: 🛡 VirusTotal Scan
         uses: crazy-max/ghaction-virustotal@v4
         with:
           request_rate: 4
