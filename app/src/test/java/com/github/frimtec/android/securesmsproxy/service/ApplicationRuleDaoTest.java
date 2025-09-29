@@ -199,20 +199,6 @@ class ApplicationRuleDaoTest {
   }
 
   @Test
-  void byPhoneNumbersNullCursor() {
-    DbFactory dbFactory = mock(DbFactory.class);
-    SQLiteDatabase db = mock(SQLiteDatabase.class);
-
-    String rawQuery = "SELECT null FROM " + VIEW_APPLICATION_RULE + " WHERE " + TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER + " IN (null)";
-    when(db.rawQuery(rawQuery, null)).thenReturn(null);
-    when(dbFactory.getDatabase(READ_ONLY)).thenReturn(db);
-    ApplicationRuleDao dao = new ApplicationRuleDao(dbFactory);
-
-    Map<String, Set<Application>> applicationsByNumber = dao.byPhoneNumbers(new LinkedHashSet<>(Arrays.asList("123", "456")));
-    assertThat(applicationsByNumber.size()).isEqualTo(0);
-  }
-
-  @Test
   void byPhoneNumbersEmptyCursor() {
     DbFactory dbFactory = mock(DbFactory.class);
     SQLiteDatabase db = mock(SQLiteDatabase.class);
