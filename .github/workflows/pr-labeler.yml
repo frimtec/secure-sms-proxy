@@ -5,6 +5,9 @@ on:
 
 jobs:
   pr-labeler:
+    permissions:
+      contents: read
+      pull-requests: write
     runs-on: ubuntu-22.04
     steps:
       - uses: TimonVS/pr-labeler-action@v5
