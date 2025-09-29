@@ -30,6 +30,8 @@ jobs:
 
   apk:
     name: Generate APK
+    permissions:
+      contents: read
     runs-on: ubuntu-22.04
 
     steps:
