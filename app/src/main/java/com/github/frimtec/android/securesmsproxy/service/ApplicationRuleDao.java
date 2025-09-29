@@ -122,7 +122,7 @@ public class ApplicationRuleDao {
     String rawQuery = "SELECT " + TextUtils.join(", ", ALL_COLUMNS) + " FROM " + VIEW_APPLICATION_RULE + " WHERE " + TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER +
         " IN (" + TextUtils.join(",", phoneNumbers.stream().map(s -> "'" + s + "'").collect(Collectors.toList())) + ")";
     try (Cursor cursor = db.rawQuery(rawQuery, null)) {
-      if (cursor != null && cursor.moveToFirst()) {
+      if (cursor.moveToFirst()) {
         do {
           long id = cursor.getLong(0);
           Application application = Objects.requireNonNull(

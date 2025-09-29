@@ -12,8 +12,12 @@
         </intent>
     </queries>
 
-    <uses-permission android:name="android.permission.RECEIVE_SMS" />
-    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission
+        android:name="android.permission.RECEIVE_SMS"
+        tools:ignore="SmsAndCallLogPolicy" />
+    <uses-permission
+        android:name="android.permission.SEND_SMS"
+        tools:ignore="SmsAndCallLogPolicy" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
     <application

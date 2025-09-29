@@ -33,7 +33,7 @@ tasks.register("unitTestCoverageReport", JacocoReport) {
 }
 
 android {
-    compileSdk 36
+    compileSdkVersion(36)
 
     defaultConfig {
         minSdkVersion 24
