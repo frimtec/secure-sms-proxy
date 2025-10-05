@@ -44,6 +44,9 @@ S2MSP does not need any other permissions. This ensures the integrity and securi
 Due to new sideloading restrictions on Android 15 and above, "Allow restricted settings" must be enabled in the S2MSP "App info" dialog before the SMS permission can be granted!
 ![Main view](images/restricted-settings.png)
 
+The most asked question about S2MSP is, whether it is safe to install the app or not.
+Read the answer here: [Why Secure‐SMS‐Proxy (S2MSP) is Safe](https://github.com/frimtec/secure-sms-proxy/wiki/Why-Secure%E2%80%90SMS%E2%80%90Proxy-(S2MSP)-is-Safe)!
+
 S2MSP supports the exchange of SMS for the following type of phone numbers:
 
 | Type                     | Supported operation |
