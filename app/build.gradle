@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: "de.mannodermaus.android-junit5"
 apply plugin: 'jacoco'
 
-def junit_version = '5.13.4'
+def junit_version = '6.0.0'
 
 System.setProperty("line.separator", "\n")
 Properties versionProps = new Properties()
