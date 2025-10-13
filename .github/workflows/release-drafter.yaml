@@ -34,7 +34,7 @@ jobs:
           sed -i 's/$code/${{ steps.generate_vcode.outputs.vcode }}/g' app/version.properties
 
       - name: Commit version
-        uses: stefanzweifel/git-auto-commit-action@v6
+        uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: Configure release information
           branch: release/next
