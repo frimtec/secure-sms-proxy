@@ -32,7 +32,7 @@ jobs:
 
   apk:
     name: Generate APK
-    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
+    if: "! github.event.pull_request.head.repo.fork"
     permissions:
       contents: read
     runs-on: ubuntu-22.04
