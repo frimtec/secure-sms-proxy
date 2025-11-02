@@ -32,7 +32,7 @@ jobs:
 
   apk:
     name: Generate APK
-    if: "! github.event.pull_request.head.repo.fork"
+    if: "github.actor == 'frimtec'"
     permissions:
       contents: read
     runs-on: ubuntu-22.04
