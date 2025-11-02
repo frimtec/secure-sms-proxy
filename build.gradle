@@ -7,8 +7,8 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.13.0'
-        classpath "de.mannodermaus.gradle.plugins:android-junit5:1.14.0.0"
+        classpath(libs.android.tools.build.gradle)
+        classpath libs.android.junit5
     }
 }
 

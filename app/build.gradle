@@ -2,8 +2,6 @@ apply plugin: 'com.android.application'
 apply plugin: "de.mannodermaus.android-junit5"
 apply plugin: 'jacoco'
 
-def junit_version = '6.0.0'
-
 System.setProperty("line.separator", "\n")
 Properties versionProps = new Properties()
 def versionPropsFile = file('version.properties')
@@ -61,18 +59,18 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
-    implementation 'androidx.activity:activity:1.11.0'
-    implementation 'com.google.android.material:material:1.12.0'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'com.googlecode.libphonenumber:libphonenumber:9.0.17'
     implementation project(path: ':securesmsproxyapi')
-    testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_version"
-    testImplementation "org.junit.jupiter:junit-jupiter-params:$junit_version"
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_version"
-    testImplementation "org.assertj:assertj-core:3.27.6"
-    testImplementation "org.mockito:mockito-core:5.20.0"
-    testImplementation 'org.json:json:20250517'
-    androidTestImplementation 'androidx.test:runner:1.7.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.7.0'
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.material)
+    implementation(libs.androidx.legacy.support.v4)
+    implementation(libs.googlecode.libphonenumber)
+    testImplementation(libs.junit.jupiter.api)
+    testImplementation(libs.junit.jupiter.params)
+    testRuntimeOnly(libs.junit.jupiter.engine)
+    testImplementation(libs.assertj.core)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.json)
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.androidx.espresso.core)
 }

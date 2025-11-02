@@ -1,11 +1,9 @@
 plugins {
-    id "com.vanniktech.maven.publish" version "0.34.0"
+    alias(libs.plugins.vanniktech.maven.publish)
 }
 apply plugin: 'com.android.library'
 apply plugin: "de.mannodermaus.android-junit5"
 apply plugin: 'jacoco'
-
-def junit_version = '6.0.0'
 
 System.setProperty("line.separator", "\n")
 Properties versionProps = new Properties()
@@ -106,15 +104,15 @@ mavenPublishing {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'androidx.appcompat:appcompat:1.7.1'
-    implementation 'com.vdurmont:semver4j:3.1.0'
-    testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_version"
-    testImplementation "org.junit.jupiter:junit-jupiter-params:$junit_version"
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_version"
-    testImplementation "org.assertj:assertj-core:3.27.6"
-    testImplementation 'org.json:json:20250517'
-    testImplementation "org.mockito:mockito-core:5.20.0"
-    androidTestImplementation 'androidx.test:runner:1.7.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.7.0'
+    implementation(libs.androidx.appcompat)
+    implementation(libs.semver4j)
+    testImplementation(libs.junit.jupiter.api)
+    testImplementation(libs.junit.jupiter.params)
+    testRuntimeOnly(libs.junit.jupiter.engine)
+    testImplementation(libs.assertj.core)
+    testImplementation(libs.json)
+    testImplementation(libs.mockito.core)
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.androidx.espresso.core)
 }
 
