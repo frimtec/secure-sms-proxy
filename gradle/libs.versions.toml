@@ -10,7 +10,7 @@ androidx-activity = "1.12.1"
 androidx-constraintlayout = "2.2.1"
 androidx-appcompat = "1.7.1"
 androidx-legacy-support-v4 = "1.0.0"
-googlecode-libphonenumber = "9.0.19"
+googlecode-libphonenumber = "9.0.20"
 semver4j = "3.1.0"
 
 androidx-espresso-core = "3.7.0"
