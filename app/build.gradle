@@ -1,5 +1,8 @@
+plugins {
+    alias(libs.plugins.android.junit.framework)
+}
+
 apply plugin: 'com.android.application'
-apply plugin: "de.mannodermaus.android-junit5"
 apply plugin: 'jacoco'
 
 System.setProperty("line.separator", "\n")

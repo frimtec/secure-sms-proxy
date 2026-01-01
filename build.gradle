@@ -8,7 +8,6 @@ buildscript {
     }
     dependencies {
         classpath(libs.android.tools.build.gradle)
-        classpath libs.android.junit5
     }
 }
 
