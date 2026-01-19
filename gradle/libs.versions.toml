@@ -2,7 +2,7 @@
 
 vanniktech-maven-publish = "0.35.0"
 
-android-junit-framework = "2.0.0"
+android-junit-framework = "2.0.1"
 android-tools-build-gradle = "8.13.2"
 
 androidx-material = "1.12.0"
