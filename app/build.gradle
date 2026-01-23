@@ -1,9 +1,8 @@
 plugins {
+    id 'com.android.application'
+    id 'jacoco'
     alias(libs.plugins.android.junit.framework)
 }
-
-apply plugin: 'com.android.application'
-apply plugin: 'jacoco'
 
 System.setProperty("line.separator", "\n")
 Properties versionProps = new Properties()
@@ -40,6 +39,9 @@ android {
         versionCode vcode
         versionName vname
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildFeatures {
+        buildConfig = true
     }
     buildTypes {
         debug {

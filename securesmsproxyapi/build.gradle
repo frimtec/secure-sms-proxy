@@ -1,10 +1,9 @@
 plugins {
+    id 'com.android.library'
+    id 'jacoco'
     alias(libs.plugins.vanniktech.maven.publish)
     alias(libs.plugins.android.junit.framework)
 }
-
-apply plugin: 'com.android.library'
-apply plugin: 'jacoco'
 
 System.setProperty("line.separator", "\n")
 Properties versionProps = new Properties()
@@ -44,6 +43,9 @@ android {
         buildConfigField 'String', 'VERSION_NAME', "\"${vname}\""
     }
 
+    buildFeatures {
+        buildConfig = true
+    }
     buildTypes {
         debug {
             enableUnitTestCoverage true
