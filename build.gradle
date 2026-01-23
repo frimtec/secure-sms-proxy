@@ -11,6 +11,10 @@ buildscript {
     }
 }
 
+plugins {
+    id 'jacoco'
+}
+
 allprojects {
     tasks.withType(JavaCompile).configureEach {
         options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
@@ -24,5 +28,3 @@ allprojects {
 tasks.register('clean', Delete) {
     delete rootProject.layout.buildDirectory
 }
-
-apply plugin: 'jacoco'
