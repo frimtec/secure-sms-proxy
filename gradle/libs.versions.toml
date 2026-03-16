@@ -15,7 +15,7 @@ semver4j = "3.1.0"
 
 androidx-espresso-core = "3.7.0"
 json = "20251224"
-mockito = "5.22.0"
+mockito = "5.23.0"
 assertj = "3.27.7"
 junit-jupiter = "6.0.3"
 androidx-test-runner = "1.7.0"
