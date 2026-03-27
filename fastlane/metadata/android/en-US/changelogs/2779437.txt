@@ -1,0 +1,4 @@
+- Add application rule management
+- Bump com.googlecode.libphonenumber:libphonenumber from 9.0.25 to 9.0.26
+- Bump androidx.activity:activity from 1.12.4 to 1.13.0
+- Bump gradle-wrapper from 9.4.0 to 9.4.1
