@@ -29,12 +29,19 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.github.frimtec.android.securesmsproxy.R;
 import com.github.frimtec.android.securesmsproxy.domain.ApplicationRule;
 import com.github.frimtec.android.securesmsproxy.service.ApplicationRuleDao;
+import com.github.frimtec.android.securesmsproxy.service.PhoneNumberFormatter;
 import com.github.frimtec.android.securesmsproxy.utility.AlertDialogHelper;
+import com.github.frimtec.android.securesmsproxy.utility.PackageInfoAccessor;
 import com.github.frimtec.android.securesmsproxy.utility.Permission;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class MainActivity extends BaseActivity {
 
@@ -64,8 +71,47 @@ public class MainActivity extends BaseActivity {
 
     View headerView = getLayoutInflater().inflate(R.layout.application_rule_header, listView, false);
     listView.addHeaderView(headerView);
+    listView.setOnItemClickListener((parent, view, position, id) -> {
+      ApplicationRule selectedRule = (ApplicationRule) parent.getItemAtPosition(position);
+      if (selectedRule != null) {
+        Intent intent = new Intent(this, ApplicationRuleDetailActivity.class);
+        intent.putExtra(ApplicationRuleDetailActivity.EXTRA_APPLICATION_NAME, selectedRule.application().name());
+        startActivity(intent);
+      }
+    });
+
+    FloatingActionButton addButton = findViewById(R.id.add_application_button);
+    addButton.setOnClickListener(v -> addApplication());
+
     registerForContextMenu(listView);
     refresh();
+  }
+
+  private void addApplication() {
+    PackageInfoAccessor packageInfoAccessor = new PackageInfoAccessor(this);
+    Set<String> alreadyRegistered = dao.all().stream()
+        .map(rule -> rule.application().name())
+        .collect(Collectors.toSet());
+
+    List<String> installedPackages = packageInfoAccessor.getInstalledPackages().stream()
+        .filter(packageName -> !packageName.equals(getPackageName()))
+        .filter(packageName -> !packageInfoAccessor.isSystemApp(packageName))
+        .filter(packageName -> !alreadyRegistered.contains(packageName))
+        .sorted(Comparator.comparing(packageName -> packageInfoAccessor.getLabel(packageName).toString().toLowerCase()))
+        .collect(Collectors.toList());
+
+    new AlertDialog.Builder(this)
+        .setTitle(R.string.main_add_application_title)
+        .setAdapter(new AppArrayAdapter(this, installedPackages), (dialog, which) -> {
+          String selectedPackage = installedPackages.get(which);
+          dao.insertOrUpdate(selectedPackage, "", Collections.emptySet(), new PhoneNumberFormatter(this));
+          refresh();
+          Intent intent = new Intent(this, ApplicationRuleDetailActivity.class);
+          intent.putExtra(ApplicationRuleDetailActivity.EXTRA_APPLICATION_NAME, selectedPackage);
+          startActivity(intent);
+        })
+        .setNegativeButton(android.R.string.cancel, (dialog, which) -> dialog.dismiss())
+        .show();
   }
 
   @Override
