@@ -10,6 +10,7 @@
   <string name="general_yes">Si</string>
   <string name="general_are_you_sure">Sei sicuro?</string>
   <string name="general_entry_deleted">La voce è stata cancellata.</string>
+  <string name="general_no_data">Nessun dato ancora disponibile.</string>
   <string name="permission_required">Permesso richiesto:</string>
   <string name="permission_sms_title">Invio/ricezione SMS</string>
   <string name="permission_sms_text">S2MSP funziona solo con le autorizzazioni per inviare e ricevere SMS.
@@ -35,4 +36,9 @@ A causa delle nuove restrizioni sul sideload su Android 15 e versioni successive
   <string name="system_language">Predefinita di sistema</string>
   <string name="notification_battery_optimization_title">L\'ottimizzazione della batteria è attiva!</string>
   <string name="notification_battery_optimization_text">Per funzionare in modo affidabile su tutti i dispositivi, S2MSP dovrebbe essere eseguito con l\'ottimizzazione della batteria disattivata.</string>
+  <string name="title_activity_application_rule_detail">Dettagli della regola di applicazione</string>
+  <string name="action_add">Aggiungere</string>
+  <string name="application_rule_detail_add_phone_number_title">Aggiungi numero</string>
+  <string name="application_rule_detail_phone_number_hint">Numero</string>
+  <string name="main_add_application_title">Aggiungi applicazione</string>
 </resources>

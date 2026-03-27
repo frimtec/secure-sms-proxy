@@ -2,7 +2,6 @@
 <resources>
   <string name="title_activity_about">About</string>
   <string name="title_activity_logcat" translatable="false">Logcat</string>
-  <string name="title_activity_application_rule_detail">Application Rule Detail</string>
   <string name="menu_about">About</string>
   <string name="menu_logcat" translatable="false">Logcat</string>
   <string name="menu_logcat_refresh">Refresh</string>
@@ -13,6 +12,7 @@
   <string name="general_yes">Yes</string>
   <string name="general_are_you_sure">Are you sure?</string>
   <string name="general_entry_deleted">Entry has been deleted.</string>
+  <string name="general_no_data">No data available yet.</string>
   <string name="permission_required">Required permission:</string>
   <string name="permission_sms_title">SMS send/receive</string>
   <string name="permission_sms_text">S2MSP only works with the permissions to send and receive SMS.
@@ -24,7 +24,6 @@ Due to new sideloading restrictions on Android 15 and above, \"Allow restricted 
   <string name="send_log_message">S2MSP was crashed unexpectedly. To improve the stability of S2MSP, please send the crash report to the author via e-mail.</string>
   <string name="send_log_button_send">Send</string>
   <string name="action_delete">Delete</string>
-  <string name="action_add">Add</string>
   <string name="header_application">Application</string>
   <string name="header_phone_numbers">Allowed numbers</string>
   <string name="register_comment">The stated application requests permissions to send and receive SMS via S2MSP restricted to the following phone numbers:</string>
@@ -43,6 +42,8 @@ Due to new sideloading restrictions on Android 15 and above, \"Allow restricted 
   <string name="system_language">System default</string>
   <string name="notification_battery_optimization_title">Battery optimization is on!</string>
   <string name="notification_battery_optimization_text">To work reliable on all devices, S2MSP should run with battery optimization turned off.</string>
+  <string name="title_activity_application_rule_detail">Application Rule Detail</string>
+  <string name="action_add">Add</string>
   <string name="application_rule_detail_add_phone_number_title">Add number</string>
   <string name="application_rule_detail_phone_number_hint">Number</string>
   <string name="main_add_application_title">Add application</string>
