@@ -1,10 +1,13 @@
 package com.github.frimtec.android.securesmsproxy.utility;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class PackageInfoAccessor {
 
@@ -37,6 +40,22 @@ public class PackageInfoAccessor {
     } catch (PackageManager.NameNotFoundException e) {
       return false;
     }
+  }
+
+  public boolean isSystemApp(String packageName) {
+    try {
+      ApplicationInfo ai = this.packageManager.getApplicationInfo(packageName, 0);
+      return (ai.flags & ApplicationInfo.FLAG_SYSTEM) != 0;
+    } catch (PackageManager.NameNotFoundException e) {
+      return false;
+    }
+  }
+
+  public List<String> getInstalledPackages() {
+    return this.packageManager.getInstalledApplications(PackageManager.GET_META_DATA)
+        .stream()
+        .map(applicationInfo -> applicationInfo.packageName)
+        .collect(Collectors.toList());
   }
 
 }

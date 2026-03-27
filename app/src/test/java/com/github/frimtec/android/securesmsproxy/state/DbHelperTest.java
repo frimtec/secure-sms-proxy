@@ -23,16 +23,28 @@ class DbHelperTest {
       dbHelper.onCreate(db);
       verify(db).execSQL(Mockito.startsWith("CREATE TABLE " + TABLE_APPLICATION));
       verify(db).execSQL(Mockito.startsWith("CREATE TABLE " + TABLE_RULE));
+      verify(db).execSQL(Mockito.startsWith("DROP VIEW IF EXISTS " + VIEW_APPLICATION_RULE));
       verify(db).execSQL(Mockito.startsWith("CREATE VIEW " + VIEW_APPLICATION_RULE));
       verifyNoMoreInteractions(db);
     }
   }
 
   @Test
-  void onUpgradeV1ToV1() {
+  void onUpgradeV1ToV2() {
     try (DbHelper dbHelper = new DbHelper(mock(Context.class))) {
       SQLiteDatabase db = mock(SQLiteDatabase.class);
-      dbHelper.onUpgrade(db, 1, 1);
+      dbHelper.onUpgrade(db, 1, 2);
+      verify(db).execSQL(Mockito.startsWith("DROP VIEW IF EXISTS " + VIEW_APPLICATION_RULE));
+      verify(db).execSQL(Mockito.startsWith("CREATE VIEW " + VIEW_APPLICATION_RULE));
+      verifyNoMoreInteractions(db);
+    }
+  }
+
+  @Test
+  void onUpgradeV2ToV2() {
+    try (DbHelper dbHelper = new DbHelper(mock(Context.class))) {
+      SQLiteDatabase db = mock(SQLiteDatabase.class);
+      dbHelper.onUpgrade(db, 2, 2);
       verifyNoInteractions(db);
     }
   }

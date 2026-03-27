@@ -154,7 +154,10 @@ public class ApplicationRuleDao {
         Set<String> phoneNumbers = Objects.requireNonNull(
             applicationPhoneNumbers.getOrDefault(application, new HashSet<>())
         );
-        phoneNumbers.add(cursor.getString(4));
+        String number = cursor.getString(4);
+        if (number != null) {
+          phoneNumbers.add(number);
+        }
         applicationPhoneNumbers.put(application, phoneNumbers);
       } while (cursor.moveToNext());
       return applications.values()
@@ -168,5 +171,19 @@ public class ApplicationRuleDao {
   public void delete(Application application) {
     SQLiteDatabase db = this.dbFactory.getDatabase(WRITABLE);
     db.delete(TABLE_APPLICATION, TABLE_APPLICATION_COLUMN_ID + "=?", new String[]{String.valueOf(application.id())});
+  }
+
+  public void addPhoneNumber(long applicationId, String phoneNumber) {
+    SQLiteDatabase db = this.dbFactory.getDatabase(WRITABLE);
+    ContentValues ruleValues = new ContentValues();
+    ruleValues.put(TABLE_RULE_COLUMN_APPLICATION_ID, applicationId);
+    ruleValues.put(TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER, phoneNumber);
+    db.insert(TABLE_RULE, null, ruleValues);
+  }
+
+  public void deletePhoneNumber(long applicationId, String phoneNumber) {
+    SQLiteDatabase db = this.dbFactory.getDatabase(WRITABLE);
+    db.delete(TABLE_RULE, TABLE_RULE_COLUMN_APPLICATION_ID + "=? AND " + TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER + "=?",
+        new String[]{String.valueOf(applicationId), phoneNumber});
   }
 }

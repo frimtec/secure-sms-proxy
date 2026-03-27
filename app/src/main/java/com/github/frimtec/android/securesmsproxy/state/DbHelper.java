@@ -23,7 +23,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
   private static final String TAG = "DbHelper";
   private static final String DB_NAME = "S2MSP.db";
-  private static final int DB_VERSION = 1;
+  private static final int DB_VERSION = 2;
 
   public DbHelper(@Nullable Context context) {
     super(context, DB_NAME, null, DB_VERSION);
@@ -43,16 +43,21 @@ public class DbHelper extends SQLiteOpenHelper {
         "  " + TABLE_RULE_COLUMN_APPLICATION_ID + " INTEGER REFERENCES " + TABLE_APPLICATION + " (" + TABLE_APPLICATION_COLUMN_ID + ") ON DELETE CASCADE," +
         "  " + TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER + " TEXT NOT NULL" +
         ");");
+    createOrUpdateView(db);
+  }
+
+  private static void createOrUpdateView(SQLiteDatabase db) {
+    db.execSQL("DROP VIEW IF EXISTS " + VIEW_APPLICATION_RULE);
     db.execSQL("CREATE VIEW " + VIEW_APPLICATION_RULE + " AS" +
         "  SELECT A.*, R." + TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER +
-        "  FROM " + TABLE_APPLICATION + " A JOIN " + TABLE_RULE + " R ON R." + TABLE_RULE_COLUMN_APPLICATION_ID + "=A." + TABLE_APPLICATION_COLUMN_ID);
+        "  FROM " + TABLE_APPLICATION + " A LEFT JOIN " + TABLE_RULE + " R ON R." + TABLE_RULE_COLUMN_APPLICATION_ID + "=A." + TABLE_APPLICATION_COLUMN_ID);
   }
 
   @Override
   public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
     Log.i(TAG, String.format("Upgrade DB from %d to %d", oldVersion, newVersion));
-//    if (oldVersion < 2) {
-//       migrate to version 2 - do not change reference schema
-//    }
+    if (oldVersion < 2) {
+      createOrUpdateView(db);
+    }
   }
 }

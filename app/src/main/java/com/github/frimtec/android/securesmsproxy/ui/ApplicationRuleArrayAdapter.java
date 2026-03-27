@@ -1,6 +1,7 @@
 package com.github.frimtec.android.securesmsproxy.ui;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import com.github.frimtec.android.securesmsproxy.utility.PackageInfoAccessor;
 import com.github.frimtec.android.securesmsproxyapi.utility.PhoneNumberType;
 
 import java.util.List;
+import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
@@ -57,10 +59,14 @@ class ApplicationRuleArrayAdapter extends ArrayAdapter<ApplicationRule> {
       label.setText(labelText);
       TextView phoneNumbers = convertView.findViewById(R.id.application_allowed_phone_numbers);
       String networkCountryIso = PhoneNumberType.networkCountryIso(getContext());
-      phoneNumbers.setText(applicationRule.allowedPhoneNumbers()
-          .stream()
-          .map(number -> PhoneNumberFormatter.getFormattedNumber(number, networkCountryIso))
-          .collect(Collectors.joining("\n"))
+      Set<String> allowedPhoneNumbers = applicationRule.allowedPhoneNumbers();
+      phoneNumbers.setText(
+          allowedPhoneNumbers
+              .stream()
+              .map(number -> PhoneNumberFormatter.getFormattedNumber(number, networkCountryIso))
+              .filter(number -> !TextUtils.isEmpty(number))
+              .sorted()
+              .collect(Collectors.joining("\n"))
       );
 
       ImageButton deleteButton = convertView.findViewById(R.id.application_button_delete);

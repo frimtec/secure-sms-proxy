@@ -48,6 +48,10 @@ public class PhoneNumberFormatter {
     }
   }
 
+  public String getFormattedNumber(String phoneNumber) {
+    return getFormattedNumber(phoneNumber, this.networkCountryCode);
+  }
+
   public static String getFormattedNumber(String phoneNumber, String networkCountryCode) {
     return switch (PhoneNumberType.fromNumber(phoneNumber, networkCountryCode)) {
       case EMPTY -> phoneNumber;
