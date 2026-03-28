@@ -108,6 +108,12 @@ Build S2MSP on your own and then install the APK via ADB to your android phone.
 S2MSP provides an easy API to integrate applications. The API supports the registration process, sending and receiving SMS,
 as well as querying if specific phone numbers are already granted for the application.
 
+### Open an Issue to get your application registered with S2MSP
+That S2MSP can show the name and the icon of your app it must be registered in the S2MSP `AndroidManifest.xml`.
+You can open an issue on this project with the following information:
+* Link to your application project.
+* Android package name of your application.
+
 ### Adding the library to your project
 The API is provided as an AAR (Android Archive) file and is available on [Maven Central][maven-central].
 You can add the following dependency to your application project:

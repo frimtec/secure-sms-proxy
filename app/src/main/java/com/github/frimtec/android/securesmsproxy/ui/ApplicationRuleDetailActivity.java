@@ -3,6 +3,7 @@ package com.github.frimtec.android.securesmsproxy.ui;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -90,6 +91,25 @@ public class ApplicationRuleDetailActivity extends BaseActivity {
     EditText input = new EditText(this);
     input.setInputType(InputType.TYPE_CLASS_TEXT);
     input.setHint(R.string.application_rule_detail_phone_number_hint);
+    input.setFilters(new InputFilter[]{(source, start, end, dest, dstart, dend) -> {
+      boolean startsWithPlus = (dstart == 0 && end > start && source.charAt(start) == '+') ||
+          (dstart > 0 && dest.length() > 0 && dest.charAt(0) == '+');
+      for (int i = start; i < end; i++) {
+        char c = source.charAt(i);
+        if (c == '+') {
+          if (dstart > 0 || i > start) {
+            return "";
+          }
+        } else if (startsWithPlus) {
+          if (!Character.isDigit(c)) {
+            return "";
+          }
+        } else if (!Character.isLetterOrDigit(c)) {
+          return "";
+        }
+      }
+      return null;
+    }});
 
     AlertDialog dialog = new AlertDialog.Builder(this)
         .setTitle(R.string.application_rule_detail_add_phone_number_title)

@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -35,8 +36,16 @@ class PhoneNumberArrayAdapter extends ArrayAdapter<String> {
     }
     String phoneNumber = getItem(position);
     if (phoneNumber != null) {
-      TextView phoneNumberText = convertView.findViewById(R.id.phone_number_text);
       String networkCountryIso = PhoneNumberType.networkCountryIso(getContext());
+      PhoneNumberType type = PhoneNumberType.fromNumber(phoneNumber, networkCountryIso);
+      ImageView typeIcon = convertView.findViewById(R.id.phone_number_type_icon);
+      typeIcon.setImageResource(switch (type) {
+        case STANDARD, NUMERIC_SHORT_CODE -> R.drawable.swap_vert_24px;
+        case ALPHANUMERIC_SHORT_CODE -> R.drawable.south_24px;
+        case EMPTY -> 0;
+      });
+
+      TextView phoneNumberText = convertView.findViewById(R.id.phone_number_text);
       phoneNumberText.setText(PhoneNumberFormatter.getFormattedNumber(phoneNumber, networkCountryIso));
 
       ImageButton deleteButton = convertView.findViewById(R.id.phone_number_delete);
