@@ -40,4 +40,5 @@ En raison des nouvelles restrictions de chargement latéral sur Android 15 et ve
   <string name="application_rule_detail_add_phone_number_title">Ajouter un numéro</string>
   <string name="application_rule_detail_phone_number_hint">Nombre</string>
   <string name="main_add_application_title">Ajouter une application</string>
+  <string name="main_no_applications_found">Aucune application appropriée trouvée!</string>
 </resources>

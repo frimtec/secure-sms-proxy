@@ -40,4 +40,5 @@ A causa delle nuove restrizioni sul sideload su Android 15 e versioni successive
   <string name="application_rule_detail_add_phone_number_title">Aggiungi numero</string>
   <string name="application_rule_detail_phone_number_hint">Numero</string>
   <string name="main_add_application_title">Aggiungi applicazione</string>
+  <string name="main_no_applications_found">Nessuna applicazione idonea trovata!</string>
 </resources>
