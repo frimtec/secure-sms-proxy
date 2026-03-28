@@ -8,6 +8,9 @@
         tools:ignore="UnnecessaryRequiredFeature" />
 
     <queries>
+        <!-- Add all applications that are compatible with S2MSP so that name and icon can be displayed. -->
+        <package android:name="com.github.frimtec.android.pikettassist" />
+
         <intent>
             <action android:name="com.github.frimtec.android.securesmsproxy.SMS_RECEIVED" />
         </intent>
