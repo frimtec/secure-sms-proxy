@@ -1,0 +1,2 @@
+- Lokalise: Translations update
+- Improve application rule management
