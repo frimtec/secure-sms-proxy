@@ -1,7 +1,6 @@
 package com.github.frimtec.android.securesmsproxy.ui;
 
 import android.content.Context;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,14 +15,13 @@ import androidx.annotation.Nullable;
 import com.github.frimtec.android.securesmsproxy.R;
 import com.github.frimtec.android.securesmsproxy.domain.Application;
 import com.github.frimtec.android.securesmsproxy.domain.ApplicationRule;
-import com.github.frimtec.android.securesmsproxy.service.PhoneNumberFormatter;
 import com.github.frimtec.android.securesmsproxy.utility.PackageInfoAccessor;
 import com.github.frimtec.android.securesmsproxyapi.utility.PhoneNumberType;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.function.BiFunction;
-import java.util.stream.Collectors;
 
 class ApplicationRuleArrayAdapter extends ArrayAdapter<ApplicationRule> {
 
@@ -58,16 +56,7 @@ class ApplicationRuleArrayAdapter extends ArrayAdapter<ApplicationRule> {
       }
       label.setText(labelText);
       TextView phoneNumbers = convertView.findViewById(R.id.application_allowed_phone_numbers);
-      String networkCountryIso = PhoneNumberType.networkCountryIso(getContext());
-      Set<String> allowedPhoneNumbers = applicationRule.allowedPhoneNumbers();
-      phoneNumbers.setText(
-          allowedPhoneNumbers
-              .stream()
-              .map(number -> PhoneNumberFormatter.getFormattedNumber(number, networkCountryIso))
-              .filter(number -> !TextUtils.isEmpty(number))
-              .sorted()
-              .collect(Collectors.joining("\n"))
-      );
+      phoneNumbers.setText(String.format(Locale.getDefault(), "%d", applicationRule.allowedPhoneNumbers().size()));
 
       ImageButton deleteButton = convertView.findViewById(R.id.application_button_delete);
       deleteButton.setOnClickListener(deleteAction.apply(this, applicationRule));

@@ -37,7 +37,8 @@
         android:layout_centerVertical="true"
         android:layout_marginStart="5dp"
         android:layout_toStartOf="@+id/application_button_delete"
-        android:textSize="15sp" />
+        android:textSize="18sp"
+        android:textStyle="bold"/>
 
     <ImageButton
         android:id="@+id/application_button_delete"
