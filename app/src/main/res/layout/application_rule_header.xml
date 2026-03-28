@@ -26,5 +26,5 @@
         android:layout_alignParentEnd="true"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:text="@string/header_phone_numbers"/>
+        android:text="@string/header_phone_numbers_count"/>
 </RelativeLayout>
