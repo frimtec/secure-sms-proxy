@@ -22,7 +22,7 @@ Aufgrund neuer Sideloading-Einschränkungen auf Android 15 und höher muss \"Ein
   <string name="send_log_button_send">Senden</string>
   <string name="action_delete">Löschen</string>
   <string name="header_application">Applikation</string>
-  <string name="header_phone_numbers">Anzahl zulässiger Nummern</string>
+  <string name="header_phone_numbers">Erlaubte Nummern</string>
   <string name="register_comment">Die genannte Applikation verlangt die Berechtigung SMS via S2MSP zu empfangen und zu senden, eingeschränkt auf folgende Telefonnummern:</string>
   <string name="register_reject">Ablehnen</string>
   <string name="register_allow">Erlauben</string>
@@ -41,4 +41,5 @@ Aufgrund neuer Sideloading-Einschränkungen auf Android 15 und höher muss \"Ein
   <string name="application_rule_detail_phone_number_hint">Nummer</string>
   <string name="main_add_application_title">Applikation hinzufügen</string>
   <string name="main_no_applications_found">Keine passenden Applikationen gefunden!</string>
+  <string name="header_phone_numbers_count">Anzahl zulässiger Nummern</string>
 </resources>
