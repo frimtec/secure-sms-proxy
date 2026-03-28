@@ -46,4 +46,5 @@ Due to new sideloading restrictions on Android 15 and above, \"Allow restricted 
   <string name="application_rule_detail_add_phone_number_title">Add number</string>
   <string name="application_rule_detail_phone_number_hint">Number</string>
   <string name="main_add_application_title">Add application</string>
+  <string name="main_no_applications_found">No suitable applications found!</string>
 </resources>

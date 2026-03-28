@@ -93,25 +93,33 @@ public class MainActivity extends BaseActivity {
         .map(rule -> rule.application().name())
         .collect(Collectors.toSet());
 
-    List<String> installedPackages = packageInfoAccessor.getInstalledPackages().stream()
+    List<String> packageOptionsToAdd = packageInfoAccessor.getInstalledPackages().stream()
         .filter(packageName -> !packageName.equals(getPackageName()))
         .filter(packageName -> !packageInfoAccessor.isSystemApp(packageName))
         .filter(packageName -> !alreadyRegistered.contains(packageName))
         .sorted(Comparator.comparing(packageName -> packageInfoAccessor.getLabel(packageName).toString().toLowerCase()))
         .collect(Collectors.toList());
 
-    new AlertDialog.Builder(this)
-        .setTitle(R.string.main_add_application_title)
-        .setAdapter(new AppArrayAdapter(this, installedPackages), (dialog, which) -> {
-          String selectedPackage = installedPackages.get(which);
-          dao.insertOrUpdate(selectedPackage, "", Collections.emptySet(), new PhoneNumberFormatter(this));
-          refresh();
-          Intent intent = new Intent(this, ApplicationRuleDetailActivity.class);
-          intent.putExtra(ApplicationRuleDetailActivity.EXTRA_APPLICATION_NAME, selectedPackage);
-          startActivity(intent);
-        })
-        .setNegativeButton(android.R.string.cancel, (dialog, which) -> dialog.dismiss())
-        .show();
+    if(packageOptionsToAdd.isEmpty()) {
+      new AlertDialog.Builder(this)
+          .setTitle(R.string.main_add_application_title)
+          .setMessage(R.string.main_no_applications_found)
+          .setNegativeButton(android.R.string.cancel, (dialog, which) -> dialog.dismiss())
+          .show();
+    } else {
+      new AlertDialog.Builder(this)
+          .setTitle(R.string.main_add_application_title)
+          .setAdapter(new AppArrayAdapter(this, packageOptionsToAdd), (dialog, which) -> {
+            String selectedPackage = packageOptionsToAdd.get(which);
+            dao.insertOrUpdate(selectedPackage, "", Collections.emptySet(), new PhoneNumberFormatter(this));
+            refresh();
+            Intent intent = new Intent(this, ApplicationRuleDetailActivity.class);
+            intent.putExtra(ApplicationRuleDetailActivity.EXTRA_APPLICATION_NAME, selectedPackage);
+            startActivity(intent);
+          })
+          .setNegativeButton(android.R.string.cancel, (dialog, which) -> dialog.dismiss())
+          .show();
+    }
   }
 
   @Override
