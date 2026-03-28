@@ -22,7 +22,7 @@ En raison des nouvelles restrictions de chargement latéral sur Android 15 et ve
   <string name="send_log_button_send">Envoyer</string>
   <string name="action_delete">Effacer</string>
   <string name="header_application">Application</string>
-  <string name="header_phone_numbers">Compte des numéros autorisés</string>
+  <string name="header_phone_numbers">Numéros autorisés</string>
   <string name="register_comment">L\'application indiquée demande des autorisations pour envoyer et recevoir des SMS via S2MSP limités aux numéros de téléphone suivants:</string>
   <string name="register_reject">Rejeter</string>
   <string name="register_allow">Permettre</string>
@@ -41,4 +41,5 @@ En raison des nouvelles restrictions de chargement latéral sur Android 15 et ve
   <string name="application_rule_detail_phone_number_hint">Nombre</string>
   <string name="main_add_application_title">Ajouter une application</string>
   <string name="main_no_applications_found">Aucune application appropriée trouvée!</string>
+  <string name="header_phone_numbers_count">Compte des numéros autorisés</string>
 </resources>
