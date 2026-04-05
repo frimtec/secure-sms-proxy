@@ -1,9 +1,9 @@
 package com.github.frimtec.android.securesmsproxy.domain;
 
+import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
-public record ApplicationRule(Application application, Set<String> allowedPhoneNumbers) {
+public record ApplicationRule(Application application, Map<String, RuleStatistics> allowedPhoneNumbers) {
 
   @Override
   public boolean equals(Object o) {

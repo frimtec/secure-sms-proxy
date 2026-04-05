@@ -5,11 +5,16 @@ import static com.github.frimtec.android.securesmsproxy.state.DbFactory.Mode.WRI
 import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_APPLICATION;
 import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_APPLICATION_COLUMN_ID;
 import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_APPLICATION_COLUMN_LISTENER;
+import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_APPLICATION_COLUMN_LOOPBACK_COUNT;
 import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_APPLICATION_COLUMN_NAME;
 import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_APPLICATION_COLUMN_SECRET;
 import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_RULE;
 import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER;
 import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_RULE_COLUMN_APPLICATION_ID;
+import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_RULE_COLUMN_ID;
+import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_RULE_COLUMN_RECEIVE_COUNT;
+import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_APPLICATION_COLUMN_SEND_BLOCKED_COUNT;
+import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_RULE_COLUMN_SEND_COUNT;
 import static com.github.frimtec.android.securesmsproxy.state.DbHelper.VIEW_APPLICATION_RULE;
 
 import android.content.ContentValues;
@@ -19,6 +24,8 @@ import android.text.TextUtils;
 
 import com.github.frimtec.android.securesmsproxy.domain.Application;
 import com.github.frimtec.android.securesmsproxy.domain.ApplicationRule;
+import com.github.frimtec.android.securesmsproxy.domain.ApplicationStatistics;
+import com.github.frimtec.android.securesmsproxy.domain.RuleStatistics;
 import com.github.frimtec.android.securesmsproxy.state.DbFactory;
 import com.github.frimtec.android.securesmsproxy.state.DbHelper;
 import com.github.frimtec.android.securesmsproxyapi.utility.Random;
@@ -41,7 +48,12 @@ public class ApplicationRuleDao {
       TABLE_APPLICATION_COLUMN_NAME,
       TABLE_APPLICATION_COLUMN_LISTENER,
       TABLE_APPLICATION_COLUMN_SECRET,
-      TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER
+      TABLE_APPLICATION_COLUMN_SEND_BLOCKED_COUNT,
+      TABLE_APPLICATION_COLUMN_LOOPBACK_COUNT,
+      TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER,
+      TABLE_RULE_COLUMN_ID,
+      TABLE_RULE_COLUMN_SEND_COUNT,
+      TABLE_RULE_COLUMN_RECEIVE_COUNT
   };
 
   private final DbFactory dbFactory;
@@ -74,7 +86,7 @@ public class ApplicationRuleDao {
       ContentValues ruleValues = new ContentValues();
       ruleValues.put(TABLE_RULE_COLUMN_APPLICATION_ID, applicationRule.application().id());
       allowedPhoneNumbersE164Formatted.stream()
-          .filter(phoneNumber -> !applicationRule.allowedPhoneNumbers().contains(phoneNumber))
+          .filter(phoneNumber -> !applicationRule.allowedPhoneNumbers().containsKey(phoneNumber))
           .forEach(phoneNumber -> {
             ruleValues.put(TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER, phoneNumber);
             db.insert(TABLE_RULE, null, ruleValues);
@@ -126,10 +138,20 @@ public class ApplicationRuleDao {
         do {
           long id = cursor.getLong(0);
           Application application = Objects.requireNonNull(
-              applications.getOrDefault(id, new Application(id, cursor.getString(1), cursor.getString(2), cursor.getString(3)))
+              applications.getOrDefault(id, new Application(
+                  id,
+                  cursor.getString(1),
+                  cursor.getString(2),
+                  cursor.getString(3),
+                  new ApplicationStatistics(
+                      id,
+                      cursor.getLong(4),
+                      cursor.getLong(5)
+                  )
+              ))
           );
           applications.put(application.id(), application);
-          String phoneNumber = cursor.getString(4);
+          String phoneNumber = cursor.getString(6);
           Set<Application> set = Objects.requireNonNull(
               applicationsByPhoneNumber.getOrDefault(phoneNumber, new HashSet<>())
           );
@@ -143,20 +165,34 @@ public class ApplicationRuleDao {
 
   private List<ApplicationRule> toApplicationRules(Cursor cursor) {
     Map<Long, Application> applications = new HashMap<>();
-    Map<Application, Set<String>> applicationPhoneNumbers = new HashMap<>();
+    Map<Application, Map<String, RuleStatistics>> applicationPhoneNumbers = new HashMap<>();
     if (cursor != null && cursor.moveToFirst()) {
       do {
         long id = cursor.getLong(0);
         Application application = Objects.requireNonNull(
-            applications.getOrDefault(id, new Application(id, cursor.getString(1), cursor.getString(2), cursor.getString(3)))
+            applications.getOrDefault(id, new Application(
+                id,
+                cursor.getString(1),
+                cursor.getString(2),
+                cursor.getString(3),
+                new ApplicationStatistics(
+                    id,
+                    cursor.getLong(4),
+                    cursor.getLong(5)
+                )
+            ))
         );
         applications.put(application.id(), application);
-        Set<String> phoneNumbers = Objects.requireNonNull(
-            applicationPhoneNumbers.getOrDefault(application, new HashSet<>())
+        Map<String, RuleStatistics> phoneNumbers = Objects.requireNonNull(
+            applicationPhoneNumbers.getOrDefault(application, new HashMap<>())
         );
-        String number = cursor.getString(4);
+        String number = cursor.getString(6);
         if (number != null) {
-          phoneNumbers.add(number);
+          phoneNumbers.put(number, new RuleStatistics(
+              cursor.getLong(7),
+              cursor.getLong(8),
+              cursor.getLong(9)
+          ));
         }
         applicationPhoneNumbers.put(application, phoneNumbers);
       } while (cursor.moveToNext());

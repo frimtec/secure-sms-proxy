@@ -65,7 +65,7 @@ public class ApplicationRuleDetailActivity extends BaseActivity {
     name.setText(applicationName);
 
     ListView listView = findViewById(R.id.phone_numbers_list);
-    phoneNumbers = new ArrayList<>(applicationRule.allowedPhoneNumbers());
+    phoneNumbers = new ArrayList<>(applicationRule.allowedPhoneNumbers().keySet());
     Collections.sort(phoneNumbers);
     adapter = new PhoneNumberArrayAdapter(this, phoneNumbers, this::deletePhoneNumber);
     listView.setAdapter(adapter);

@@ -81,7 +81,7 @@ public class SmsSender extends BroadcastReceiver {
           } else {
             PhoneNumberFormatter phoneNumberFormatter = this.phoneNumberFormatterProvider.apply(context);
             String number = phoneNumberFormatter.toE164(sms.getNumber());
-            if (applicationRule.allowedPhoneNumbers().contains(number)) {
+            if (applicationRule.allowedPhoneNumbers().containsKey(number)) {
               send(context, sms.getSubscriptionId(), number, sms.getText());
             } else {
               Log.w(TAG, String.format("SMS sending blocked because of not allowed phone number %s of application %s.",
