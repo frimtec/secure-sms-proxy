@@ -42,4 +42,5 @@ En raison des nouvelles restrictions de chargement latéral sur Android 15 et ve
   <string name="main_add_application_title">Ajouter une application</string>
   <string name="main_no_applications_found">Aucune application appropriée trouvée!</string>
   <string name="header_phone_numbers_count">Compte des numéros autorisés</string>
+  <string name="application_rule_detail_statistics_tooltip"><![CDATA[↑️ SMS envoyé ↓ SMS reçu\n⟳ Test de bouclage SMS\n⊘ SMS bloqués pour l\'envoi]]></string>
 </resources>

@@ -42,4 +42,5 @@ Aufgrund neuer Sideloading-Einschränkungen auf Android 15 und höher muss \"Ein
   <string name="main_add_application_title">Applikation hinzufügen</string>
   <string name="main_no_applications_found">Keine passenden Applikationen gefunden!</string>
   <string name="header_phone_numbers_count">Anzahl zulässiger Nummern</string>
+  <string name="application_rule_detail_statistics_tooltip"><![CDATA[↑️ SMS gesendet ↓ SMS empfangen\n⟳ SMS Loopback-Test\n⊘ SMS Senden blockiert]]></string>
 </resources>
