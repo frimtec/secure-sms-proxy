@@ -42,4 +42,5 @@ A causa delle nuove restrizioni sul sideload su Android 15 e versioni successive
   <string name="main_add_application_title">Aggiungi applicazione</string>
   <string name="main_no_applications_found">Nessuna applicazione idonea trovata!</string>
   <string name="header_phone_numbers_count">Conteggio numeri consentiti</string>
+  <string name="application_rule_detail_statistics_tooltip"><![CDATA[↑️ SMS inviato ↓ SMS ricevuto\n⟳ Test di loopback SMS\n⊘ SMS bloccato all\'invio]]></string>
 </resources>
