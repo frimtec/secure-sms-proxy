@@ -16,11 +16,9 @@ import com.github.frimtec.android.securesmsproxy.R;
 import com.github.frimtec.android.securesmsproxy.domain.Application;
 import com.github.frimtec.android.securesmsproxy.domain.ApplicationRule;
 import com.github.frimtec.android.securesmsproxy.utility.PackageInfoAccessor;
-import com.github.frimtec.android.securesmsproxyapi.utility.PhoneNumberType;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 import java.util.function.BiFunction;
 
 class ApplicationRuleArrayAdapter extends ArrayAdapter<ApplicationRule> {
@@ -60,6 +58,21 @@ class ApplicationRuleArrayAdapter extends ArrayAdapter<ApplicationRule> {
 
       ImageButton deleteButton = convertView.findViewById(R.id.application_button_delete);
       deleteButton.setOnClickListener(deleteAction.apply(this, applicationRule));
+
+
+      TextView statisticsText = convertView.findViewById(R.id.application_statistics);
+      var statistics = applicationRule.aggregatedStatistics();
+      statisticsText.setText(
+          getContext().getString(
+              R.string.application_rule_detail_statistics,
+              statistics.sendCount(),
+              statistics.receiveCount(),
+              statistics.loopbackCount(),
+              statistics.sendBlockCount()
+          )
+      );
+
+
     }
     return convertView;
   }

@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.github.frimtec.android.securesmsproxy.domain.Application;
+import com.github.frimtec.android.securesmsproxy.domain.ApplicationStatistics;
 import com.github.frimtec.android.securesmsproxyapi.Sms;
 import com.github.frimtec.android.securesmsproxyapi.utility.Aes2;
 
@@ -45,7 +46,7 @@ class SmsListenerTest {
   @Test
   void broadcastReceivedSms() {
     Context context = mock(Context.class);
-    Application application = new Application(1L, "app1", "listener1", SECRET);
+    Application application = new Application(1L, "app1", "listener1", SECRET, new ApplicationStatistics(1L, 5L, 3L));
     List<Sms> smsList = Collections.singletonList(new Sms("number", "text"));
     SmsListener.broadcastReceivedSms(context, application, smsList);
     verify(context).sendOrderedBroadcast(any(), isNull());
@@ -78,7 +79,7 @@ class SmsListenerTest {
     List<Sms> smsList = Collections.singletonList(new Sms("number", "text"));
     when(smsDecoder.getSmsFromIntent(phoneNumberFormatter, intent)).thenReturn(smsList);
     SmsListener smsListener = new SmsListener(smsDecoder, dao, smsBroadcastIntentFactory, (context) -> phoneNumberFormatter);
-    Application application = new Application(1L, "app1", "listener1", SECRET);
+    Application application = new Application(1L, "app1", "listener1", SECRET, new ApplicationStatistics(1L, 5L, 3L));
     when(dao.byPhoneNumbers(any())).thenReturn(Collections.singletonMap("number", Collections.singleton(application)));
 
     Context context = mock(Context.class);
@@ -98,7 +99,7 @@ class SmsListenerTest {
     List<Sms> smsList = Collections.singletonList(new Sms("number", "text"));
     when(smsDecoder.getSmsFromIntent(phoneNumberFormatter, intent)).thenReturn(smsList);
     SmsListener smsListener = new SmsListener(smsDecoder, dao, SmsListener.SMS_BROADCAST_INTENT_SUPPLIER, (context) -> phoneNumberFormatter);
-    Application application = new Application(1L, "app1", "listener1", SECRET);
+    Application application = new Application(1L, "app1", "listener1", SECRET, new ApplicationStatistics(1L, 5L, 3L));
     when(dao.byPhoneNumbers(any())).thenReturn(Collections.singletonMap("number", Collections.singleton(application)));
 
     Context context = mock(Context.class);
@@ -117,8 +118,8 @@ class SmsListenerTest {
     when(smsDecoder.getSmsFromIntent(phoneNumberFormatter, intent)).thenReturn(smsList);
     BiFunction<Application, String, Intent> smsBroadcastIntentFactory = broadcastIntentFactory(broadcastIntent, encryptedSmsCaptor);
     SmsListener smsListener = new SmsListener(smsDecoder, dao, smsBroadcastIntentFactory, (context) -> phoneNumberFormatter);
-    Application application1 = new Application(1L, "app1", "listener1", SECRET);
-    Application application2 = new Application(2L, "app2", "listener2", SECRET.replaceAll("1", "A"));
+    Application application1 = new Application(1L, "app1", "listener1", SECRET, new ApplicationStatistics(1L, 5L, 3L));
+    Application application2 = new Application(2L, "app2", "listener2", SECRET.replaceAll("1", "A"), new ApplicationStatistics(2L, 5L, 3L));
     when(dao.byPhoneNumbers(any())).thenReturn(Collections.singletonMap("number", new HashSet<>(Arrays.asList(application1, application2))));
 
     Context context = mock(Context.class);
@@ -146,8 +147,8 @@ class SmsListenerTest {
     when(smsDecoder.getSmsFromIntent(phoneNumberFormatter, intent)).thenReturn(smsList);
     BiFunction<Application, String, Intent> smsBroadcastIntentFactory = broadcastIntentFactory(broadcastIntent, encryptedSmsCaptor);
     SmsListener smsListener = new SmsListener(smsDecoder, dao, smsBroadcastIntentFactory, (context) -> phoneNumberFormatter);
-    Application application1 = new Application(1L, "name1", "listener1", SECRET);
-    Application application2 = new Application(2L, "name2", "listener2", SECRET.replaceAll("1", "A"));
+    Application application1 = new Application(1L, "name1", "listener1", SECRET, new ApplicationStatistics(1L, 5L, 3L));
+    Application application2 = new Application(2L, "name2", "listener2", SECRET.replaceAll("1", "A"), new ApplicationStatistics(2L, 5L, 3L));
 
     Map<String, Set<Application>> applicationsMap = new HashMap<>();
     applicationsMap.put("number1", Collections.singleton(application1));

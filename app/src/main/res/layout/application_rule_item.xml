@@ -24,11 +24,19 @@
         android:id="@+id/application_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
+        android:layout_alignTop="@id/application_logo"
         android:layout_marginStart="5dp"
         android:layout_toEndOf="@+id/application_logo"
         android:textSize="18sp"
         android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/application_statistics"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/application_label"
+        android:layout_alignStart="@id/application_label"
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/application_allowed_phone_numbers"

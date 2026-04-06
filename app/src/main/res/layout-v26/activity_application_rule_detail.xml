@@ -38,7 +38,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/application_name"
         android:layout_alignStart="@id/application_label"
-        android:textSize="14sp"/>
+        android:textSize="14sp"
+        android:tooltipText="@string/application_rule_detail_statistics_tooltip"/>
 
     <TextView
         android:id="@+id/phone_numbers_header"
