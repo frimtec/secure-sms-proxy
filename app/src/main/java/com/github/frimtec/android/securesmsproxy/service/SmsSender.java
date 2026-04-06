@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.github.frimtec.android.securesmsproxy.domain.ApplicationRule;
+import com.github.frimtec.android.securesmsproxy.domain.RuleStatistics;
 import com.github.frimtec.android.securesmsproxy.utility.Permission;
 import com.github.frimtec.android.securesmsproxyapi.Sms;
 import com.github.frimtec.android.securesmsproxyapi.utility.Aes2;
@@ -75,15 +76,19 @@ public class SmsSender extends BroadcastReceiver {
           Sms sms = Sms.fromJson(aes.decrypt(text));
           if (PHONE_NUMBER_LOOPBACK.equals(sms.getNumber())) {
             SmsListener.broadcastReceivedSms(context, applicationRule.application(), Collections.singletonList(sms));
+            this.dao.incrementLoopbackCount(applicationRule.application().id());
           } else if (!PhoneNumberType.fromNumber(sms.getNumber(), context).isSendSupport()) {
             Log.w(TAG, String.format("SMS sending blocked because SMS number %s of application %s does not support sending.",
                 sms.getNumber(), applicationRule.application().name()));
           } else {
             PhoneNumberFormatter phoneNumberFormatter = this.phoneNumberFormatterProvider.apply(context);
             String number = phoneNumberFormatter.toE164(sms.getNumber());
-            if (applicationRule.allowedPhoneNumbers().containsKey(number)) {
+            RuleStatistics ruleFound = applicationRule.allowedPhoneNumbers().get(number);
+            if (ruleFound != null) {
               send(context, sms.getSubscriptionId(), number, sms.getText());
+              this.dao.incrementSendCount(ruleFound.ruleId());
             } else {
+              this.dao.incrementSendBlockedCount(applicationRule.application().id());
               Log.w(TAG, String.format("SMS sending blocked because of not allowed phone number %s of application %s.",
                   number, applicationRule.application().name()));
             }

@@ -24,6 +24,7 @@ public class DbHelper extends SQLiteOpenHelper {
   public static final String TABLE_RULE_COLUMN_SEND_COUNT = "send_count";
   public static final String TABLE_RULE_COLUMN_RECEIVE_COUNT = "receive_count";
   public static final String VIEW_APPLICATION_RULE = "v_application_rule";
+  public static final String VIEW_APPLICATION_RULE_COLUMN_RULE_ID = "rule_id";
 
   private static final String TAG = "DbHelper";
   private static final String DB_NAME = "S2MSP.db";
@@ -57,7 +58,7 @@ public class DbHelper extends SQLiteOpenHelper {
   private static void createOrUpdateView(SQLiteDatabase db) {
     db.execSQL("DROP VIEW IF EXISTS " + VIEW_APPLICATION_RULE);
     db.execSQL("CREATE VIEW " + VIEW_APPLICATION_RULE + " AS" +
-        "  SELECT A.*, R.*" +
+        "  SELECT A.*, R.*, R._id AS " + VIEW_APPLICATION_RULE_COLUMN_RULE_ID +
         "  FROM " + TABLE_APPLICATION + " A LEFT JOIN " + TABLE_RULE + " R ON R." + TABLE_RULE_COLUMN_APPLICATION_ID + "=A." + TABLE_APPLICATION_COLUMN_ID);
   }
 

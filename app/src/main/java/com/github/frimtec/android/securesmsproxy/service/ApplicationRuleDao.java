@@ -8,14 +8,14 @@ import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_APP
 import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_APPLICATION_COLUMN_LOOPBACK_COUNT;
 import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_APPLICATION_COLUMN_NAME;
 import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_APPLICATION_COLUMN_SECRET;
+import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_APPLICATION_COLUMN_SEND_BLOCKED_COUNT;
 import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_RULE;
 import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER;
 import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_RULE_COLUMN_APPLICATION_ID;
-import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_RULE_COLUMN_ID;
 import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_RULE_COLUMN_RECEIVE_COUNT;
-import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_APPLICATION_COLUMN_SEND_BLOCKED_COUNT;
 import static com.github.frimtec.android.securesmsproxy.state.DbHelper.TABLE_RULE_COLUMN_SEND_COUNT;
 import static com.github.frimtec.android.securesmsproxy.state.DbHelper.VIEW_APPLICATION_RULE;
+import static com.github.frimtec.android.securesmsproxy.state.DbHelper.VIEW_APPLICATION_RULE_COLUMN_RULE_ID;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -51,7 +51,7 @@ public class ApplicationRuleDao {
       TABLE_APPLICATION_COLUMN_SEND_BLOCKED_COUNT,
       TABLE_APPLICATION_COLUMN_LOOPBACK_COUNT,
       TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER,
-      TABLE_RULE_COLUMN_ID,
+      VIEW_APPLICATION_RULE_COLUMN_RULE_ID,
       TABLE_RULE_COLUMN_SEND_COUNT,
       TABLE_RULE_COLUMN_RECEIVE_COUNT
   };
@@ -221,5 +221,38 @@ public class ApplicationRuleDao {
     SQLiteDatabase db = this.dbFactory.getDatabase(WRITABLE);
     db.delete(TABLE_RULE, TABLE_RULE_COLUMN_APPLICATION_ID + "=? AND " + TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER + "=?",
         new String[]{String.valueOf(applicationId), phoneNumber});
+  }
+
+  public void incrementSendBlockedCount(long applicationId) {
+    incrementCounter(TABLE_APPLICATION, TABLE_APPLICATION_COLUMN_SEND_BLOCKED_COUNT, applicationId);
+  }
+
+  public void incrementLoopbackCount(long applicationId) {
+    incrementCounter(TABLE_APPLICATION, TABLE_APPLICATION_COLUMN_LOOPBACK_COUNT, applicationId);
+  }
+
+  public void incrementSendCount(long ruleId) {
+    incrementCounter(TABLE_RULE, TABLE_RULE_COLUMN_SEND_COUNT, ruleId);
+  }
+
+  public void incrementReceiveCount(long applicationId, String phoneNumber, int times) {
+    incrementCounter(
+        TABLE_RULE,
+        TABLE_RULE_COLUMN_RECEIVE_COUNT,
+        TABLE_RULE_COLUMN_APPLICATION_ID + " = ? AND " + TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER + " = ?",
+        new Object[]{applicationId, phoneNumber},
+        times
+    );
+  }
+
+  private void incrementCounter(String tableName, String columnName, long id) {
+    incrementCounter(tableName, columnName, "_id = ?", new Object[]{id}, 1);
+  }
+
+  private void incrementCounter(String tableName, String columnName, String whereClause, Object[] params, int times) {
+    this.dbFactory.getDatabase(WRITABLE).execSQL(
+        "UPDATE " + tableName + " SET " + columnName + " = " + columnName + " + " + times + " WHERE " + whereClause,
+        params
+    );
   }
 }

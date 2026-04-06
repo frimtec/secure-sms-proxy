@@ -67,13 +67,16 @@ public class SmsListener extends BroadcastReceiver {
           .collect(Collectors.groupingBy(Sms::getNumber));
       Log.i(TAG, "SMS received from numbers: " + smsByNumber.keySet());
       Map<String, Set<Application>> applicationsByNumber = this.dao.byPhoneNumbers(smsByNumber.keySet());
-      smsByNumber.forEach((key, value) -> {
-        Set<Application> applications = applicationsByNumber.get(key);
+      smsByNumber.forEach((phoneNumber, smsList) -> {
+        Set<Application> applications = applicationsByNumber.get(phoneNumber);
         if (applications == null || applications.isEmpty()) {
           // no registrations for this number
           return;
         }
-        applications.forEach(application -> broadcastReceivedSms(context, application, value, smsBroadcastIntentFactory));
+        applications.forEach(application -> {
+          broadcastReceivedSms(context, application, smsList, smsBroadcastIntentFactory);
+          this.dao.incrementReceiveCount(application.id(), phoneNumber, smsList.size());
+        });
       });
     }
   }
