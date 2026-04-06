@@ -16,7 +16,9 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.github.frimtec.android.securesmsproxy.R;
+import com.github.frimtec.android.securesmsproxy.domain.AggregatedStatistics;
 import com.github.frimtec.android.securesmsproxy.domain.ApplicationRule;
+import com.github.frimtec.android.securesmsproxy.domain.RuleStatistics;
 import com.github.frimtec.android.securesmsproxy.service.ApplicationRuleDao;
 import com.github.frimtec.android.securesmsproxy.service.PhoneNumberFormatter;
 import com.github.frimtec.android.securesmsproxy.utility.AlertDialogHelper;
@@ -64,10 +66,21 @@ public class ApplicationRuleDetailActivity extends BaseActivity {
     TextView name = findViewById(R.id.application_name);
     name.setText(applicationName);
 
+    TextView statistics = findViewById(R.id.application_statistics);
+    var aggregatedStatistics = applicationRule.aggregatedStatistics();
+    statistics.setText(
+        getString(R.string.application_rule_detail_statistics,
+            aggregatedStatistics.sendCount(),
+            aggregatedStatistics.receiveCount(),
+            aggregatedStatistics.loopbackCount(),
+            aggregatedStatistics.sendBlockCount()
+        )
+    );
+
     ListView listView = findViewById(R.id.phone_numbers_list);
-    phoneNumbers = new ArrayList<>(applicationRule.allowedPhoneNumbers());
+    phoneNumbers = new ArrayList<>(applicationRule.allowedPhoneNumbers().keySet());
     Collections.sort(phoneNumbers);
-    adapter = new PhoneNumberArrayAdapter(this, phoneNumbers, this::deletePhoneNumber);
+    adapter = new PhoneNumberArrayAdapter(this, phoneNumbers, applicationRule.allowedPhoneNumbers(), this::deletePhoneNumber);
     listView.setAdapter(adapter);
 
     Button addButton = findViewById(R.id.add_phone_number_button);

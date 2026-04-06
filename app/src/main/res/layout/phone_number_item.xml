@@ -20,8 +20,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/phone_number_type_icon"
-        android:layout_centerVertical="true"
         android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/phone_number_statistics"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="8dp"
+        android:layout_toStartOf="@id/phone_number_delete"
+        android:textSize="12sp" />
 
     <ImageButton
         android:id="@+id/phone_number_delete"

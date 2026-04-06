@@ -1,9 +1,11 @@
 package com.github.frimtec.android.securesmsproxy.domain;
 
+import java.util.Collection;
+import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
-public record ApplicationRule(Application application, Set<String> allowedPhoneNumbers) {
+public record ApplicationRule(Application application,
+                              Map<String, RuleStatistics> allowedPhoneNumbers) {
 
   @Override
   public boolean equals(Object o) {
@@ -20,6 +22,17 @@ public record ApplicationRule(Application application, Set<String> allowedPhoneN
   @Override
   public int hashCode() {
     return Objects.hash(application);
+  }
+
+  public AggregatedStatistics aggregatedStatistics() {
+    var ruleStatistics = allowedPhoneNumbers().values();
+    var applicationStatistics = application().statistics();
+    return new AggregatedStatistics(
+        ruleStatistics.stream().mapToLong(RuleStatistics::sendCount).sum(),
+        ruleStatistics.stream().mapToLong(RuleStatistics::receiveCount).sum(),
+        applicationStatistics.sendBlockCount(),
+        applicationStatistics.loopbackCount()
+    );
   }
 
 }

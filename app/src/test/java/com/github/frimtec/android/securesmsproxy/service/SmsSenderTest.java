@@ -18,6 +18,8 @@ import android.telephony.SmsManager;
 
 import com.github.frimtec.android.securesmsproxy.domain.Application;
 import com.github.frimtec.android.securesmsproxy.domain.ApplicationRule;
+import com.github.frimtec.android.securesmsproxy.domain.ApplicationStatistics;
+import com.github.frimtec.android.securesmsproxy.domain.RuleStatistics;
 import com.github.frimtec.android.securesmsproxyapi.SecureSmsProxyFacade;
 import com.github.frimtec.android.securesmsproxyapi.Sms;
 import com.github.frimtec.android.securesmsproxyapi.utility.Aes;
@@ -26,6 +28,7 @@ import com.github.frimtec.android.securesmsproxyapi.utility.Aes2;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
+import java.util.Map;
 import java.util.function.Function;
 
 class SmsSenderTest {
@@ -132,7 +135,7 @@ class SmsSenderTest {
     when(bundle.getString(EXTRA_TEXT)).thenReturn("any");
     when(bundle.getString(Intent.EXTRA_PACKAGE_NAME)).thenReturn("application");
     when(intent.getExtras()).thenReturn(bundle);
-    when(dao.byApplicationName("application")).thenReturn(new ApplicationRule(new Application(1L, "application", "listener", SECRET), Collections.singleton("number")));
+    when(dao.byApplicationName("application")).thenReturn(new ApplicationRule(new Application(1L, "application", "listener", SECRET, new ApplicationStatistics(1L, 5L, 3L)), Map.of("number", new RuleStatistics(1L, 4L, 3L))));
     Context context = mock(Context.class);
     smsSender.onReceive(context, intent);
 
@@ -152,7 +155,7 @@ class SmsSenderTest {
     when(bundle.getString(EXTRA_TEXT)).thenReturn(new Aes2(SECRET).encrypt(sms.toJson()));
     when(bundle.getString(Intent.EXTRA_PACKAGE_NAME)).thenReturn("application");
     when(intent.getExtras()).thenReturn(bundle);
-    when(dao.byApplicationName("application")).thenReturn(new ApplicationRule(new Application(1L, "application", "listener", SECRET), Collections.singleton("number")));
+    when(dao.byApplicationName("application")).thenReturn(new ApplicationRule(new Application(1L, "application", "listener", SECRET, new ApplicationStatistics(1L, 5L, 3L)), Map.of("number", new RuleStatistics(1L, 4L, 3L))));
     Context context = mock(Context.class);
     when(context.getSystemService(eq(SmsManager.class))).thenReturn(smsManager);
     smsSender.onReceive(context, intent);
@@ -173,7 +176,7 @@ class SmsSenderTest {
     when(bundle.getString(EXTRA_TEXT)).thenReturn(new Aes(SECRET).encrypt(sms.toJson()));
     when(bundle.getString(Intent.EXTRA_PACKAGE_NAME)).thenReturn("application");
     when(intent.getExtras()).thenReturn(bundle);
-    when(dao.byApplicationName("application")).thenReturn(new ApplicationRule(new Application(1L, "application", "listener", SECRET), Collections.singleton(PHONE_NUMBER_LOOPBACK)));
+    when(dao.byApplicationName("application")).thenReturn(new ApplicationRule(new Application(1L, "application", "listener", SECRET, new ApplicationStatistics(1L, 5L, 3L)), Map.of("number", new RuleStatistics(1L, 4L, 3L))));
     Context context = mock(Context.class);
     smsSender.onReceive(context, intent);
 
@@ -193,7 +196,7 @@ class SmsSenderTest {
     when(bundle.getString(EXTRA_TEXT)).thenReturn(new Aes(SECRET).encrypt(sms.toJson()));
     when(bundle.getString(Intent.EXTRA_PACKAGE_NAME)).thenReturn("application");
     when(intent.getExtras()).thenReturn(bundle);
-    when(dao.byApplicationName("application")).thenReturn(new ApplicationRule(new Application(1L, "application", "listener", SECRET), Collections.singleton(PHONE_NUMBER_LOOPBACK)));
+    when(dao.byApplicationName("application")).thenReturn(new ApplicationRule(new Application(1L, "application", "listener", SECRET, new ApplicationStatistics(1L, 5L, 3L)), Map.of("number", new RuleStatistics(1L, 4L, 3L))));
     Context context = mock(Context.class);
     smsSender.onReceive(context, intent);
 
@@ -213,7 +216,7 @@ class SmsSenderTest {
     when(bundle.getString(EXTRA_TEXT)).thenReturn(new Aes(SECRET).encrypt(sms.toJson()));
     when(bundle.getString(Intent.EXTRA_PACKAGE_NAME)).thenReturn("application");
     when(intent.getExtras()).thenReturn(bundle);
-    when(dao.byApplicationName("application")).thenReturn(new ApplicationRule(new Application(1L, "application", "listener", SECRET), Collections.singleton("otherNumber")));
+    when(dao.byApplicationName("application")).thenReturn(new ApplicationRule(new Application(1L, "application", "listener", SECRET, new ApplicationStatistics(1L, 5L, 3L)), Map.of("number", new RuleStatistics(1L, 4L, 3L))));
     Context context = mock(Context.class);
     smsSender.onReceive(context, intent);
 

@@ -2,7 +2,7 @@ package com.github.frimtec.android.securesmsproxy.domain;
 
 import java.util.Objects;
 
-public record Application(long id, String name, String listener, String secret) {
+public record Application(long id, String name, String listener, String secret, ApplicationStatistics statistics) {
 
   @Override
   public boolean equals(Object o) {

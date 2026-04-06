@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.github.frimtec.android.securesmsproxy.domain.Application;
 import com.github.frimtec.android.securesmsproxy.domain.ApplicationRule;
+import com.github.frimtec.android.securesmsproxy.domain.ApplicationStatistics;
 import com.github.frimtec.android.securesmsproxy.state.DbFactory;
 import com.github.frimtec.android.securesmsproxy.state.DbHelper;
 
@@ -79,8 +80,8 @@ class ApplicationRuleDaoTest {
     SQLiteDatabase dbWrite = mock(SQLiteDatabase.class);
 
     Cursor cursor = createCursor(Arrays.asList(
-        Arrays.asList(1L, "app_1", "listener_1", "secret_1", "123"),
-        Arrays.asList(1L, "app_1", "listener_1", "secret_1", "456")
+        Arrays.asList(1L, "app_1", "listener_1", "secret_1", 5L, 6L, "123", 17L, 7L, 8L),
+        Arrays.asList(1L, "app_1", "listener_1", "secret_1", 5L, 6L, "456", 18L, 1L, 2L)
     ));
     when(dbRead.query(DbHelper.VIEW_APPLICATION_RULE, ALL_COLUMNS, TABLE_APPLICATION_COLUMN_NAME + "=?", new String[]{"app_1"}, null, null, null))
         .thenReturn(cursor);
@@ -135,8 +136,8 @@ class ApplicationRuleDaoTest {
     SQLiteDatabase db = mock(SQLiteDatabase.class);
 
     Cursor cursor = createCursor(Arrays.asList(
-        Arrays.asList(1L, "app_1", "listener_1", "secret_1", "123"),
-        Arrays.asList(1L, "app_1", "listener_1", "secret_1", "456")
+        Arrays.asList(1L, "app_1", "listener_1", "secret_1", 5L, 6L, "123", 17L, 7L, 8L),
+        Arrays.asList(1L, "app_1", "listener_1", "secret_1", 5L, 6L, "456", 18L, 1L, 2L)
     ));
     when(db.query(DbHelper.VIEW_APPLICATION_RULE, ALL_COLUMNS, TABLE_APPLICATION_COLUMN_NAME + "=?", new String[]{"app_1"}, null, null, null))
         .thenReturn(cursor);
@@ -145,7 +146,7 @@ class ApplicationRuleDaoTest {
 
     ApplicationRule applicationRules = dao.byApplicationName("app_1");
     assertThat(applicationRules.toString()).isEqualTo(
-        "ApplicationRule[application=Application[id=1, name=app_1, listener=listener_1, secret=secret_1], allowedPhoneNumbers=[123, 456]]");
+        "ApplicationRule[application=Application[id=1, name=app_1, listener=listener_1, secret=secret_1, statistics=ApplicationStatistics[applicationId=1, sendBlockCount=5, loopbackCount=6]], allowedPhoneNumbers={123=RuleStatistics[ruleId=17, sendCount=7, receiveCount=0], 456=RuleStatistics[ruleId=18, sendCount=1, receiveCount=0]}]");
   }
 
   @Test
@@ -183,9 +184,9 @@ class ApplicationRuleDaoTest {
     SQLiteDatabase db = mock(SQLiteDatabase.class);
 
     Cursor cursor = createCursor(Arrays.asList(
-        Arrays.asList(1L, "app_1", "listener_1", "secret_1", "123"),
-        Arrays.asList(2L, "app_2", "listener_2", "secret_2", "123"),
-        Arrays.asList(1L, "app_1", "listener_1", "secret_1", "456")
+        Arrays.asList(1L, "app_1", "listener_1", "secret_1", 5L, 6L, "123", 17L, 7L, 8L),
+        Arrays.asList(2L, "app_2", "listener_2", "secret_2", 11L, 12L, "123", 5L, 18L, 19L),
+        Arrays.asList(1L, "app_1", "listener_1", "secret_1", 5L, 6L, "456", 18L, 1L, 2L)
     ));
     when(db.query(DbHelper.VIEW_APPLICATION_RULE, ALL_COLUMNS, null, null, null, null, null))
         .thenReturn(cursor);
@@ -194,8 +195,8 @@ class ApplicationRuleDaoTest {
 
     List<ApplicationRule> applicationRules = dao.all();
     assertThat(applicationRules.toString()).isEqualTo(
-        "[ApplicationRule[application=Application[id=1, name=app_1, listener=listener_1, secret=secret_1], allowedPhoneNumbers=[123, 456]], " +
-            "ApplicationRule[application=Application[id=2, name=app_2, listener=listener_2, secret=secret_2], allowedPhoneNumbers=[123]]]");
+        "[ApplicationRule[application=Application[id=1, name=app_1, listener=listener_1, secret=secret_1, statistics=ApplicationStatistics[applicationId=1, sendBlockCount=5, loopbackCount=6]], allowedPhoneNumbers={123=RuleStatistics[ruleId=17, sendCount=7, receiveCount=0], 456=RuleStatistics[ruleId=18, sendCount=1, receiveCount=0]}], " +
+            "ApplicationRule[application=Application[id=2, name=app_2, listener=listener_2, secret=secret_2, statistics=ApplicationStatistics[applicationId=2, sendBlockCount=11, loopbackCount=12]], allowedPhoneNumbers={123=RuleStatistics[ruleId=5, sendCount=18, receiveCount=0]}]]");
   }
 
   @Test
@@ -219,9 +220,9 @@ class ApplicationRuleDaoTest {
     SQLiteDatabase db = mock(SQLiteDatabase.class);
 
     Cursor cursor = createCursor(Arrays.asList(
-        Arrays.asList(1L, "app_1", "listener_1", "secret_1", "123"),
-        Arrays.asList(2L, "app_2", "listener_2", "secret_2", "123"),
-        Arrays.asList(1L, "app_1", "listener_1", "secret_1", "456")
+        Arrays.asList(1L, "app_1", "listener_1", "secret_1", 5L, 6L, "123", 17L, 7L, 8L),
+        Arrays.asList(2L, "app_2", "listener_2", "secret_2", 11L, 12L, "123", 5L, 18L, 19L),
+        Arrays.asList(1L, "app_1", "listener_1", "secret_1", 5L, 6L, "456", 18L, 1L, 2L)
     ));
     String rawQuery = "SELECT null FROM " + VIEW_APPLICATION_RULE + " WHERE " + TABLE_RULE_COLUMN_ALLOWED_PHONE_NUMBER + " IN (null)";
     when(db.rawQuery(rawQuery, null))
@@ -231,8 +232,8 @@ class ApplicationRuleDaoTest {
 
     Map<String, Set<Application>> applicationsByNumber = dao.byPhoneNumbers(new LinkedHashSet<>(Arrays.asList("123", "456")));
     assertThat(applicationsByNumber.toString()).isEqualTo(
-        "{123=[Application[id=1, name=app_1, listener=listener_1, secret=secret_1], Application[id=2, name=app_2, listener=listener_2, secret=secret_2]], " +
-            "456=[Application[id=1, name=app_1, listener=listener_1, secret=secret_1]]}");
+        "{123=[Application[id=1, name=app_1, listener=listener_1, secret=secret_1, statistics=ApplicationStatistics[applicationId=1, sendBlockCount=5, loopbackCount=6]], Application[id=2, name=app_2, listener=listener_2, secret=secret_2, statistics=ApplicationStatistics[applicationId=2, sendBlockCount=11, loopbackCount=12]]], " +
+            "456=[Application[id=1, name=app_1, listener=listener_1, secret=secret_1, statistics=ApplicationStatistics[applicationId=1, sendBlockCount=5, loopbackCount=6]]]}");
   }
 
   private Cursor createCursor(List<List<Object>> expectedApplicationRuleValues) {
@@ -256,8 +257,23 @@ class ApplicationRuleDaoTest {
       List<String> secrets = expectedApplicationRuleValues.stream().map(row -> (String) row.get(3)).toList();
       when(cursor.getString(3)).thenReturn(secrets.get(0), secrets.subList(1, secrets.size()).toArray(new String[0]));
 
-      List<String> numbers = expectedApplicationRuleValues.stream().map(row -> (String) row.get(4)).toList();
-      when(cursor.getString(4)).thenReturn(numbers.get(0), numbers.subList(1, numbers.size()).toArray(new String[0]));
+      List<Long> blockedCount = expectedApplicationRuleValues.stream().map(row -> (Long) row.get(4)).toList();
+      when(cursor.getLong(4)).thenReturn(blockedCount.get(0), blockedCount.subList(1, blockedCount.size()).toArray(new Long[0]));
+
+      List<Long> loopbackCount = expectedApplicationRuleValues.stream().map(row -> (Long) row.get(5)).toList();
+      when(cursor.getLong(5)).thenReturn(loopbackCount.get(0), loopbackCount.subList(1, loopbackCount.size()).toArray(new Long[0]));
+
+      List<String> numbers = expectedApplicationRuleValues.stream().map(row -> (String) row.get(6)).toList();
+      when(cursor.getString(6)).thenReturn(numbers.get(0), numbers.subList(1, numbers.size()).toArray(new String[0]));
+
+      List<Long> ruleIds = expectedApplicationRuleValues.stream().map(row -> (Long) row.get(7)).toList();
+      when(cursor.getLong(7)).thenReturn(ruleIds.get(0), ruleIds.subList(1, ruleIds.size()).toArray(new Long[0]));
+
+      List<Long> sendCount = expectedApplicationRuleValues.stream().map(row -> (Long) row.get(8)).toList();
+      when(cursor.getLong(8)).thenReturn(sendCount.get(0), sendCount.subList(1, sendCount.size()).toArray(new Long[0]));
+
+      List<Long> receiveCount = expectedApplicationRuleValues.stream().map(row -> (Long) row.get(8)).toList();
+      when(cursor.getLong(8)).thenReturn(receiveCount.get(0), receiveCount.subList(1, receiveCount.size()).toArray(new Long[0]));
     }
     return cursor;
   }
@@ -269,7 +285,7 @@ class ApplicationRuleDaoTest {
     when(dbFactory.getDatabase(WRITABLE)).thenReturn(db);
     ApplicationRuleDao dao = new ApplicationRuleDao(dbFactory);
 
-    dao.delete(new Application(1L, "name", "listener", "secret"));
+    dao.delete(new Application(1L, "name", "listener", "secret", new ApplicationStatistics(1L, 5L, 3L)));
 
     verify(db).delete(TABLE_APPLICATION, TABLE_APPLICATION_COLUMN_ID + "=?", new String[]{String.valueOf(1L)});
   }

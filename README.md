@@ -30,11 +30,20 @@ S2MSP asks the user for permission, whether the requesting application is allowe
 
 ![Permission request dialog](fastlane/metadata/android/en-US/images/phoneScreenshots/S2MSP-01.png)
 
-In the main view of S2MSP all applications with their allowed phone numbers are listed.
+In the main view of S2MSP all SMS communication allowed applications are listed.
+Additionally, the following statistics are shown for each application:
+* ↑️ Number of sent SMS from this application 
+* ↓ Number of received SMS by this application
+* ⟳ Number of test SMS (loopback) exchanged with this application (no real SMS are exchanged with the phone provider)
+* ⊘ Number of SMS sent from this application that where blocked due to missing allowed phone number
 
 ![Main view](fastlane/metadata/android/en-US/images/phoneScreenshots/S2MSP-02.png)
 
 With the trash icon, the allowed permission for an application can be revoked again.
+
+By clicking on an application, you see the details with all allowed phone numbers.
+
+![Detail view](fastlane/metadata/android/en-US/images/phoneScreenshots/S2MSP-03.png)
 
 All SMS exchanged with third party applications are strongly encrypted.
 
