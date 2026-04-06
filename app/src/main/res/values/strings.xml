@@ -45,11 +45,13 @@ Due to new sideloading restrictions on Android 15 and above, \"Allow restricted 
   <string name="action_add">Add</string>
   <string name="application_rule_detail_add_phone_number_title">Add number</string>
   <string name="application_rule_detail_phone_number_hint">Number</string>
-  <string name="application_rule_detail_statistics" translatable="false">↑️%1$d ↓️%2$d   ⟳%3$d ⊘ %4$d</string>
-  <string name="application_rule_detail_statistics_tooltip" >↑️ SMS sent ↓ SMS received\n⟳ SMS loopback test\n⊘ SMS blocked to send</string>
-  <string name="application_rule_detail_rule_statistics" translatable="false">↑️%1$d ↓️%2$d</string>
-  <string name="application_rule_detail_rule_statistics_no_send" translatable="false">↓️%2$d</string>
   <string name="main_add_application_title">Add application</string>
   <string name="main_no_applications_found">No suitable applications found!</string>
   <string name="header_phone_numbers_count">Allowed numbers count</string>
+  <string name="application_rule_detail_statistics" translatable="false">↑️%1$d ↓️%2$d   ⟳%3$d ⊘ %4$d</string>
+  <string name="application_rule_detail_statistics_tooltip">↑️ SMS sent ↓ SMS received
+⟳ SMS loopback test
+⊘ SMS blocked to send</string>
+  <string name="application_rule_detail_rule_statistics" translatable="false">↑️%1$d ↓️%2$d</string>
+  <string name="application_rule_detail_rule_statistics_no_send" translatable="false">↓️%2$d</string>
 </resources>
