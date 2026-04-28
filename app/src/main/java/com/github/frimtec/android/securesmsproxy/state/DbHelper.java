@@ -28,7 +28,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
   private static final String TAG = "DbHelper";
   private static final String DB_NAME = "S2MSP.db";
-  private static final int DB_VERSION = 3;
+  private static final int DB_VERSION = 4;
 
   public DbHelper(@Nullable Context context) {
     super(context, DB_NAME, null, DB_VERSION);
@@ -52,6 +52,7 @@ public class DbHelper extends SQLiteOpenHelper {
         "  " + TABLE_RULE_COLUMN_SEND_COUNT + " INTEGER NOT NULL DEFAULT 0," +
         "  " + TABLE_RULE_COLUMN_RECEIVE_COUNT + " INTEGER NOT NULL DEFAULT 0" +
         ");");
+    createUniqueIndex(db);
     createOrUpdateView(db);
   }
 
@@ -72,5 +73,13 @@ public class DbHelper extends SQLiteOpenHelper {
       db.execSQL("ALTER TABLE " + TABLE_RULE + " ADD COLUMN " + TABLE_RULE_COLUMN_RECEIVE_COUNT + " INTEGER NOT NULL DEFAULT 0");
       createOrUpdateView(db);
     }
+    if (oldVersion < 4) {
+      db.execSQL("DELETE FROM " + TABLE_APPLICATION + " WHERE " + TABLE_APPLICATION_COLUMN_ID + " NOT IN (SELECT " + TABLE_RULE_COLUMN_APPLICATION_ID + " FROM " + TABLE_RULE + ")");
+      createUniqueIndex(db);
+    }
+  }
+
+  private static void createUniqueIndex(SQLiteDatabase db) {
+    db.execSQL("CREATE UNIQUE INDEX idx_" + TABLE_APPLICATION + "_" + TABLE_APPLICATION_COLUMN_NAME + " ON " + TABLE_APPLICATION + " (" + TABLE_APPLICATION_COLUMN_NAME + ")");
   }
 }
