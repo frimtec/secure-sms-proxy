@@ -1,0 +1,4 @@
+- Cleanup zombie applications from db and harden db schema
+- Bump com.googlecode.libphonenumber:libphonenumber from 9.0.27 to 9.0.28
+- Bump com.android.tools.build:gradle from 9.1.0 to 9.1.1
+- Bump com.googlecode.libphonenumber:libphonenumber from 9.0.28 to 9.0.29
