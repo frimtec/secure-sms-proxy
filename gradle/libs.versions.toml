@@ -14,7 +14,7 @@ googlecode-libphonenumber = "9.0.30"
 semver4j = "3.1.0"
 
 androidx-espresso-core = "3.7.0"
-json = "20251224"
+json = "20260522"
 mockito = "5.23.0"
 assertj = "3.27.7"
 junit-jupiter = "6.0.3"
