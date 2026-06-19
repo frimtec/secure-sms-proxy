@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
 
+import androidx.core.os.BundleCompat;
+
 import com.github.frimtec.android.securesmsproxyapi.Sms;
 
 import java.util.Collections;
@@ -29,7 +31,7 @@ public class SmsDecoder {
     Bundle bundle = intent.getExtras();
     if (bundle != null) {
       int subscription = bundle.getInt("subscription", -1);
-      Object[] pdus = (Object[]) bundle.get("pdus");
+      Object[] pdus = BundleCompat.getSerializable(bundle, "pdus", Object[].class);
       String format = bundle.getString("format");
       if (pdus != null) {
         Map<String, String> smsTextByNumber = new LinkedHashMap<>();

@@ -1,5 +1,6 @@
 package com.github.frimtec.android.securesmsproxy.utility;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -51,6 +52,7 @@ public class PackageInfoAccessor {
     }
   }
 
+  @SuppressLint("QueryPermissionsNeeded")
   public List<String> getInstalledPackages() {
     return this.packageManager.getInstalledApplications(PackageManager.GET_META_DATA)
         .stream()

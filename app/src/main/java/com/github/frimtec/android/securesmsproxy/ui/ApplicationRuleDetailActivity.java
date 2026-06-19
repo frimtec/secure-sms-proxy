@@ -13,12 +13,11 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.github.frimtec.android.securesmsproxy.R;
-import com.github.frimtec.android.securesmsproxy.domain.AggregatedStatistics;
 import com.github.frimtec.android.securesmsproxy.domain.ApplicationRule;
-import com.github.frimtec.android.securesmsproxy.domain.RuleStatistics;
 import com.github.frimtec.android.securesmsproxy.service.ApplicationRuleDao;
 import com.github.frimtec.android.securesmsproxy.service.PhoneNumberFormatter;
 import com.github.frimtec.android.securesmsproxy.utility.AlertDialogHelper;
@@ -101,29 +100,7 @@ public class ApplicationRuleDetailActivity extends BaseActivity {
   }
 
   private void addPhoneNumber() {
-    EditText input = new EditText(this);
-    input.setInputType(InputType.TYPE_CLASS_TEXT);
-    input.setHint(R.string.application_rule_detail_phone_number_hint);
-    input.setFilters(new InputFilter[]{(source, start, end, dest, dstart, dend) -> {
-      boolean startsWithPlus = (dstart == 0 && end > start && source.charAt(start) == '+') ||
-          (dstart > 0 && dest.length() > 0 && dest.charAt(0) == '+');
-      for (int i = start; i < end; i++) {
-        char c = source.charAt(i);
-        if (c == '+') {
-          if (dstart > 0 || i > start) {
-            return "";
-          }
-        } else if (startsWithPlus) {
-          if (!Character.isDigit(c)) {
-            return "";
-          }
-        } else if (!Character.isLetterOrDigit(c)) {
-          return "";
-        }
-      }
-      return null;
-    }});
-
+    EditText input = getEditText();
     AlertDialog dialog = new AlertDialog.Builder(this)
         .setTitle(R.string.application_rule_detail_add_phone_number_title)
         .setView(input)
@@ -164,5 +141,32 @@ public class ApplicationRuleDetailActivity extends BaseActivity {
       });
     });
     dialog.show();
+  }
+
+  @NonNull
+  private EditText getEditText() {
+    EditText input = new EditText(this);
+    input.setInputType(InputType.TYPE_CLASS_TEXT);
+    input.setHint(R.string.application_rule_detail_phone_number_hint);
+    input.setFilters(new InputFilter[]{(source, start, end, dest, dstart, dend) -> {
+      boolean startsWithPlus = (dstart == 0 && end > start && source.charAt(start) == '+') ||
+          (dstart > 0 && dest.length() > 0 && dest.charAt(0) == '+');
+      for (int i = start; i < end; i++) {
+        char c = source.charAt(i);
+        if (c == '+') {
+          if (dstart > 0 || i > start) {
+            return "";
+          }
+        } else if (startsWithPlus) {
+          if (!Character.isDigit(c)) {
+            return "";
+          }
+        } else if (!Character.isLetterOrDigit(c)) {
+          return "";
+        }
+      }
+      return null;
+    }});
+    return input;
   }
 }

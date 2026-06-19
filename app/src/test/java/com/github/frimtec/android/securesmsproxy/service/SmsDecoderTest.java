@@ -100,7 +100,8 @@ class SmsDecoderTest {
     Bundle bundle = mock(Bundle.class);
     when(bundle.getInt("subscription", -1)).thenReturn(Objects.requireNonNullElse(subscription, -1));
 
-    when(bundle.get("pdus")).thenReturn(pdus);
+    when(bundle.getSerializable("pdus", Object[].class)).thenReturn(pdus);
+    when(bundle.getSerializable("pdus")).thenReturn(pdus);
     when(bundle.getString("format")).thenReturn("format");
     return bundle;
   }
