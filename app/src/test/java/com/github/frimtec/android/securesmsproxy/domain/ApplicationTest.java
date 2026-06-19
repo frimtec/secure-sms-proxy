@@ -5,13 +5,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Map;
-
 class ApplicationTest {
 
   @Test
   void testProperties() {
-    Map<String, RuleStatistics> allowedPhoneNumbers = Map.of("number", new RuleStatistics(1L, 0L, 0L));
     Application application = new Application(12L, "name", "listener", "secret", new ApplicationStatistics(12L, 5L, 3L));
     assertThat(application.id()).isEqualTo(12L);
     assertThat(application.name()).isEqualTo("name");

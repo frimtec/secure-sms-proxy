@@ -1,6 +1,5 @@
 package com.github.frimtec.android.securesmsproxy.domain;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
 
