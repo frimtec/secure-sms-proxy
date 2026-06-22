@@ -1,6 +1,6 @@
 [versions]
 
-vanniktech-maven-publish = "0.36.0"
+vanniktech-maven-publish = "0.37.0"
 
 android-junit-framework = "2.0.1"
 android-tools-build-gradle = "9.2.1"
