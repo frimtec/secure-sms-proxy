@@ -1,0 +1,5 @@
+- Bump com.googlecode.libphonenumber:libphonenumber from 9.0.33 to 9.0.34
+- Bump com.googlecode.libphonenumber:libphonenumber from 9.0.34 to 9.0.35
+- Bump org.json:json from 20260522 to 20260719
+- Bump androidx.constraintlayout:constraintlayout from 2.2.1 to 2.2.2
+- Bump com.googlecode.libphonenumber:libphonenumber from 9.0.35 to 9.0.36
